@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { updateCart, updateTotalItems } from '@/redux/cart.slice';
 import { useGetOrderUserByStatus } from '@/queries/cart.query';
 import { PagingModel } from '@/constants/data';
+import Footer from '../shared/footer';
 export default function DashboardLayout({
   children
 }: {
@@ -35,13 +36,15 @@ export default function DashboardLayout({
   }, []);
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-white ">
+    <div className="flex min-h-screen flex-col justify-between overflow-hidden bg-white ">
       <MobileSidebar
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
       />
       <Sidebar />
-      <main className="overflow-y-auto">{children}</main>
+
+      <main className="flex-1 overflow-y-auto">{children}</main>
+      <Footer />
       <Toaster />
     </div>
   );

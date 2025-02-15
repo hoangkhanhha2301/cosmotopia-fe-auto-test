@@ -5,7 +5,9 @@ import cosmeLogo from '@/assets/logo/cosme_logo.png';
 import { Search } from 'lucide-react';
 import PersonIcon from '@mui/icons-material/Person';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { useRouter } from '@/routes/hooks';
 export default function Sidebar() {
+  const router = useRouter();
   return (
     <nav
       className={cn(
@@ -14,28 +16,22 @@ export default function Sidebar() {
         'w-full'
       )}
     >
-      <div
-        className={cn('mx-auto w-[80%] px-0', 'justify-center ')}
-      >
-        <div className="flex items-center justify-between border-b border-gray-200 drop-shadow-md py-4">
+      <div className={cn('mx-auto w-[80%] px-0', 'justify-center ')}>
+        <div className="flex items-center justify-between border-b border-gray-200 py-4 drop-shadow-md">
           <>
             <div className="flex items-center text-[36px]">
-              <img
-                src={cosmeLogo}
-                alt="cosme-logo"
-                className='w-8 h-8 mr-2'
-              />
+              <img src={cosmeLogo} alt="cosme-logo" className="mr-2 h-8 w-8" />
               Cosmotopia
             </div>
-            <div className="max-w-2xl mx-auto w-full px-4">
+            <div className="flex-1 px-12">
               <div className="relative">
-                <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-gray-400">
+                <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-gray-400">
                   <Search className="h-5 w-5" />
                 </div>
                 <input
                   type="search"
                   placeholder="Tìm kiếm..."
-                  className="w-full py-3 pl-10 pr-4 bg-gray-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-gray-200 transition-shadow"
+                  className="w-full rounded-full bg-gray-100 py-3 pl-10 pr-4 text-sm transition-shadow focus:outline-none focus:ring-2 focus:ring-gray-200"
                 />
               </div>
             </div>
@@ -54,13 +50,28 @@ export default function Sidebar() {
                   </div>
                 );
               })} */}
-              <div className='cart'>
-                <ShoppingCartIcon className="text-blue-500 w-6 h-6 mr-1" />
+              <div className="cart">
+                <ShoppingCartIcon className="text-blue-500 mr-1 h-6 w-6" />
                 <span className="font-montserrat">Giỏ hàng</span>
               </div>
               <div className="user flex items-center">
-                <PersonIcon className="text-blue-500 w-6 h-6 mr-1" />
-                <span className="font-montserrat">Tài khoản</span>
+                <PersonIcon className="text-blue-500 mr-1 h-6 w-6" />
+                {/* <span className="font-montserrat">Tài khoản</span> */}
+                <p className="font-montserrat">
+                  <span
+                    onClick={() => router.push('/login')}
+                    className="hover: cursor-pointer font-montserrat"
+                  >
+                    Đăng nhập
+                  </span>
+                  /{' '}
+                  <span
+                    onClick={() => router.push('/register')}
+                    className="hover: cursor-pointer font-montserrat"
+                  >
+                    Đăng ký
+                  </span>
+                </p>
               </div>
             </div>
           </>
