@@ -1,5 +1,7 @@
 import ScrollToTop from '@/hooks/scroll-to-top';
+import ForgotPassword from '@/pages/AuthPage/ForgotPassword';
 import NotFound from '@/pages/not-found';
+import ProductDetail from '@/pages/ProductDetail/ProductDetail';
 import { Suspense, lazy } from 'react';
 import { Navigate, Outlet, useRoutes } from 'react-router-dom';
 
@@ -39,6 +41,14 @@ export default function AppRouter() {
         {
           path: '/register',
           element: <RegisterPage />
+        },
+        {
+          path: '/forgotPassword',
+          element: <ForgotPassword />
+        },
+        {
+          path: '/product',
+          element: <ProductDetail />
         }
       ]
     }

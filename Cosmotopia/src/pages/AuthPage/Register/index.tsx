@@ -12,7 +12,7 @@ export default function RegisterPage() {
     <>
       <BasePages
         className="relative mx-auto max-h-screen w-[80%] flex-1 p-4"
-        pageHead="Giỏ hàng | G-Local"
+        pageHead="Register"
       >
         <div className="flex items-center">
           <div className="flex-1">
@@ -43,16 +43,17 @@ export default function RegisterPage() {
                 />
               </Form.Item>
               <Form.Item
-                name="phone"
+                name="email"
                 rules={[
                   {
                     required: true,
-                    message: 'Please input your phone!'
+                    message: 'Please input your Email!'
                   }
                 ]}
               >
                 <input
-                  placeholder="Số điện thoại"
+                  placeholder="Email"
+                  type="email"
                   className=" w-full rounded-full bg-gray-50 py-3 pl-10 pr-4 text-sm transition-shadow focus:outline-none focus:ring-2 focus:ring-gray-200"
                 />
               </Form.Item>
@@ -94,27 +95,17 @@ export default function RegisterPage() {
               >
                 <input
                   type="password"
-                  placeholder="Mật khẩu"
+                  placeholder="Nhập lại mật khẩu"
                   className=" w-full rounded-full bg-gray-50 py-3 pl-10 pr-4 text-sm transition-shadow focus:outline-none focus:ring-2 focus:ring-gray-200"
                 />
               </Form.Item>
-              <div className="mb-2 flex items-center justify-between">
-                <Form.Item
-                  name="remember"
-                  valuePropName="checked"
-                  label={null}
-                  className="m-0 p-0"
-                ></Form.Item>
-              </div>
 
-              <Form.Item label={null}>
-                <button
-                  type="submit"
-                  className="from-blue-500 w-full rounded-full bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] px-6 py-3 text-base font-medium text-white transition-colors duration-200 hover:bg-[#9B22DB]"
-                >
-                  Đăng nhập
-                </button>
-              </Form.Item>
+              <button
+                type="submit"
+                className="from-blue-500 w-full rounded-full bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] px-6 py-3 text-base font-medium text-white transition-colors duration-200 hover:bg-[#9B22DB]"
+              >
+                Đăng ký
+              </button>
             </Form>
             {/* <input
             placeholder="Tên đăng nhập"
@@ -152,9 +143,9 @@ export default function RegisterPage() {
               Bạn đã có tài khoản? {'   '}
               <span
                 className="hover: cursor-pointer text-purple-500"
-                onClick={() => router.push('/register')}
+                onClick={() => router.push('/login')}
               >
-                Đăng ký
+                Đăng nhập
               </span>
             </p>
             {/* <button className="flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-md transition hover:shadow-lg"></button> */}
