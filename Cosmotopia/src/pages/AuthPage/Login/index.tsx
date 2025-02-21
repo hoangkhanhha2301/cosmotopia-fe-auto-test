@@ -1,13 +1,33 @@
 import BasePages from '@/components/shared/base-pages.js';
-import { Checkbox, Form } from 'antd';
-
-import FacebookIcon from '@mui/icons-material/Facebook';
+import { Checkbox, Form, message } from 'antd';
 import { useRouter } from '@/routes/hooks';
+import { useDispatch } from 'react-redux';
+import { useLogin } from '@/queries/auth.query';
+import helper from '@/helpers/index';
+import { login } from '@/redux/auth.slice';
 export default function LoginPage() {
-  const onFinish = (values) => {
-    console.log('Success:', values);
-  };
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { mutateAsync: loginAccount, isPending } = useLogin();
+
+  const onFinish = async (values) => {
+    try {
+      const model = {
+        email: values.Email,
+        password: values.password,
+        // isRemember: values.remember || false
+      };
+      var data = await loginAccount(model);
+      console.log(data);
+      helper.cookie_set('AT', data.token);
+      // helper.cookie_set('RT', data.refreshToken);
+      dispatch(login());
+      router.push('/');
+    } catch (err) {
+      console.error('Login error:', err); // Log the exact error
+      message.error('Tên đăng nhập hoặc mật khẩu không đúng.');
+    }
+  };
   return (
     <>
       <BasePages

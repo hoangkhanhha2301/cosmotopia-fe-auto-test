@@ -6,7 +6,7 @@ import cosmeLogo from '@/assets/logo/cosme_logo_2.png';
 
 export default function Footer() {
   return (
-    <footer className="bg-[#FAF8FF] py-8 w-full mx-auto">
+    <footer className="bg-[#FAF8FF] py-8 w-full mx-auto w-[80%]">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
           {/* Logo and Social Section */}

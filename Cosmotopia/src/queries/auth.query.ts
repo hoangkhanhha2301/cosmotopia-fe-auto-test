@@ -1,7 +1,7 @@
 import BaseRequest from '@/config/axios.config';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-const SUB_URL = `api/Account`;
+const SUB_URL = `api/User`;
 
 export const useLogin = () => {
   return useMutation({

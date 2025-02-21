@@ -13,6 +13,8 @@ import helper_get from './get';
 import dateandtime from 'date-and-time';
 // import __ from '../languages/index';
 import mergeImages from 'merge-images';
+import { formatDistanceToNow } from 'date-fns';
+import { vi } from 'date-fns/locale';
 
 interface exportCanvasAsImageProps {
   canvas: any;
@@ -95,14 +97,153 @@ export const exportCanvasAsImage = async ({
  * Helpers
  */
 class helpers {
-  convertToDate(isoString) {
-    const date = new Date(isoString);
+  createExpirationRange(): { from: string; to: string } {
+    const today = new Date();
+    const oneMonthLater = new Date(today);
+    oneMonthLater.setMonth(today.getMonth() + 1);
+
+    const formatDate = (date: Date): string => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+
+    return {
+      from: formatDate(today),
+      to: formatDate(oneMonthLater)
+    };
+  }
+
+  getStartAndEndOfMonth = () => {
+    const today = new Date();
+
+    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+    const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    const formatDate = (date: Date): string => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+
+    return {
+      from: formatDate(startOfMonth),
+      to: formatDate(endOfMonth)
+    };
+  };
+
+  createHistoryCreateRange(): { from: string; to: string } {
+    const today = new Date();
+
+    const formatDate = (date: Date): string => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate() + 1).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+
+    return {
+      from: '2024-01-01',
+      to: formatDate(today)
+    };
+  }
+
+  validateContractDates(
+    signDate: string | undefined,
+    startDate: string | undefined,
+    endDate: string | undefined
+  ) {
+    function parseDate(dateString) {
+      const [day, month, year] = dateString.split('/').map(Number);
+      return new Date(year, month - 1, day);
+    }
+
+    const sign = parseDate(signDate);
+    const start = parseDate(startDate);
+    const end = parseDate(endDate);
+
+    if (sign > start) {
+      return 'Ngày ký phải trước hoặc bằng ngày hiệu lực.';
+    }
+
+    if (start >= end) {
+      return 'Ngày hiệu lực phải trước ngày hết hạn.';
+    }
+
+    return 'Hợp lệ';
+  }
+
+  formatFileSize(size: number): string {
+    if (size < 1024) {
+      return `${size} B`;
+    } else if (size < 1024 * 1024) {
+      return `${(size / 1024).toFixed(1)} KB`;
+    } else {
+      return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+    }
+  }
+
+  getFileName(url: string): string {
+    const startIdx = url.lastIndexOf('/') + 1;
+    const endIdx = url.indexOf('_', startIdx);
+
+    const fileNamePart = url.substring(startIdx, endIdx);
+    return `${fileNamePart}.pdf`;
+  }
+
+  parseDate = (dateString: string): Date | null => {
+    const [day, month, year] = dateString.split('/').map(Number);
+    if (!day || !month || !year) return null;
+    return new Date(year, month - 1, day);
+  };
+
+  timeAgo(timestamp) {
+    const date = new Date(timestamp * 1000);
+    return formatDistanceToNow(date, { addSuffix: true, locale: vi });
+  }
+
+  // DD/MM/YYYY -> YYYY-MM-DD
+  convertToDateString = (date: string | undefined): string => {
+    if (date === undefined) return '';
+
+    const [day, month, year] = date.split('/');
+
+    const paddedDay = day.padStart(2, '0');
+    const paddedMonth = month.padStart(2, '0');
+
+    return `${year}-${paddedMonth}-${paddedDay}`;
+  };
+
+  convertToDate(
+    isoString: string | Date,
+    format: 'DD/MM/YYYY' | 'MM/DD/YYYY' | 'YYYY-MM-DD' = 'DD/MM/YYYY',
+    separator: '/' | '-' = '/'
+  ): string | null {
+    const date = isoString instanceof Date ? isoString : new Date(isoString);
 
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear();
 
-    return `${day}-${month}-${year}`;
+    let formattedDate: string;
+
+    switch (format) {
+      case 'DD/MM/YYYY':
+        formattedDate = `${day}${separator}${month}${separator}${year}`;
+        break;
+      case 'MM/DD/YYYY':
+        formattedDate = `${month}${separator}${day}${separator}${year}`;
+        break;
+      case 'YYYY-MM-DD':
+        formattedDate = `${year}-${month}-${day}`;
+        break;
+      default:
+        formattedDate = `${day}${separator}${month}${separator}${year}`;
+    }
+
+    return formattedDate;
   }
 
   /**
@@ -418,8 +559,8 @@ class helpers {
    * @param x
    * @returns
    */
-  formatNumberWithCommas(n: string | number): string {
-    n = this.parseNumeric(n);
+  formatNumberWithDot(n: string | number): string {
+    // n = parseNumeric(n);
     let isNegative = false;
 
     if (n < 0) {
@@ -430,7 +571,7 @@ class helpers {
     n = n.toString();
     var pattern = /(\d+)(\d{3})/;
     while (pattern.test(n)) {
-      n = n.replace(pattern, '$1,$2');
+      n = n.replace(pattern, '$1.$2');
     }
 
     return isNegative ? '-' + n : n;

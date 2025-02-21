@@ -19,10 +19,12 @@ export default function Sidebar() {
       <div className={cn('mx-auto w-[80%] px-0', 'justify-center ')}>
         <div className="flex items-center justify-between border-b border-gray-200 py-4 drop-shadow-md">
           <>
-            <div className="flex items-center text-[36px]">
+            <span 
+            onClick={() => router.push('/')}
+            className="flex items-center text-[36px] hover: cursor-pointer ">
               <img src={cosmeLogo} alt="cosme-logo" className="mr-2 h-8 w-8" />
               Cosmotopia
-            </div>
+            </span>
             <div className="flex-1 px-12">
               <div className="relative">
                 <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-gray-400">
@@ -52,7 +54,11 @@ export default function Sidebar() {
               })} */}
               <div className="cart">
                 <ShoppingCartIcon className="text-blue-500 mr-1 h-6 w-6" />
-                <span className="font-montserrat">Giỏ hàng</span>
+                <span 
+                onClick={() => router.push('/cart')}
+                className="hover:cursor-pointer font-montserrat">
+                  Giỏ hàng
+                </span>
               </div>
               <div className="user flex items-center">
                 <PersonIcon className="text-blue-500 mr-1 h-6 w-6" />
@@ -60,14 +66,14 @@ export default function Sidebar() {
                 <p className="font-montserrat">
                   <span
                     onClick={() => router.push('/login')}
-                    className="hover: cursor-pointer font-montserrat"
+                    className="hover:cursor-pointer font-montserrat"
                   >
                     Đăng nhập
                   </span>
                   /{' '}
                   <span
                     onClick={() => router.push('/register')}
-                    className="hover: cursor-pointer font-montserrat"
+                    className="hover:cursor-pointer font-montserrat"
                   >
                     Đăng ký
                   </span>
