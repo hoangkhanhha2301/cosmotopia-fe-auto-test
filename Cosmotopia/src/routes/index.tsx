@@ -1,5 +1,9 @@
 import ScrollToTop from '@/hooks/scroll-to-top';
 import ForgotPassword from '@/pages/AuthPage/ForgotPassword';
+import NewPassword from '@/pages/AuthPage/NewPassword';
+import OtgPage from '@/pages/AuthPage/Otp';
+import Cart from '@/pages/Cart';
+import DashBoard from '@/pages/Dashboard';
 import NotFound from '@/pages/not-found';
 import ProductDetail from '@/pages/ProductDetail/ProductDetail';
 import { Suspense, lazy } from 'react';
@@ -43,14 +47,50 @@ export default function AppRouter() {
           element: <RegisterPage />
         },
         {
+          path: '/otp',
+          element: <OtgPage />
+        },
+        {
+          path: '/newPass',
+          element: <NewPassword />
+        },
+        {
           path: '/forgotPassword',
           element: <ForgotPassword />
         },
         {
           path: '/product',
           element: <ProductDetail />
+        },
+        {
+          path: '/cart',
+          element: <Cart />
         }
       ]
+    }
+  ];
+  const AdminRoutes = [
+    {
+      path: '/dashboard',
+      element: <DashBoard />
+      // children={[
+      //   <Route
+      //     path="/dashboard/account"
+      //     element={
+      //       <ProtectedRoute roles={["0", "1"]}>
+      //         <ManageUser />
+      //       </ProtectedRoute>
+      //     }
+      //   />,
+
+      //   <Route path="/dashboard/profile" element={<ProfileAccount />} />,
+      //   <Route path="/dashboard/campaign" element={<Campaign />} />,
+      //   <Route path="/dashboard/post" element={<Post />} />,
+      //   <Route
+      //     path="/dashboard/jobapplication"
+      //     element={<JobApplication />}
+      //   />,
+      // ]}
     }
   ];
 
@@ -65,7 +105,7 @@ export default function AppRouter() {
     }
   ];
 
-  const routes = useRoutes([...systemRoute, ...publicRoutes]);
+  const routes = useRoutes([...systemRoute, ...publicRoutes, ...AdminRoutes]);
 
   return routes;
 }

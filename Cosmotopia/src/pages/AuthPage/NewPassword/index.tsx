@@ -3,8 +3,7 @@ import { Checkbox, Form } from 'antd';
 
 import FacebookIcon from '@mui/icons-material/Facebook';
 import { useRouter } from '@/routes/hooks';
-import { ro } from 'date-fns/locale';
-export default function ForgotPassword() {
+export default function NewPassword() {
   const onFinish = (values) => {
     console.log('Success:', values);
   };
@@ -21,7 +20,7 @@ export default function ForgotPassword() {
           </div>
           <div className="px-24 py-12" style={{ minWidth: '650px' }}>
             <p className=" mb-8 text-center text-4xl font-bold text-purple-500 drop-shadow-md">
-              Lấy lại mật khẩu
+              Tạo mật khẩu mới
             </p>
             <Form
               name="basic"
@@ -30,17 +29,44 @@ export default function ForgotPassword() {
               autoComplete="off"
             >
               <Form.Item
-                name="email"
+                name="password"
                 rules={[
                   {
                     required: true,
-                    message: 'Please input your Email!'
+                    message: 'Please input your password!'
                   }
                 ]}
               >
                 <input
-                  type="email"
-                  placeholder="Email"
+                  type="password"
+                  placeholder="Mật khẩu"
+                  className=" w-full rounded-full bg-gray-50 py-3 pl-10 pr-4 text-sm transition-shadow focus:outline-none focus:ring-2 focus:ring-gray-200"
+                />
+              </Form.Item>
+              <Form.Item
+                name="confirm-password"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please confirm your password!'
+                  },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue('password') === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(
+                        new Error(
+                          'The new password that you entered do not match!'
+                        )
+                      );
+                    }
+                  })
+                ]}
+              >
+                <input
+                  type="password"
+                  placeholder="Nhập lại mật khẩu"
                   className=" w-full rounded-full bg-gray-50 py-3 pl-10 pr-4 text-sm transition-shadow focus:outline-none focus:ring-2 focus:ring-gray-200"
                 />
               </Form.Item>
@@ -48,9 +74,8 @@ export default function ForgotPassword() {
               <button
                 type="submit"
                 className=" from-blue-500 mb-2 w-full rounded-full bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] px-6 py-3 text-base font-medium text-white transition-colors duration-200 hover:bg-[#9B22DB]"
-                onClick={() => router.push('/otp')}
               >
-                Gửi mã OTP
+                Xác nhận
               </button>
             </Form>
             {/* <input

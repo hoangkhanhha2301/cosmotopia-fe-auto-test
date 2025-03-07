@@ -1,3 +1,4 @@
+import { Radio } from 'antd';
 import React, { FC, useState } from 'react';
 
 interface PhanLoaiProps {
@@ -9,7 +10,7 @@ export const PhanLoai: FC<PhanLoaiProps> = ({ listOptions }) => {
   return (
     <div className="mt-4">
       <p className="font-medium">Phân loại</p>
-      <div className="mt-2 flex space-x-2">
+      {/* <div className="mt-2 flex space-x-2">
         {listOptions?.map((item, index) => (
           <button
             key={index}
@@ -19,7 +20,14 @@ export const PhanLoai: FC<PhanLoaiProps> = ({ listOptions }) => {
             {item}
           </button>
         ))}
-      </div>
+      </div> */}
+      <Radio.Group defaultValue="a" className="mx-0 mt-1 p-0">
+        {listOptions?.map((item, index) => (
+          <Radio.Button value={item} className="mx-1 ">
+            {item}
+          </Radio.Button>
+        ))}
+      </Radio.Group>
     </div>
   );
 };
