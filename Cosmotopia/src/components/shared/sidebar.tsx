@@ -1,13 +1,35 @@
 import HeaderNav from '@/components/shared/header-nav';
-import { navItems, subNavItems } from '@/constants/data';
+import { navItems} from '@/constants/data';
 import { cn } from '@/lib/utils';
 import cosmeLogo from '@/assets/logo/cosme_logo.png';
-import { Search } from 'lucide-react';
+import { LogOutIcon, Search } from 'lucide-react';
 import PersonIcon from '@mui/icons-material/Person';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useRouter } from '@/routes/hooks';
+import helper from '@/helpers/index';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
+import { useLogout } from '@/queries/auth.query';
+import { logout } from '@/redux/auth.slice';
+
 export default function Sidebar() {
   const router = useRouter();
+  const accessToken = helper.cookie_get('AT');
+  const auth = useSelector((state: RootState) => state.auth.isLogin);
+  const { mutateAsync: logoutAccount } = useLogout();
+  const dispatch = useDispatch();
+
+  console.log(auth);
+
+  const handleLogout = async () => {
+    await logoutAccount({
+      accessToken: accessToken,
+    });
+    helper.cookie_delete('RT');
+    helper.cookie_delete('AT');
+    router.push('/login');
+    dispatch(logout());
+  };
   return (
     <nav
       className={cn(
@@ -19,9 +41,9 @@ export default function Sidebar() {
       <div className={cn('mx-auto w-[80%] px-0', 'justify-center ')}>
         <div className="flex items-center justify-between border-b border-gray-200 py-4 drop-shadow-md">
           <>
-            <span 
-            onClick={() => router.push('/')}
-            className="flex items-center text-[36px] hover: cursor-pointer ">
+            <span
+              onClick={() => router.push('/')}
+              className="flex items-center text-[36px] hover: cursor-pointer ">
               <img src={cosmeLogo} alt="cosme-logo" className="mr-2 h-8 w-8" />
               Cosmotopia
             </span>
@@ -54,30 +76,35 @@ export default function Sidebar() {
               })} */}
               <div className="cart">
                 <ShoppingCartIcon className="text-blue-500 mr-1 h-6 w-6" />
-                <span 
-                onClick={() => router.push('/cart')}
-                className="hover:cursor-pointer font-montserrat">
+                <span
+                  onClick={() => router.push('/cart')}
+                  className="hover:cursor-pointer font-montserrat">
                   Giỏ hàng
                 </span>
               </div>
               <div className="user flex items-center">
                 <PersonIcon className="text-blue-500 mr-1 h-6 w-6" />
-                {/* <span className="font-montserrat">Tài khoản</span> */}
-                <p className="font-montserrat">
-                  <span
-                    onClick={() => router.push('/login')}
-                    className="hover:cursor-pointer font-montserrat"
-                  >
-                    Đăng nhập
-                  </span>
-                  /{' '}
-                  <span
-                    onClick={() => router.push('/register')}
-                    className="hover:cursor-pointer font-montserrat"
-                  >
-                    Đăng ký
-                  </span>
-                </p>
+                {auth ? (
+                  <div className="flex flex-col">
+                    <span onClick={() => router.push("/profile")} className="hover:cursor-pointer font-montserrat">
+                      Tài khoản
+                    </span>
+                    <button onClick={handleLogout} className="flex items-center space-x-2 hover:text-white mt-2">
+                      <LogOutIcon className="h-5 w-5" />
+                      <span>Đăng xuất</span>
+                    </button>
+                  </div>
+                ) : (
+                  <p className="font-montserrat">
+                    <span onClick={() => router.push("/login")} className="hover:cursor-pointer font-montserrat">
+                      Đăng nhập
+                    </span>
+                    /{" "}
+                    <span onClick={() => router.push("/register")} className="hover:cursor-pointer font-montserrat">
+                      Đăng ký
+                    </span>
+                  </p>
+                )}
               </div>
             </div>
           </>
