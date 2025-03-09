@@ -1,14 +1,24 @@
 import BasePages from '@/components/shared/base-pages.js';
-import { Checkbox, Form } from 'antd';
+import { Checkbox, Form, Input } from 'antd';
 
 import FacebookIcon from '@mui/icons-material/Facebook';
 import { useRouter } from '@/routes/hooks';
-import { ro } from 'date-fns/locale';
-export default function ForgotPassword() {
+export default function OtgPage() {
   const onFinish = (values) => {
     console.log('Success:', values);
   };
   const router = useRouter();
+  const onChange = (text) => {
+    console.log('onChange:', text);
+  };
+  const onInput = (value) => {
+    console.log('onInput:', value);
+  };
+  const sharedProps = {
+    onChange,
+    onInput
+  };
+
   return (
     <>
       <BasePages
@@ -21,7 +31,7 @@ export default function ForgotPassword() {
           </div>
           <div className="px-24 py-12" style={{ minWidth: '650px' }}>
             <p className=" mb-8 text-center text-4xl font-bold text-purple-500 drop-shadow-md">
-              Lấy lại mật khẩu
+              Xác nhận OTP
             </p>
             <Form
               name="basic"
@@ -38,19 +48,23 @@ export default function ForgotPassword() {
                   }
                 ]}
               >
-                <input
-                  type="email"
-                  placeholder="Email"
-                  className=" w-full rounded-full bg-gray-50 py-3 pl-10 pr-4 text-sm transition-shadow focus:outline-none focus:ring-2 focus:ring-gray-200"
-                />
+                <div className="flex items-center justify-center">
+                  <Input.OTP
+                    size="large"
+                    // formatter={(str) => str.toUpperCase()}
+                    // {...sharedProps}
+                  />
+                </div>
               </Form.Item>
 
               <button
                 type="submit"
                 className=" from-blue-500 mb-2 w-full rounded-full bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] px-6 py-3 text-base font-medium text-white transition-colors duration-200 hover:bg-[#9B22DB]"
-                onClick={() => router.push('/otp')}
+                onClick={() => {
+                  router.push('/newPass');
+                }}
               >
-                Gửi mã OTP
+                Xác nhận
               </button>
             </Form>
             {/* <input
@@ -66,7 +80,7 @@ export default function ForgotPassword() {
             <button className="from-blue-500 mt-4 w-full rounded-full bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] px-6 py-3 font-medium text-white transition-colors duration-200 hover:bg-[#9B22DB]">
               Đăng nhập
             </button> */}
-            <div className="my-4 flex items-center">
+            {/* <div className="my-4 flex items-center">
               <div className="h-px flex-1 bg-gradient-to-r from-pink-300 to-purple-300"></div>
               <span className="mx-4 text-lg font-medium text-gray-500">
                 HOẶC
@@ -82,7 +96,7 @@ export default function ForgotPassword() {
               >
                 Đăng nhập
               </span>
-            </p>
+            </p> */}
             {/* <button className="flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-md transition hover:shadow-lg"></button> */}
           </div>
         </div>

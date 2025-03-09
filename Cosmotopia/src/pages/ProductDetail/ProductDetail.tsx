@@ -4,19 +4,86 @@ import { useRouter } from '@/routes/hooks';
 import { Form, Image, InputNumber, Rate } from 'antd';
 import { PhanLoai } from './PhanLoai';
 import { useState } from 'react';
-
+import { MoreOutlined, CheckCircleFilled } from '@ant-design/icons';
 const listImg = ['./detail.png', './detail.png', './logo.png'];
 const listContent = [
-  'Chi tiết sản phẩm',
-  'Cách dùng',
-  'Thành phần',
-  'Đánh giá'
+  {
+    title: 'Chi tiết sản phẩm',
+    detail: [
+      'Xuất xứ: Việt Nam',
+      'Kích thước: 20x30cm',
+      'Trọng lượng: 500g',
+      'Chất liệu: Nhựa cao cấp'
+    ]
+  },
+  {
+    title: 'Cách dùng',
+    detail: [
+      'Rửa sạch trước khi sử dụng',
+      'Dùng theo hướng dẫn của nhà sản xuất',
+      'Không để gần nguồn nhiệt cao'
+    ]
+  },
+  {
+    title: 'Thành phần',
+    detail: [
+      'Thành phần chính: Nhựa PP',
+      'Không chứa BPA, an toàn cho sức khỏe'
+    ]
+  },
+  {
+    title: 'Đánh giá',
+    detail: [
+      {
+        reviewer: 'Nguyễn Thuý An',
+        rating: 5,
+        content:
+          'Sản phẩm rất tuyệt! Màu sắc tự nhiên, giữ màu lâu và không gây kích ứng.',
+        time: '2024-03-05 14:30'
+      },
+      {
+        reviewer: 'Trần Minh Hoàng',
+        rating: 4,
+        content:
+          'Mình thấy chất lượng ổn, nhưng màu có hơi nhạt hơn so với hình.',
+        time: '2024-03-04 10:15'
+      },
+      {
+        reviewer: 'Lê Hồng Nhung',
+        rating: 5,
+        content:
+          'Cực kỳ ưng ý, giao hàng nhanh, đóng gói đẹp. Mua lần thứ 2 rồi!',
+        time: '2024-03-03 18:45'
+      },
+      {
+        reviewer: 'Phạm Quốc Bảo',
+        rating: 3,
+        content: 'Màu đẹp nhưng hơi bột, không hợp với da khô lắm.',
+        time: '2024-03-02 12:20'
+      },
+      {
+        reviewer: 'Vũ Hải Yến',
+        rating: 4,
+        content: 'Son lên màu đẹp nhưng độ bám không được lâu như mong đợi.',
+        time: '2024-03-01 09:50'
+      }
+    ]
+  },
+  {
+    title: 'Review từ KOL',
+    detail: [
+      'Sản phẩm rất tốt, bền và đẹp',
+      'Giá cả hợp lý, đáng mua',
+      'Giao hàng nhanh chóng, đóng gói cẩn thận'
+    ]
+  }
 ];
 const length = listImg.length;
 export default function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [indexImg, setIndexImg] = useState(0);
-  const [content, setContent] = useState(listContent[0]);
+
+  const [currentTab, setCurrentTab] = useState(listContent[0]);
   const router = useRouter();
   return (
     <>
@@ -96,20 +163,41 @@ export default function ProductDetail() {
               <div className="flex items-center rounded-xl bg-gray-100">
                 <button
                   className="border-none px-3 py-2 text-xl font-bold text-gray-600"
-                  onClick={() => quantity != 1 && setQuantity(quantity - 1)}
+                  onClick={() => {
+                    quantity > 1 ? setQuantity(quantity - 1) : setQuantity(1);
+                  }}
                 >
                   -
                 </button>
-                <span className="w-12 border-none bg-gray-100 px-4 py-2 text-center">
-                  {quantity}
-                </span>
+                <input
+                  min={0}
+                  value={quantity}
+                  // type="number"
+
+                  onChange={(e) => {
+                    const value = Number(e.target.value);
+                    // setQuantity(value);
+                    value > 123 ? setQuantity(123) : setQuantity(value);
+                  }}
+                  className="w-12 border-none bg-gray-100  py-2 text-center text-[#9C3CFD]"
+                />
+
                 <button
                   className="border-none px-3 py-2 text-xl font-bold text-gray-600"
-                  onClick={() => setQuantity(quantity + 1)}
+                  onClick={() => setQuantity(Number(quantity) + 1)}
                 >
                   +
                 </button>
               </div>
+              <span> 123 sản phẩm có sẵn </span>
+            </div>
+            <div className="mt-4 flex items-center gap-6">
+              <button
+                type="submit"
+                className="from-blue-500 mb-2 w-96 rounded-full bg-[#F5F5F5] px-6 py-3 text-base font-medium text-black transition-colors duration-200 "
+              >
+                Thêm vào giỏ hàng
+              </button>
               <button
                 type="submit"
                 className=" from-blue-500 mb-2 w-80 rounded-full bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] px-6 py-3 text-base font-medium text-white transition-colors duration-200 hover:bg-[#9B22DB]"
@@ -124,45 +212,67 @@ export default function ProductDetail() {
             {listContent.map((tab, index) => (
               <button
                 key={index}
-                onClick={() => setContent(tab)}
+                onClick={() => setCurrentTab(tab)}
                 className={`relative py-2 font-medium text-gray-600 transition-all ${
-                  content === tab ? ' text-purple-500' : ''
+                  currentTab.title === tab.title ? ' text-purple-500' : ''
                 }`}
               >
-                {tab}
-                {content === tab && (
+                {tab.title}
+                {currentTab.title === tab.title && (
                   <div className="absolute -bottom-1 left-0 h-[2px] w-full bg-purple-500"></div>
                 )}
               </button>
             ))}
-            <div className="flex items-center gap-1">
+            {/* <div className="flex items-center gap-1">
               <span>Xem thêm</span>
               <img
                 className="h-4 w-4 object-cover"
                 src="./arrowDown.svg"
                 alt=""
               />
-            </div>
+            </div> */}
           </div>
-          <p>
-            Phấn Phủ Carslan Black Magnetic Soft Mist Powder Dạng Nén 8g là sản
-            phẩm phấn phủ đến từ thương hiệu Carslan - Trung Quốc, với công thức
-            tiên tiến giúp che phủ lỗ chân lông, làm mờ các khuyết điểm cho lớp
-            nền mịn lì tự nhiên và kiểm soát dầu hiệu quả suốt cả ngày dài.
-            Thành phần an toàn, không chứa Talc hoặc các chất gây kích ứng, phù
-            hợp với mọi loại da. Phấn Phủ Dạng Nén Carslan Black Magnetic Soft
-            Mist Powder 8g hiện đã có tại Hasaki với 5 phân loại chia làm 2
-            phiên bản: Phiên bản thường: Phấn Phủ Carslan Black Magnetic Soft
-            Mist Powder Dạng Nén Vỏ Đen - Màu Tím: Làm sáng da, chống xỉn màu.
-            Phấn Phủ Carslan Black Magnetic Soft Mist Powder Dạng Nén Vỏ Đen -
-            Màu Hồng Đào: Làm sáng da mặt và giúp da rạng rỡ. Phấn Phủ Carslan
-            Black Magnetic Soft Mist Powder Dạng Nén Vỏ Đen - Màu Trong
-            Suốt: Phấn mỏng nhẹ phù hợp mọi tông da. Phiên bản kiểm soát dầu:
-            Phấn Phủ Dạng Nén Carslan Black Magnetic Soft Mist Powder Vỏ Xám -
-            Màu Trong Suốt: Giúp kiểm soát dầu mạnh mẽ.  Phấn Phủ Dạng Nén
-            Carslan Black Magnetic Soft Mist Powder Vỏ Xám - Màu Tím: Giúp kiểm
-            soát dầu mạnh mẽ, nâng tông cho da xỉn màu. 
-          </p>
+          <div className="min-h-32 py-4">
+            {currentTab.title !== 'Đánh giá' ? (
+              currentTab.detail.map((a) => <p>{a}</p>)
+            ) : (
+              <div>
+                Tất cả đánh giá (451)
+                <div className="flex flex-wrap justify-between gap-2 ">
+                  {currentTab.detail.map((a) => (
+                    <div className="relative w-[calc(50%-8px)] rounded-xl border bg-white p-4 shadow-md">
+                      {/* Nút More */}
+                      <MoreOutlined className="absolute right-4 top-4 cursor-pointer text-gray-500" />
+
+                      {/* Rating Stars */}
+                      <Rate
+                        allowHalf
+                        disabled
+                        defaultValue={a.rating}
+                        className="text-yellow-500 mb-2"
+                      />
+
+                      {/* Tên người đánh giá */}
+                      <div className="flex items-center space-x-2">
+                        <span className="text-lg font-semibold">
+                          {a.reviewer}
+                        </span>
+                        <CheckCircleFilled className="text-green-500" />
+                      </div>
+
+                      {/* Nội dung review */}
+                      <p className="mt-2 text-gray-600">{a.content}</p>
+
+                      {/* Ngày đăng */}
+                      <p className="mt-2 text-sm text-gray-400">
+                        Posted on August 14, 2023
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
         <div>
           <div className="mt-4 flex items-center justify-between">
