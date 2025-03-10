@@ -3,7 +3,6 @@ import helpers from '../helpers';
 import { toast } from '@/components/ui/use-toast';
 import __helpers from '../helpers';
 
-
 const baseURL =
   process.env.NODE_ENV === 'production'
     ? 'https://localhost:7191/'
@@ -67,6 +66,15 @@ var BaseRequest = {
     try {
       const response = await axios.post<any>(url, data);
       return response.data;
+    } catch (err) {
+      console.log('err', err);
+    }
+  },
+  PostWithOutResponse: async (url: string, data?: any) => {
+    try {
+      const response = await axios.post<any>(url, data);
+      console.log('response', response);
+      return response;
     } catch (err) {
       console.log('err', err);
     }

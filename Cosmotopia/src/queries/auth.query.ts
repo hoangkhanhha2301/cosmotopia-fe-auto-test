@@ -16,17 +16,30 @@ export const useRegister = () => {
   return useMutation({
     mutationKey: ['register'],
     mutationFn: async (model: any) => {
-      return BaseRequest.Post(`/${SUB_URL}/register`, model);
+      return BaseRequest.PostWithOutResponse(
+        `/${SUB_URL}/registerwithotp`,
+        model
+      );
     }
   });
 };
-
-export const useGetInfoUser = () => {
-  return useQuery({
-    queryKey: ['get_info_user'],
-    queryFn: async () => {
-      return BaseRequest.Post(`/${SUB_URL}/get-info-user`);
-    },
-    staleTime: 3600000
+export const useOTP = () => {
+  return useMutation({
+    mutationKey: ['register'],
+    mutationFn: async (model: any) => {
+      return BaseRequest.PostWithOutResponse(
+        `/${SUB_URL}/registerwithotp`,
+        model
+      );
+    }
   });
 };
+// export const useGetInfoUser = () => {
+//   return useQuery({
+//     queryKey: ['get_info_user'],
+//     queryFn: async () => {
+//       return BaseRequest.Post(`/${SUB_URL}/get-info-user`);
+//     },
+//     staleTime: 3600000
+//   });
+// };

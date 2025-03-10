@@ -1,13 +1,44 @@
 import BasePages from '@/components/shared/base-pages.js';
 import Footer from '@/components/shared/footer';
+import { useRegister } from '@/queries/auth.query';
 import { useRouter } from '@/routes/hooks';
-import { Checkbox, Form } from 'antd';
-
+import { Col, Form, message, Row } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import { sSpin } from '../../../signify/store.ts';
 export default function RegisterPage() {
-  const onFinish = (values) => {
-    console.log('Success:', values);
-  };
   const router = useRouter();
+  const navigate = useNavigate();
+  const { mutateAsync: registerAccount, isPending } = useRegister();
+  const onFinish = async (values) => {
+    console.log(values);
+    sSpin.set(true);
+    try {
+      const model = {
+        email: values.email,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        password: values.password,
+        confirmPassword: values.confirmPassword,
+        phone: values.phone
+        // <otpExpiration:></otpExpiration:>
+      };
+      var data = await registerAccount(model);
+      console.log(data);
+      // helper.cookie_set('RT', data.refreshToken);
+
+      if (data?.success) {
+        navigate('/OTP', { state: { email: values.email } });
+        message.success('Vui lòng kiểm tra mail để xác thực OTP');
+      } else {
+        message.error(data?.message);
+      }
+    } catch (err) {
+      message.error('Something went wrong');
+    } finally {
+      sSpin.set(false);
+    }
+  };
+
   return (
     <>
       <BasePages
@@ -28,20 +59,41 @@ export default function RegisterPage() {
               onFinish={onFinish}
               autoComplete="off"
             >
-              <Form.Item
-                name="name"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input your name!'
-                  }
-                ]}
-              >
-                <input
-                  placeholder="Họ và tên"
-                  className=" w-full rounded-full bg-gray-50 py-3 pl-10 pr-4 text-sm transition-shadow focus:outline-none focus:ring-2 focus:ring-gray-200"
-                />
-              </Form.Item>
+              <Row>
+                <Col span={10}>
+                  <Form.Item
+                    name="lastName"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Please input your lastName!'
+                      }
+                    ]}
+                  >
+                    <input
+                      placeholder="Họ"
+                      className=" w-full rounded-full bg-gray-50 py-3 pl-10 pr-4 text-sm transition-shadow focus:outline-none focus:ring-2 focus:ring-gray-200"
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={2}></Col>
+                <Col span={10}>
+                  <Form.Item
+                    name="firstName"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Please input your firstName!'
+                      }
+                    ]}
+                  >
+                    <input
+                      placeholder="Tên"
+                      className=" w-full rounded-full bg-gray-50 py-3 pl-10 pr-4 text-sm transition-shadow focus:outline-none focus:ring-2 focus:ring-gray-200"
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
               <Form.Item
                 name="email"
                 rules={[
@@ -54,6 +106,20 @@ export default function RegisterPage() {
                 <input
                   placeholder="Email"
                   type="email"
+                  className=" w-full rounded-full bg-gray-50 py-3 pl-10 pr-4 text-sm transition-shadow focus:outline-none focus:ring-2 focus:ring-gray-200"
+                />
+              </Form.Item>
+              <Form.Item
+                name="phone"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your phone!'
+                  }
+                ]}
+              >
+                <input
+                  placeholder="Số điện thoại"
                   className=" w-full rounded-full bg-gray-50 py-3 pl-10 pr-4 text-sm transition-shadow focus:outline-none focus:ring-2 focus:ring-gray-200"
                 />
               </Form.Item>
@@ -73,7 +139,7 @@ export default function RegisterPage() {
                 />
               </Form.Item>
               <Form.Item
-                name="confirm-password"
+                name="confirmPassword"
                 rules={[
                   {
                     required: true,

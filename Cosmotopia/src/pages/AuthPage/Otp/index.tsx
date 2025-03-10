@@ -3,11 +3,23 @@ import { Checkbox, Form, Input } from 'antd';
 
 import FacebookIcon from '@mui/icons-material/Facebook';
 import { useRouter } from '@/routes/hooks';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 export default function OtgPage() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const email = location.state?.email;
+  useEffect(() => {
+    if (!email) {
+      navigate('/'); // Điều hướng về home nếu không có email
+    }
+  }, [email, navigate]);
+  console.log(email);
   const onFinish = (values) => {
+    navigate('/');
     console.log('Success:', values);
   };
-  const router = useRouter();
+
   const onChange = (text) => {
     console.log('onChange:', text);
   };
@@ -44,25 +56,18 @@ export default function OtgPage() {
                 rules={[
                   {
                     required: true,
-                    message: 'Please input your Email!'
+                    message: 'Cannot be empty'
                   }
                 ]}
               >
                 <div className="flex items-center justify-center">
-                  <Input.OTP
-                    size="large"
-                    // formatter={(str) => str.toUpperCase()}
-                    // {...sharedProps}
-                  />
+                  <Input.OTP size="large" />
                 </div>
               </Form.Item>
 
               <button
                 type="submit"
                 className=" from-blue-500 mb-2 w-full rounded-full bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] px-6 py-3 text-base font-medium text-white transition-colors duration-200 hover:bg-[#9B22DB]"
-                onClick={() => {
-                  router.push('/newPass');
-                }}
               >
                 Xác nhận
               </button>
