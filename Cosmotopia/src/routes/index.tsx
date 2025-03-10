@@ -31,6 +31,7 @@ export default function AppRouter() {
       ),
       children: [
         {
+          path: '/',
           element: <HomePage />,
           index: true
         },

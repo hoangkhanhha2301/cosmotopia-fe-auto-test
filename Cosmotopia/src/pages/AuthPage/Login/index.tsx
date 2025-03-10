@@ -5,16 +5,18 @@ import { useDispatch } from 'react-redux';
 import { useLogin } from '@/queries/auth.query';
 import helper from '@/helpers/index';
 import { login } from '@/redux/auth.slice';
+import { sSpin } from '@/signify/store';
 export default function LoginPage() {
   const router = useRouter();
   const dispatch = useDispatch();
   const { mutateAsync: loginAccount, isPending } = useLogin();
 
   const onFinish = async (values) => {
+    sSpin.set(true);
     try {
       const model = {
         email: values.Email,
-        password: values.password,
+        password: values.password
         // isRemember: values.remember || false
       };
       var data = await loginAccount(model);
@@ -26,6 +28,8 @@ export default function LoginPage() {
     } catch (err) {
       console.error('Login error:', err); // Log the exact error
       message.error('Tên đăng nhập hoặc mật khẩu không đúng.');
+    } finally {
+      sSpin.set(false);
     }
   };
   return (
