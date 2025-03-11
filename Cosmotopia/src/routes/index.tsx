@@ -1,4 +1,6 @@
 import ScrollToTop from '@/hooks/scroll-to-top';
+import { Brand } from '@/pages/AdminPage/Brand/Brand';
+import { Category } from '@/pages/AdminPage/Category/Category';
 import { Product } from '@/pages/AdminPage/Product/Product';
 
 import ForgotPassword from '@/pages/AuthPage/ForgotPassword';
@@ -80,6 +82,16 @@ export default function AppRouter() {
         {
           path: '/dashboard/Product',
           element: <Product />
+          // index: true
+        },
+        {
+          path: '/dashboard/category',
+          element: <Category />
+          // index: true
+        },
+        {
+          path: '/dashboard/brand',
+          element: <Brand />
           // index: true
         }
       ]

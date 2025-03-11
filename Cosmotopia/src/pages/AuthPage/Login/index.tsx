@@ -14,6 +14,7 @@ export default function LoginPage() {
 
   const onFinish = async (values) => {
     dispatch(turnOnSpin());
+
     try {
       const model = {
         email: values.Email,
@@ -26,7 +27,7 @@ export default function LoginPage() {
       helper.cookie_set('role', data.role);
       // helper.cookie_set('RT', data.refreshToken);
       dispatch(login());
-      if (data.role === 'Customers') {
+      if (data.role == 'Customers') {
         router.push('/');
       } else router.push('/dashboard');
     } catch (err) {
