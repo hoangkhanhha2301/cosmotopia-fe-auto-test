@@ -36,14 +36,19 @@ export const useOTP = () => {
   return useMutation({
     mutationKey: ['register'],
     mutationFn: async (model: any) => {
-      return BaseRequest.PostWithOutResponse(
-        `/${SUB_URL}/registerwithotp`,
-        model
-      );
+      return BaseRequest.PostWithOutResponse(`/${SUB_URL}/verifyotp`, model);
     }
   });
 };
-// export const useGetInfoUser = () => {
+// export const useForgotPassWord = () => {
+//   return useMutation({
+//     mutationKey: ['register'],
+//     mutationFn: async (model: any) => {
+//       return BaseRequest.PostWithOutResponse(`/${SUB_URL}/verifyotp`, model);
+//     }
+//   });
+// };
+// // export const useGetInfoUser = () => {
 //   return useQuery({
 //     queryKey: ['get_info_user'],
 //     queryFn: async () => {

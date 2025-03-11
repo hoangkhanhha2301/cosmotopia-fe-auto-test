@@ -1,42 +1,47 @@
 import BasePages from '@/components/shared/base-pages.js';
 import Footer from '@/components/shared/footer';
 import { useRegister } from '@/queries/auth.query';
+import { turnOffSpin, turnOnSpin } from '@/redux/spin.slice';
 import { useRouter } from '@/routes/hooks';
 import { Col, Form, message, Row } from 'antd';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { sSpin } from '../../../signify/store.ts';
+
 export default function RegisterPage() {
   const router = useRouter();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { mutateAsync: registerAccount, isPending } = useRegister();
   const onFinish = async (values) => {
     console.log(values);
-    sSpin.set(true);
-    try {
-      const model = {
-        email: values.email,
-        firstName: values.firstName,
-        lastName: values.lastName,
-        password: values.password,
-        confirmPassword: values.confirmPassword,
-        phone: values.phone
-        // <otpExpiration:></otpExpiration:>
-      };
-      var data = await registerAccount(model);
-      console.log(data);
-      // helper.cookie_set('RT', data.refreshToken);
+    dispatch(turnOnSpin());
 
-      if (data?.success) {
-        navigate('/OTP', { state: { email: values.email } });
-        message.success('Vui lòng kiểm tra mail để xác thực OTP');
-      } else {
-        message.error(data?.message);
-      }
-    } catch (err) {
-      message.error('Something went wrong');
-    } finally {
-      sSpin.set(false);
-    }
+    const model = {
+      email: values.email,
+      firstName: values.firstName,
+      lastName: values.lastName,
+      password: values.password,
+      confirmPassword: values.confirmPassword,
+      phone: values.phone
+      // <otpExpiration:></otpExpiration:>
+    };
+    await registerAccount(model)
+      .then((data: any) => {
+        if (data?.success) {
+          navigate('/OTP', { state: { email: values.email } });
+          message.success('Vui lòng kiểm tra mail để xác thực OTP');
+        } else {
+          message.error('Something went wrong');
+        }
+      })
+      .catch((err) => {
+        message.error('Something went wrong');
+      })
+      .finally(() => {
+        dispatch(turnOffSpin());
+      });
+
+    // helper.cookie_set('RT', data.refreshToken);
   };
 
   return (

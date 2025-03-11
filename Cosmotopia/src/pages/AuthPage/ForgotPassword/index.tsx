@@ -5,9 +5,8 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import { useRouter } from '@/routes/hooks';
 import { ro } from 'date-fns/locale';
 export default function ForgotPassword() {
-  const onFinish = (values) => {
-    console.log('Success:', values);
-  };
+  // const { mutateAsync: OTPAccount } = useOTP();
+  const onFinish = (values) => {};
   const router = useRouter();
   return (
     <>
@@ -48,7 +47,6 @@ export default function ForgotPassword() {
               <button
                 type="submit"
                 className=" from-blue-500 mb-2 w-full rounded-full bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] px-6 py-3 text-base font-medium text-white transition-colors duration-200 hover:bg-[#9B22DB]"
-                onClick={() => router.push('/otp')}
               >
                 Gửi mã OTP
               </button>

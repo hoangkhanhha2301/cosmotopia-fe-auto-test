@@ -5,14 +5,15 @@ import { useDispatch } from 'react-redux';
 import { useLogin } from '@/queries/auth.query';
 import helper from '@/helpers/index';
 import { login } from '@/redux/auth.slice';
-import { sSpin } from '@/signify/store';
+import { turnOffSpin, turnOnSpin } from '@/redux/spin.slice';
+
 export default function LoginPage() {
   const router = useRouter();
   const dispatch = useDispatch();
   const { mutateAsync: loginAccount, isPending } = useLogin();
 
   const onFinish = async (values) => {
-    sSpin.set(true);
+    dispatch(turnOnSpin());
     try {
       const model = {
         email: values.Email,
@@ -22,14 +23,17 @@ export default function LoginPage() {
       var data = await loginAccount(model);
       console.log(data);
       helper.cookie_set('AT', data.token);
+      helper.cookie_set('role', data.role);
       // helper.cookie_set('RT', data.refreshToken);
       dispatch(login());
-      router.push('/');
+      if (data.role === 'Customers') {
+        router.push('/');
+      } else router.push('/dashboard');
     } catch (err) {
       console.error('Login error:', err); // Log the exact error
       message.error('Tên đăng nhập hoặc mật khẩu không đúng.');
     } finally {
-      sSpin.set(false);
+      dispatch(turnOffSpin());
     }
   };
   return (
