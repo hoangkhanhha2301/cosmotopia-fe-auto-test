@@ -1,3 +1,4 @@
+import { RootState } from '@/redux/store';
 import {
   AreaChartOutlined,
   AuditOutlined,
@@ -10,8 +11,10 @@ import {
 } from '@ant-design/icons';
 import { Layout, Menu, theme } from 'antd';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-
+import helper from '@/helpers/index';
+import { logout } from '@/redux/auth.slice';
 function getItem(label: any, key: any, icon: any, children: any) {
   return {
     key,
@@ -22,7 +25,9 @@ function getItem(label: any, key: any, icon: any, children: any) {
 }
 export default function DashBoard() {
   const navigate = useNavigate();
-
+  var role = helper.cookie_get('role');
+  const dispatch = useDispatch();
+  console.log(role);
   const { Header, Content, Sider } = Layout;
   const [collapsed, setCollapsed] = useState(false);
   const {
@@ -51,8 +56,8 @@ export default function DashBoard() {
 
     //     console.log(JSON.parse(userInfo));
     //   }
-    let role = '0';
-    if (role == '0') {
+
+    if (role == 'Administrator') {
       setItems([
         // getItem("Acount", "acount", <ContactsOutlined />),
         // getItem("Request", "request", <SolutionOutlined />),
@@ -63,7 +68,7 @@ export default function DashBoard() {
         // ]),
         getItem('Management', 'management', <ContactsOutlined />, [
           getItem('Account', 'account', <SolutionOutlined />),
-          getItem('Campaign', 'campaign', <AreaChartOutlined />),
+          getItem('Product', 'product', <AreaChartOutlined />),
           getItem('Post', 'post', <AuditOutlined />),
           getItem('Job Application', 'jobapplication', <BorderOutlined />)
         ]),
@@ -228,9 +233,8 @@ export default function DashBoard() {
               <LogoutOutlined
                 type="primary"
                 onClick={() => {
-                  //   Cookies.remove('userInfo');
-                  //   Cookies.remove('token');
-                  //   SUser.set({});
+                  helper.cookie_delete('AT');
+                  dispatch(logout());
                   navigate('/');
                 }}
                 style={{

@@ -2,6 +2,7 @@ import axios from 'axios';
 import helpers from '../helpers';
 import { toast } from '@/components/ui/use-toast';
 import __helpers from '../helpers';
+import { message } from 'antd';
 
 const baseURL =
   process.env.NODE_ENV === 'production'
@@ -52,7 +53,7 @@ const onResponseError = (error: any) => {
 axios.interceptors.request.use(onRequestSuccess, onRequestError);
 axios.interceptors.response.use(onResponseSuccess, onResponseError);
 axios.defaults.baseURL = baseURL;
-
+export const api = axios;
 var BaseRequest = {
   Get: async (url: string) => {
     try {
@@ -76,7 +77,7 @@ var BaseRequest = {
       console.log('response', response);
       return response;
     } catch (err) {
-      console.log('err', err);
+      message.error(err?.title);
     }
   },
   PostWithoutCatch: async (url: string, data?: any) => {

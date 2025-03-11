@@ -1,4 +1,6 @@
 import ScrollToTop from '@/hooks/scroll-to-top';
+import { Product } from '@/pages/AdminPage/Product/Product';
+
 import ForgotPassword from '@/pages/AuthPage/ForgotPassword';
 import NewPassword from '@/pages/AuthPage/NewPassword';
 import OtgPage from '@/pages/AuthPage/Otp';
@@ -73,8 +75,14 @@ export default function AppRouter() {
   const AdminRoutes = [
     {
       path: '/dashboard',
-      element: <DashBoard />
-      // children={[
+      element: <DashBoard />,
+      children: [
+        {
+          path: '/dashboard/Product',
+          element: <Product />
+          // index: true
+        }
+      ]
       //   <Route
       //     path="/dashboard/account"
       //     element={
@@ -84,14 +92,12 @@ export default function AppRouter() {
       //     }
       //   />,
 
-      //   <Route path="/dashboard/profile" element={<ProfileAccount />} />,
       //   <Route path="/dashboard/campaign" element={<Campaign />} />,
       //   <Route path="/dashboard/post" element={<Post />} />,
       //   <Route
       //     path="/dashboard/jobapplication"
       //     element={<JobApplication />}
       //   />,
-      // ]}
     }
   ];
 

@@ -1,34 +1,48 @@
 import BasePages from '@/components/shared/base-pages.js';
-import { Checkbox, Form, Input } from 'antd';
+import { Checkbox, Form, Input, message } from 'antd';
 
 import FacebookIcon from '@mui/icons-material/Facebook';
 import { useRouter } from '@/routes/hooks';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useOTP } from '@/queries/auth.query';
+import { useDispatch } from 'react-redux';
+import { turnOffSpin, turnOnSpin } from '@/redux/spin.slice';
 export default function OtgPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
+  const { mutateAsync: OTPAccount } = useOTP();
+  const [otp, setOtp] = useState('');
   const email = location.state?.email;
   useEffect(() => {
     if (!email) {
       navigate('/'); // Điều hướng về home nếu không có email
     }
   }, [email, navigate]);
-  console.log(email);
-  const onFinish = (values) => {
-    navigate('/');
+  const onFinish = async (values) => {
+    dispatch(turnOnSpin());
+    const model = {
+      email: email,
+      otp: values
+    };
+    console.log(model);
+    OTPAccount(model)
+      .then((data: any) => {
+        if (data?.success) {
+          message.success('OTP verified successfully');
+          navigate('/');
+        } else {
+          message.error(data?.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        dispatch(turnOffSpin());
+      });
     console.log('Success:', values);
-  };
-
-  const onChange = (text) => {
-    console.log('onChange:', text);
-  };
-  const onInput = (value) => {
-    console.log('onInput:', value);
-  };
-  const sharedProps = {
-    onChange,
-    onInput
   };
 
   return (
@@ -45,33 +59,30 @@ export default function OtgPage() {
             <p className=" mb-8 text-center text-4xl font-bold text-purple-500 drop-shadow-md">
               Xác nhận OTP
             </p>
-            <Form
-              name="basic"
-              className="w-full"
-              onFinish={onFinish}
-              autoComplete="off"
-            >
-              <Form.Item
-                name="email"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Cannot be empty'
-                  }
-                ]}
-              >
-                <div className="flex items-center justify-center">
-                  <Input.OTP size="large" />
-                </div>
-              </Form.Item>
 
-              <button
-                type="submit"
-                className=" from-blue-500 mb-2 w-full rounded-full bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] px-6 py-3 text-base font-medium text-white transition-colors duration-200 hover:bg-[#9B22DB]"
-              >
-                Xác nhận
-              </button>
-            </Form>
+            <div className="mb-6 flex items-center justify-center">
+              <Input.OTP
+                onChange={(text) => {
+                  setOtp(text);
+
+                  onFinish(text);
+                }}
+                size="large"
+              />
+            </div>
+
+            <button
+              type="submit"
+              onClick={() => {
+                if (otp.length < 6) {
+                  message.error('OTP must be at least 6 characters');
+                } else onFinish(otp);
+              }}
+              className=" from-blue-500 mb-2 w-full rounded-full bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] px-6 py-3 text-base font-medium text-white transition-colors duration-200 hover:bg-[#9B22DB]"
+            >
+              Xác nhận
+            </button>
+
             {/* <input
               placeholder="Tên đăng nhập"
               className="mb-4 w-full rounded-full bg-gray-50 py-3 pl-10 pr-4 text-sm transition-shadow focus:outline-none focus:ring-2 focus:ring-gray-200"
