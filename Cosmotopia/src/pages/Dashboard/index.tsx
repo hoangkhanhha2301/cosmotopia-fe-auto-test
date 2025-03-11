@@ -69,8 +69,8 @@ export default function DashBoard() {
         getItem('Management', 'management', <ContactsOutlined />, [
           getItem('Account', 'account', <SolutionOutlined />),
           getItem('Product', 'product', <AreaChartOutlined />),
-          getItem('Post', 'post', <AuditOutlined />),
-          getItem('Job Application', 'jobapplication', <BorderOutlined />)
+          getItem('Brand', 'brand', <AreaChartOutlined />),
+          getItem('Category', 'category', <AuditOutlined />)
         ]),
         getItem('Settings', 'settings', <SettingOutlined />, [
           getItem('Profile', 'profile', <UserOutlined />)
@@ -82,8 +82,8 @@ export default function DashBoard() {
       setItems([
         getItem('Management', 'management', <ContactsOutlined />, [
           getItem('Account', 'account', <SolutionOutlined />),
-          getItem('Campaign', 'campaign', <AreaChartOutlined />),
-          getItem('Post', 'post', <AuditOutlined />),
+          getItem('Brand', 'brand', <AreaChartOutlined />),
+          getItem('Category', 'category', <AuditOutlined />),
           getItem('Job Application', 'jobapplication', <BorderOutlined />)
         ]),
         getItem('Settings', 'settings', <SettingOutlined />, [
