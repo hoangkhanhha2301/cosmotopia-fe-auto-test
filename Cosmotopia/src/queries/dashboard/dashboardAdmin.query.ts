@@ -14,7 +14,8 @@ export const getAllProduct = () => api.get('api/Product/GetAllProduct');
 export const getProductDetail = (id) =>
   api.get(`api/Product/GetProductBy/${id}`);
 export const AddProduct = (data) => api.post(`api/Product/CreateProduct`, data);
-
+export const UpdateProduct = (data, id) =>
+  api.put(`api/Product/UpdateProduct/${id}`, data);
 // Category
 export const getAllCategory = () => api.get('api/Category/GetAllCategory');
 export const getCategoryById = (id) =>

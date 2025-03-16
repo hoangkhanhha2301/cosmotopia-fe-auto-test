@@ -64,9 +64,6 @@ export const Brand: FC<BrandProps> = ({}) => {
       dataIndex: 'createdAt',
       key: 'createdAt',
       render: (date) => (date ? dayjs(date).format('DD/MM/YYYY') : '')
-      // render: (n, o) => {
-      //   return <>{getRole(n)}</>;
-      // },
     },
 
     {

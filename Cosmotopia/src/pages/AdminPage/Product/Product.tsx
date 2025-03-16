@@ -3,7 +3,8 @@ import {
   getAllBrand,
   getAllCategory,
   getAllProduct,
-  getProductDetail
+  getProductDetail,
+  UpdateProduct
 } from '@/queries/dashboard/dashboardAdmin.query';
 import { UploadOutlined } from '@ant-design/icons';
 import {
@@ -38,12 +39,28 @@ export const Product: FC<ProductProps> = ({}) => {
   const [productId, setProductId] = useState<string>('');
   const [form] = Form.useForm();
   const columns = [
+    // {
+    //   title: 'ProductID',
+    //   dataIndex: 'productId',
+    //   key: 'productId',
+    //   render: (n, o) => {
+    //     return <>{n ? n : '-'}</>;
+    //   }
+    // },
     {
-      title: 'ProductID',
-      dataIndex: 'productId',
-      key: 'productId',
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
       render: (n, o) => {
         return <>{n ? n : '-'}</>;
+      }
+    },
+    {
+      title: 'Brand',
+      dataIndex: 'brand',
+      key: 'brand',
+      render: (n, o) => {
+        return <>{n ? n.name : '-'}</>;
       }
     },
     {
@@ -56,15 +73,7 @@ export const Product: FC<ProductProps> = ({}) => {
     },
 
     {
-      title: 'DDescription',
-      dataIndex: 'description',
-      key: 'description'
-      // render: (n, o) => {
-      //   return <>{getRole(n)}</>;
-      // },
-    },
-    {
-      title: 'PricePrice',
+      title: 'Price',
       dataIndex: 'price',
       key: 'price'
       // render: (n, o) => {
@@ -156,7 +165,7 @@ export const Product: FC<ProductProps> = ({}) => {
     //   onError(error); // Báo lỗi nếu có
     // }
   };
-  console.log(brand, category);
+
   const showModal = (id) => {
     setProductId(id);
   };
@@ -176,34 +185,66 @@ export const Product: FC<ProductProps> = ({}) => {
         console.log(dataCurrent);
         form.setFieldsValue({
           // image :
+
           description: dataCurrent.description,
           stockQuantity: dataCurrent.stockQuantity,
           price: dataCurrent.price,
-          brand: dataCurrent.brand,
-          category: dataCurrent.category,
-          name: dataCurrent.name
+          brand: dataCurrent.brand?.brandId,
+          commissionRate: dataCurrent.commissionRate,
+          category: dataCurrent.category?.categoryId,
+          name: dataCurrent.name,
+          isActive: dataCurrent.isActive
         });
+        const newFileList = dataCurrent.imageUrls?.map((url, index) => ({
+          uid: index,
+          url: url,
+          status: 'done'
+        }));
+        setFileList(newFileList);
       });
     }
   }, [productId]);
+  const addData = (model) => {
+    AddProduct(model)
+      .then((data) => {
+        console.log(data);
+        message.success('add new Product success!!!');
+        handleCancel();
+        getData();
+      })
+      .catch((error) => {
+        console.log(error);
+        message.error(error.response?.data?.msg);
+      });
+  };
+  const updateData = (model) => {
+    UpdateProduct(model, productId)
+      .then((data) => {
+        console.log(data);
+        message.success('update Product success!!!');
+        handleCancel();
+        getData();
+      })
+      .catch((error) => {
+        console.log(error);
+        message.error(error.response?.data?.msg);
+      });
+  };
   const onFinish = async (values) => {
     const listImage = fileList.map((file) => file.url);
     console.log(listImage);
     console.log(values);
     const model = {
-      listImage: listImage
+      name: values.name,
+      description: values.description,
+      price: values.price,
+      stockQuantity: values.stockQuantity,
+      commissionRate: values.commissionRate,
+      categoryId: values.category,
+      brandId: values.brand,
+      imageUrls: listImage
     };
-    // AddProduct(123)
-    //   .then((data) => {
-    //     console.log(data);
-    //     message.success('add new Product success!!!');
-    //     handleCancel();
-    //     getData();
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //     message.error(error.response?.data?.msg);
-    //   });
+    productId.length > 1 ? updateData(model) : addData(model);
   };
   const getData = () => {
     console.log('oke');
@@ -221,7 +262,6 @@ export const Product: FC<ProductProps> = ({}) => {
   const getCategory = () => {
     getAllCategory()
       .then((data) => {
-        console.log(data);
         setCategory(data?.data);
       })
       .catch((error) => {
@@ -233,7 +273,6 @@ export const Product: FC<ProductProps> = ({}) => {
   const getBrand = () => {
     getAllBrand()
       .then((data) => {
-        console.log(data);
         setBrand(data?.data);
       })
       .catch((error) => {
@@ -243,8 +282,9 @@ export const Product: FC<ProductProps> = ({}) => {
       .finally(() => {});
   };
   const onSearch = (value, _e, info) => {
-    setValueSearch(value.length > 0 ? value : null);
+    setValueSearch(value.length > 0 ? value : '');
   };
+
   useEffect(() => {
     getData();
     getCategory();
@@ -427,6 +467,57 @@ export const Product: FC<ProductProps> = ({}) => {
                         </Form.Item>
                       </Col>
                     </Row>
+                    <Row gutter={24}>
+                      <Col span={12}>
+                        <Form.Item
+                          name="commissionRate"
+                          label="Commission Rate"
+                          rules={[
+                            {
+                              required: true,
+                              message:
+                                'Please Enter Commission Rate of Product!'
+                            }
+                          ]}
+                        >
+                          <InputNumber
+                            min={0}
+                            style={{ width: '100%' }}
+                            placeholder="Enter Commission Rate of Product"
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item
+                          name="isActive"
+                          label="Lock Product"
+                          rules={[
+                            {
+                              required: true,
+                              message: 'Please Enter status of Product!'
+                            }
+                          ]}
+                        >
+                          <Select
+                            // defaultValue="lucy"
+                            style={{
+                              width: '100%'
+                            }}
+                            // onChange={handleChange}
+                            options={[
+                              {
+                                value: false,
+                                label: 'Lock Product'
+                              },
+                              {
+                                value: true,
+                                label: 'UnLock Product'
+                              }
+                            ]}
+                          />
+                        </Form.Item>
+                      </Col>
+                    </Row>
                   </Col>
                   <Col span={12}>
                     <Row gutter={24}>
@@ -469,6 +560,7 @@ export const Product: FC<ProductProps> = ({}) => {
                             prev.filter((item) => item.uid !== file.uid)
                           );
                         }}
+                        accept=".jpg,.png,.pdf"
                         // showUploadList={true}
                         // beforeUpload={(file) => {
                         //   setFileList((prev) => [...prev, file]);

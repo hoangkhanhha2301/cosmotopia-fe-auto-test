@@ -1,6 +1,5 @@
 import ScrollToTop from '@/hooks/scroll-to-top';
 import { Account } from '@/pages/AdminPage/Account/AccountManager';
-
 import { Brand } from '@/pages/AdminPage/Brand/Brand';
 import { Category } from '@/pages/AdminPage/Category/Category';
 import { Order } from '@/pages/AdminPage/Order/Order';
@@ -14,6 +13,7 @@ import Cart from '@/pages/Cart';
 import DashBoard from '@/pages/Dashboard';
 import NotFound from '@/pages/not-found';
 import ProductDetail from '@/pages/ProductDetail/ProductDetail';
+import Unauthorized from '@/pages/unauthorizedPage';
 import { Suspense, lazy } from 'react';
 import { Navigate, Outlet, useRoutes } from 'react-router-dom';
 
@@ -23,10 +23,19 @@ const HomePage = lazy(() => import('@/pages/Home/index'));
 const ProfilePage = lazy(() => import('@/pages/ProfilePage/ProfilePage'));
 const LoginPage = lazy(() => import('@/pages/AuthPage/Login/index'));
 const RegisterPage = lazy(() => import('@/pages/AuthPage/Register/index'));
-const OrderTracking = lazy(() => import('@/pages/ProfilePage/OrderTracking'))
-const ProductGridPage = lazy(() => import('@/pages/ProductGrid/index'))
+const OrderTracking = lazy(() => import('@/pages/ProfilePage/OrderTracking'));
+const ProductGridPage = lazy(() => import('@/pages/ProductGrid/index'));
+import helper from '@/helpers/index';
 // ----------------------------------------------------------------------
-
+const ProtectedRoute = ({ children, allowedRoles }) => {
+  const userObject = JSON.parse(helper.cookie_get('user'));
+  const userRole = userObject.role;
+  console.log(userRole);
+  if (!allowedRoles.includes(userRole)) {
+    return <Navigate to="/401" replace />;
+  }
+  return children;
+};
 export default function AppRouter() {
   const systemRoute = [
     {
@@ -99,73 +108,8 @@ export default function AppRouter() {
           element: <ProfilePage />,
           index: true
         },
-        { path: "orders", element: <OrderTracking /> }
+        { path: 'orders', element: <OrderTracking /> }
       ]
-    }
-  ];
-
-  const AdminRoutes = [
-    {
-      path: '/dashboard',
-      element: <DashBoard />,
-      children: [
-        {
-          path: '/dashboard/Product',
-          element: <Product />
-          // index: true
-        },
-        {
-          path: '/dashboard/category',
-          element: <Category />
-          // index: true
-        },
-        {
-          path: '/dashboard/brand',
-          element: <Brand />
-          // index: true
-        },
-        {
-          path: '/dashboard/order',
-          element: <Order />
-          // index: true
-        },
-        {
-          path: '/dashboard/account',
-          element: <Account />
-          // index: true
-        },
-        {
-          path: '/dashboard/profile',
-          element: <Profile />
-          // index: true
-        }
-      ]
-      //   <Route
-      //     path="/dashboard/account"
-      //     element={
-      //       <ProtectedRoute roles={["0", "1"]}>
-      //         <ManageUser />
-      //       </ProtectedRoute>
-      //     }
-      //   />,
-
-      //   <Route path="/dashboard/campaign" element={<Campaign />} />,
-      //   <Route path="/dashboard/post" element={<Post />} />,
-      //   <Route
-      //     path="/dashboard/jobapplication"
-      //     element={<JobApplication />}
-      //   />,
-    }
-  ];
-
-  const publicRoutes = [
-    {
-      path: '/404',
-      element: <NotFound />
-    },
-    {
-      path: '*',
-      element: <Navigate to="/404" replace />
     }
   ];
 
@@ -173,3 +117,85 @@ export default function AppRouter() {
 
   return routes;
 }
+const AdminRoutes = [
+  {
+    path: '/dashboard',
+    element: (
+      <ProtectedRoute allowedRoles={['Administrator', 'Manager']}>
+        <DashBoard />
+      </ProtectedRoute>
+    ),
+    // // { value: 0, label: 'Administrator' },
+    // { value: 1, label: 'Manager' },
+    // { value: 2, label: 'Affiliates' },
+    // { value: 3, label: 'Customers' },
+    // { value: 4, label: 'Sales Staff' },
+    // { value: 5, label: 'Shipper Staff' }
+    children: [
+      {
+        path: '/dashboard/Product',
+        element: <Product />
+        // index: true
+      },
+      {
+        path: '/dashboard/category',
+        element: <Category />
+        // index: true
+      },
+      {
+        path: '/dashboard/brand',
+        element: <Brand />
+        // index: true
+      },
+      {
+        path: '/dashboard/order',
+        element: <Order />
+        // index: true
+      },
+      {
+        path: '/dashboard/account',
+        element: (
+          <ProtectedRoute allowedRoles={['Administrator']}>
+            <Account />
+          </ProtectedRoute>
+        )
+        // index: true
+      },
+      {
+        path: '/dashboard/profile',
+        element: <Profile />
+        // index: true
+      }
+    ]
+    //   <Route
+    //     path="/dashboard/account"
+    //     element={
+    //       <ProtectedRoute roles={["0", "1"]}>
+    //         <ManageUser />
+    //       </ProtectedRoute>
+    //     }
+    //   />,
+
+    //   <Route path="/dashboard/campaign" element={<Campaign />} />,
+    //   <Route path="/dashboard/post" element={<Post />} />,
+    //   <Route
+    //     path="/dashboard/jobapplication"
+    //     element={<JobApplication />}
+    //   />,
+  }
+];
+
+const publicRoutes = [
+  {
+    path: '/404',
+    element: <NotFound />
+  },
+  {
+    path: '/401',
+    element: <Unauthorized />
+  },
+  {
+    path: '*',
+    element: <Navigate to="/404" replace />
+  }
+];

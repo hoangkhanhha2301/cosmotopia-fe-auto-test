@@ -30,9 +30,7 @@ function getItem(label: any, key: any, icon: any, children: any) {
 }
 export default function DashBoard() {
   const navigate = useNavigate();
-  var role = helper.cookie_get('role');
   const dispatch = useDispatch();
-  console.log(role);
   const { Header, Content, Sider } = Layout;
   const [collapsed, setCollapsed] = useState(false);
   const {
@@ -48,7 +46,7 @@ export default function DashBoard() {
     location.pathname.split('/')[location.pathname.split('/').length - 1];
 
   const userObject = JSON.parse(helper.cookie_get('user'));
-  console.log(userObject);
+  const role = userObject.role;
   const dataOpen = JSON.parse(localStorage.getItem('keys')) ?? [];
 
   const [openKeys, setOpenKeys] = useState(dataOpen);
@@ -66,13 +64,6 @@ export default function DashBoard() {
 
     if (role == 'Administrator') {
       setItems([
-        // getItem("Acount", "acount", <ContactsOutlined />),
-        // getItem("Request", "request", <SolutionOutlined />),
-        // getItem("Session", "session", <AreaChartOutlined />),
-        // getItem("Statistical", "statistical", <ContainerOutlined />, [
-        //   getItem("Overview Statistics", "overviewStatistics"),
-        //   getItem("Session Statistics", "sessionStatistics"),
-        // ]),
         getItem('Management', 'management', <ContactsOutlined />, [
           getItem('Account', 'account', <SolutionOutlined />),
           getItem('Product', 'product', <ProductOutlined />),
@@ -87,20 +78,29 @@ export default function DashBoard() {
         // getItem(),
       ]);
     }
-    if (role == '1') {
+    if (role == 'Manager') {
       setItems([
+        // getItem("Acount", "acount", <ContactsOutlined />),
+        // getItem("Request", "request", <SolutionOutlined />),
+        // getItem("Session", "session", <AreaChartOutlined />),
+        // getItem("Statistical", "statistical", <ContainerOutlined />, [
+        //   getItem("Overview Statistics", "overviewStatistics"),
+        //   getItem("Session Statistics", "sessionStatistics"),
+        // ]),
         getItem('Management', 'management', <ContactsOutlined />, [
-          getItem('Account', 'account', <SolutionOutlined />),
-          getItem('Brand', 'brand', <AreaChartOutlined />),
-          getItem('Category', 'category', <AuditOutlined />),
-          getItem('Job Application', 'jobapplication', <BorderOutlined />)
+          getItem('Product', 'product', <ProductOutlined />),
+          getItem('Brand', 'brand', <AppleOutlined />),
+          getItem('Category', 'category', <MenuOutlined />),
+          getItem('Order', 'order', <ShoppingCartOutlined />)
+          // getItem('Category', 'category', <MenuOutlined />)
         ]),
         getItem('Settings', 'settings', <SettingOutlined />, [
           getItem('Profile', 'profile', <UserOutlined />)
         ])
+        // getItem(),
       ]);
     }
-    if (role == '2') {
+    if (role == 'Sales Staff') {
       setItems([
         getItem('Management', 'management', <ContactsOutlined />, [
           getItem('Campaign', 'campaign', <AreaChartOutlined />),
@@ -217,7 +217,7 @@ export default function DashBoard() {
                 {/* {user?.name} */}
               </span>
               <p>
-                Role: Admin
+                Role:{`${userObject?.role}`}
                 {/* {getRole(user?.role)} */}
               </p>
             </div>
@@ -235,9 +235,9 @@ export default function DashBoard() {
                 style={{ maxWidth: '200px' }}
                 // onClick={handleClick}
               />
-              <p style={{ maxWidth: '200px', marginBottom: '16px' }}>
+              {/* <p style={{ maxWidth: '200px', marginBottom: '16px' }}>
                 COMESTICS
-              </p>
+              </p> */}
             </div>
             <div>
               <LogoutOutlined
