@@ -36,7 +36,7 @@ export default function DashboardLayout({
   }, []);
 
   return (
-    <div className="flex min-h-screen flex-col justify-between overflow-hidden bg-white ">
+    <div className="flex min-h-screen flex-col justify-between overflow-visible bg-white ">
       <MobileSidebar
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}

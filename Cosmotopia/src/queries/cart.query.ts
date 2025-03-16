@@ -95,3 +95,15 @@ export const useUpdateOrder = () => {
     }
   });
 };
+
+
+export const useGetAllOrders = (page = 1, pageSize = 3) => {
+  return useQuery({
+    queryKey: ['get_all_orders', page, pageSize],
+    queryFn: async () => {
+      const response = await BaseRequest.Get(`/api/Order/user/orders?page=${page}&pageSize=${pageSize}`);
+      console.log("API Response:", response); // Debug API response
+      return response || []; // Tránh trả về undefined
+    },
+  });
+};

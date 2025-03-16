@@ -21,6 +21,25 @@ export const useLogout = () => {
   });
 };
 
+export const useGetProfile = () => {
+  return useQuery({
+    queryKey: ['get_profile'],
+    queryFn: async () => {
+      return BaseRequest.Get(`/api/User/GetCurrentUser`);
+    },
+    retry: 1
+  });
+};
+
+export const useEditProfile = () => {
+  return useMutation({
+    mutationKey: ['edit_proile'],
+    mutationFn: async (model: any) => {
+      return await BaseRequest.Put(`/api/User/EditSelf`, model);
+    }
+  });
+};
+
 export const useRegister = () => {
   return useMutation({
     mutationKey: ['register'],
