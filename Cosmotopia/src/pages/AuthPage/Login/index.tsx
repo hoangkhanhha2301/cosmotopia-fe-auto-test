@@ -25,6 +25,7 @@ export default function LoginPage() {
       console.log(data);
       helper.cookie_set('AT', data.token);
       helper.cookie_set('role', data.role);
+      helper.cookie_set('user', JSON.stringify({ ...data, token: '' }));
       // helper.cookie_set('RT', data.refreshToken);
       dispatch(login());
       if (data.role == 'Customers') {

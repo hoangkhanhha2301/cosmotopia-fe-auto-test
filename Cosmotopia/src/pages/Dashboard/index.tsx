@@ -1,14 +1,19 @@
 import { RootState } from '@/redux/store';
 import {
+  AppleOutlined,
   AreaChartOutlined,
   AuditOutlined,
   BorderOutlined,
   ContactsOutlined,
   LogoutOutlined,
+  MenuOutlined,
+  ProductOutlined,
   SettingOutlined,
+  ShoppingCartOutlined,
   SolutionOutlined,
   UserOutlined
 } from '@ant-design/icons';
+import cosmeLogo from '@/assets/logo/cosme_logo_2.png';
 import { Layout, Menu, theme } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -42,6 +47,8 @@ export default function DashBoard() {
   const currentURI =
     location.pathname.split('/')[location.pathname.split('/').length - 1];
 
+  const userObject = JSON.parse(helper.cookie_get('user'));
+  console.log(userObject);
   const dataOpen = JSON.parse(localStorage.getItem('keys')) ?? [];
 
   const [openKeys, setOpenKeys] = useState(dataOpen);
@@ -68,9 +75,11 @@ export default function DashBoard() {
         // ]),
         getItem('Management', 'management', <ContactsOutlined />, [
           getItem('Account', 'account', <SolutionOutlined />),
-          getItem('Product', 'product', <AreaChartOutlined />),
-          getItem('Brand', 'brand', <AreaChartOutlined />),
-          getItem('Category', 'category', <AuditOutlined />)
+          getItem('Product', 'product', <ProductOutlined />),
+          getItem('Brand', 'brand', <AppleOutlined />),
+          getItem('Category', 'category', <MenuOutlined />),
+          getItem('Order', 'order', <ShoppingCartOutlined />)
+          // getItem('Category', 'category', <MenuOutlined />)
         ]),
         getItem('Settings', 'settings', <SettingOutlined />, [
           getItem('Profile', 'profile', <UserOutlined />)
@@ -178,15 +187,40 @@ export default function DashBoard() {
         </Menu>
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
-          <header
+        <Header
+          style={{ background: colorBgContainer, boxSizing: 'border-box' }}
+          className="mt-2"
+        >
+          <div
             style={{
               textAlign: 'center',
-              fontSize: '32px',
+
               position: 'relative'
             }}
+            className="flex items-center justify-between px-4"
           >
-            {' '}
+            <div
+              style={{
+                // position: 'absolute',
+                // left: '20px',
+                textAlign: 'left',
+                color: 'black',
+                border: 'none',
+                // borderRadius: '5px',
+                // padding: '10px 12px',
+                fontSize: '15px',
+                lineHeight: '23px'
+              }}
+            >
+              <span>
+                Hi👋:{'  '} {`${userObject?.firstName} ${userObject?.lastName}`}
+                {/* {user?.name} */}
+              </span>
+              <p>
+                Role: Admin
+                {/* {getRole(user?.role)} */}
+              </p>
+            </div>
             <div
               style={{
                 display: 'flex',
@@ -195,39 +229,15 @@ export default function DashBoard() {
                 gap: '8px'
               }}
             >
-              <div
-                style={{
-                  position: 'absolute',
-                  left: '20px',
-                  textAlign: 'left',
-                  color: 'black',
-                  border: 'none',
-                  borderRadius: '5px',
-                  padding: '10px 12px',
-                  fontSize: '15px',
-                  lineHeight: '23px'
-                }}
-              >
-                {/* {
-                  <SUser.Wrap>
-                    {(user) => (
-                      <>
-                        <span>
-                          Hi👋:{'  '} {user?.name}
-                        </span>
-                        <p>Role: {getRole(user?.role)}</p>
-                      </>
-                    )}
-                  </SUser.Wrap>
-                } */}
-              </div>
               <img
-                src="/Logo.svg"
+                src={cosmeLogo}
                 alt=""
                 style={{ maxWidth: '200px' }}
                 // onClick={handleClick}
               />
-              <p style={{ maxWidth: '200px' }}> CLCA</p>
+              <p style={{ maxWidth: '200px', marginBottom: '16px' }}>
+                COMESTICS
+              </p>
             </div>
             <div>
               <LogoutOutlined
@@ -238,9 +248,9 @@ export default function DashBoard() {
                   navigate('/');
                 }}
                 style={{
-                  position: 'absolute',
-                  right: '30px',
-                  top: '15px',
+                  // position: 'absolute',
+                  // right: '30px',
+                  // top: '15px',
                   backgroundColor: '#1677ff',
                   color: 'white',
                   border: 'none',
@@ -253,7 +263,7 @@ export default function DashBoard() {
                 }}
               />
             </div>
-          </header>
+          </div>
         </Header>
         <Content
           style={{ margin: '0 16px', display: 'flex', flexDirection: 'column' }}

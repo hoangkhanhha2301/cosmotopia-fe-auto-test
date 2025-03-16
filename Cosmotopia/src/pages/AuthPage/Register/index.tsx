@@ -100,6 +100,24 @@ export default function RegisterPage() {
                 </Col>
               </Row>
               <Form.Item
+                name="phone"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your phone!'
+                  },
+                  {
+                    pattern: /^[0-9]{10}$/,
+                    message: 'Phone number must be exactly 10 digits!'
+                  }
+                ]}
+              >
+                <input
+                  placeholder="Số điện thoại"
+                  className=" w-full rounded-full bg-gray-50 py-3 pl-10 pr-4 text-sm transition-shadow focus:outline-none focus:ring-2 focus:ring-gray-200"
+                />
+              </Form.Item>
+              <Form.Item
                 name="email"
                 rules={[
                   {
@@ -114,20 +132,7 @@ export default function RegisterPage() {
                   className=" w-full rounded-full bg-gray-50 py-3 pl-10 pr-4 text-sm transition-shadow focus:outline-none focus:ring-2 focus:ring-gray-200"
                 />
               </Form.Item>
-              <Form.Item
-                name="phone"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input your phone!'
-                  }
-                ]}
-              >
-                <input
-                  placeholder="Số điện thoại"
-                  className=" w-full rounded-full bg-gray-50 py-3 pl-10 pr-4 text-sm transition-shadow focus:outline-none focus:ring-2 focus:ring-gray-200"
-                />
-              </Form.Item>
+
               <Form.Item
                 name="password"
                 rules={[
