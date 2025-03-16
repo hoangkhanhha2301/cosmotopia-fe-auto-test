@@ -16,7 +16,7 @@ export const Profile: FC<ProfileProps> = ({}) => {
       .then((data) => {
         console.log(data);
         const profile = data?.data;
-        helper.cookie_set('user', JSON.stringify(profile));
+        // helper.cookie_set('user', JSON.stringify(profile));
         form.setFieldsValue({
           email: profile.email,
           phone: profile.phone,
@@ -160,7 +160,7 @@ export const Profile: FC<ProfileProps> = ({}) => {
                     </Row> */}
           </Col>
         </Row>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" disabled>
           Update Profile
         </Button>
         {/*  */}

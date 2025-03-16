@@ -33,7 +33,7 @@ import dayjs from 'dayjs';
 import React, { FC, useEffect, useState } from 'react';
 
 interface AccountProps {}
-const optionsRole = [
+export const optionsRole = [
   // { value: 0, label: 'Administrator' },
   { value: 1, label: 'Manager' },
   { value: 2, label: 'Affiliates' },
