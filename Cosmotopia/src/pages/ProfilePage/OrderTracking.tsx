@@ -1,7 +1,8 @@
 import { Image } from "antd";
 import { Truck } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetAllOrders } from "@/queries/cart.query"; // Import hook gọi API
+
 
 const orderStatuses = [
   { id: "all", label: "Tất cả" },
@@ -15,12 +16,16 @@ export default function OrderTracking() {
   const [activeStatus, setActiveStatus] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Gọi API lấy danh sách đơn hàng từ server
   const { data, isLoading, error } = useGetAllOrders(currentPage, 3);
   console.log(data);
   if (isLoading) return <p>Đang tải đơn hàng...</p>;
   if (error) return <p>Lỗi khi tải đơn hàng!</p>;
-
+  // const getData = ()=>{
+  //   getAllOrder(1,3).then(data=>{console.log(data)})
+  // }
+  // useEffect(()=>{
+  //   getData()
+  // })
   const allOrders = data?.orders || [];
 
   // Lọc đơn hàng theo trạng thái
@@ -40,7 +45,7 @@ export default function OrderTracking() {
             key={status.id}
             onClick={() => {
               setActiveStatus(status.id);
-              setCurrentPage(1); // Reset về trang đầu khi lọc
+              setCurrentPage(1); 
             }}
             className={`rounded-xl px-4 py-3 text-sm transition-colors ${
               activeStatus === status.id

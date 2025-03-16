@@ -21,7 +21,7 @@ export function UserAccountMenu({ auth, handleLogout }: UserAccountMenuProps) {
     {
       key: '1',
       label: (
-        <Link to="/profile/orders" className="block px-4 py-2 text-[#32294B] font-montserrat font-normal text-base hover:bg-gray-100">
+        <Link to="/profile/orders" className="block px-4 py-2 text-[#32294B] font-montserrat font-normal text-base hover:bg-gray-100 hover:text-[#BF38FF]">
           Đơn hàng
         </Link>
       ),
@@ -29,15 +29,15 @@ export function UserAccountMenu({ auth, handleLogout }: UserAccountMenuProps) {
     {
       key: '2',
       label: (
-        <Link to="/profile" className="block px-4 py-2 text-[#32294B] font-montserrat font-normal text-base hover:bg-gray-100">
-          Tài khoản
+        <Link to="/profile" className="block px-4 py-2 text-[#32294B] font-montserrat font-normal text-base hover:bg-gray-100 hover:text-[#BF38FF]">
+          Hồ sơ
         </Link>
       ),
     },
     {
       key: '3',
       label: (
-        <span onClick={handleLogout} className="block px-4 py-2 text-[#32294B] font-montserrat font-normal text-base hover:bg-gray-100">
+        <span onClick={handleLogout} className="block px-4 py-2 text-[#32294B] font-montserrat font-normal text-base hover:bg-gray-100 hover:text-[#BF38FF]">
           Đăng xuất
         </span>
       ),
@@ -60,15 +60,21 @@ export function UserAccountMenu({ auth, handleLogout }: UserAccountMenuProps) {
   return (
     <div className="relative" ref={dropdownRef}>
       <div className="user flex items-center">
-        <PersonIcon className="text-blue-500 mr-1 h-6 w-6" />
+      
         {auth ? (
           // <div className="flex cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
           //   <span className="hover:cursor-pointer font-montserrat">Tài khoản</span>
           // </div>
           <Dropdown menu={{ items }} placement="bottomCenter">
-            <span className="hover:cursor-pointer font-montserrat">Tài khoản</span>
+             <div>
+             <PersonIcon className="text-blue-500 mr-1 h-6 w-6" />
+             <span className="hover:cursor-pointer font-montserrat">Tài khoản</span>
+             </div>
           </Dropdown>
         ) : (
+
+         <>
+          <PersonIcon className="text-blue-500 mr-1 h-6 w-6" />
           <p className="font-montserrat">
             <span onClick={() => router.push("/login")} className="hover:cursor-pointer font-montserrat">
               Đăng nhập
@@ -78,6 +84,7 @@ export function UserAccountMenu({ auth, handleLogout }: UserAccountMenuProps) {
               Đăng ký
             </span>
           </p>
+         </>
         )}
       </div>
 

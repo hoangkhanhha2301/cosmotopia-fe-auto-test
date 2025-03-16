@@ -63,6 +63,14 @@ var BaseRequest = {
       console.log('err', err);
     }
   },
+  Get2: async (url: string) => {
+    try {
+      const response = await axios.get(url);
+      return response;
+    } catch (err) {
+      console.log('err', err);
+    }
+  },
   Post: async (url: string, data?: any) => {
     try {
       const response = await axios.post<any>(url, data);
