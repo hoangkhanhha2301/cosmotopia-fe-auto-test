@@ -10,38 +10,86 @@ export default function ProductDetail() {
   const router = useRouter();
   const { id } = useParams<{ id: string }>(); // Get product ID from URL
   const { data, isLoading } = useGetDetailProduct(id); // Fetch product details
-  const [product, setProduct] = useState(null);
+  const [listContent, setListContent] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
   const [indexImg, setIndexImg] = useState(0);
   console.log(data?.description);
-  const listContent = [
-    // { title: 'Chi tiết sản phẩm', detail: data?.description || [] },
-    { title: 'Cách dùng', detail: data?.usage || [] },
-    { title: 'Thành phần', detail: data?.ingredients || [] },
-    { title: 'Đánh giá', detail: data?.reviews || [] },
-  ];
-  setProduct({...data,listContent:[...listContent,
-    { title: 'Chi tiết sản phẩm', detail: data?.description || [] },
-    
-  ]});
+  // const listContent = [
+  //   // { title: 'Chi tiết sản phẩm', detail: data?.description || [] },
+  //   { title: 'Cách dùng', detail: data?.usage || [] },
+  //   { title: 'Thành phần', detail: data?.ingredients || [] },
+  //   { title: 'Đánh giá', detail: data?.reviews || [] },
+  // ];
+
   const [currentTab, setCurrentTab] = useState();
-  useEffect(()=>{
-    setCurrentTab[product?.listContent[0]]
-  },[product])
+  useEffect(() => {
+    if (data) {
+      setListContent([
+        { title: 'Chi tiết sản phẩm', detail: data?.description || [] },
+        { title: 'Cách dùng', detail: data?.usage || [] },
+        { title: 'Thành phần', detail: data?.ingredients || [] },
+        {
+          title: 'Đánh giá',
+          detail: data?.reviews || [
+            {
+              reviewer: 'Nguyễn Thuý An',
+              rating: 5,
+              content:
+                'Sản phẩm rất tuyệt! Màu sắc tự nhiên, giữ màu lâu và không gây kích ứng.',
+              time: '2024-03-05 14:30'
+            },
+            {
+              reviewer: 'Trần Minh Hoàng',
+              rating: 4,
+              content:
+                'Mình thấy chất lượng ổn, nhưng màu có hơi nhạt hơn so với hình.',
+              time: '2024-03-04 10:15'
+            },
+            {
+              reviewer: 'Lê Hồng Nhung',
+              rating: 5,
+              content:
+                'Cực kỳ ưng ý, giao hàng nhanh, đóng gói đẹp. Mua lần thứ 2 rồi!',
+              time: '2024-03-03 18:45'
+            },
+            {
+              reviewer: 'Phạm Quốc Bảo',
+              rating: 3,
+              content: 'Màu đẹp nhưng hơi bột, không hợp với da khô lắm.',
+              time: '2024-03-02 12:20'
+            },
+            {
+              reviewer: 'Vũ Hải Yến',
+              rating: 4,
+              content:
+                'Son lên màu đẹp nhưng độ bám không được lâu như mong đợi.',
+              time: '2024-03-01 09:50'
+            }
+          ]
+        }
+      ]);
+      setCurrentTab({
+        title: 'Chi tiết sản phẩm',
+        detail: data?.description || []
+      });
+    }
+  }, [data]);
   if (isLoading) {
-    return <Spin className="flex justify-center items-center h-screen" />;
+    return <Spin className="flex h-screen items-center justify-center" />;
   }
 
   if (!data) {
-    return <p className="text-center text-red-500">Không tìm thấy sản phẩm!</p>;
+    return <p className="text-red-500 text-center">Không tìm thấy sản phẩm!</p>;
   }
 
   const listImg = data?.images || []; // Ảnh từ API
   const length = listImg.length;
-  
 
   return (
-    <BasePages className="relative mx-auto w-[80%] flex-1 p-4" pageHead="dataDetail">
+    <BasePages
+      className="relative mx-auto w-[80%] flex-1 p-4"
+      pageHead="dataDetail"
+    >
       <div className="flex items-center gap-4 " style={{ height: '670px' }}>
         {/* Danh sách ảnh nhỏ */}
         <div className="flex w-1/12 flex-col items-center justify-between gap-4 ">
@@ -57,7 +105,9 @@ export default function ProductDetail() {
               src={url}
               alt=""
               className={`h-20 w-full rounded-lg transition-all duration-300 hover:cursor-pointer ${
-                index === indexImg ? 'scale-105 shadow-lg ring-2 ring-purple-500' : 'opacity-60'
+                index === indexImg
+                  ? 'scale-105 shadow-lg ring-2 ring-purple-500'
+                  : 'opacity-60'
               }`}
               onClick={() => setIndexImg(index)}
             />
@@ -72,7 +122,10 @@ export default function ProductDetail() {
 
         {/* Ảnh chính */}
         <div className="flex w-7/12 justify-center">
-          <Image src={listImg[indexImg]} style={{ height: '582px', width: '100%' }} />
+          <Image
+            src={listImg[indexImg]}
+            style={{ height: '582px', width: '100%' }}
+          />
         </div>
 
         {/* Thông tin sản phẩm */}
@@ -86,7 +139,9 @@ export default function ProductDetail() {
             <span className="text-2xl font-semibold text-purple-500">
               {data.price} VNĐ
             </span>
-            <span className="text-gray-400 line-through">{data.oldPrice} VNĐ</span>
+            <span className="text-gray-400 line-through">
+              {data.oldPrice} VNĐ
+            </span>
             <span className="rounded bg-[rgba(255,0,0,0.1)] px-2 py-0.5 text-xs font-medium text-[rgba(255,0,0,0.8)]">
               -{data.discount}%
             </span>
@@ -135,7 +190,7 @@ export default function ProductDetail() {
       {/* Tabs */}
       <div>
         <div className="flex items-center justify-between px-2 py-4">
-          {product?.listContent.map((tab, index) => (
+          {listContent?.map((tab, index) => (
             <button
               key={index}
               onClick={() => setCurrentTab(tab)}
@@ -152,17 +207,27 @@ export default function ProductDetail() {
         </div>
         <div className="min-h-32 py-4">
           {currentTab?.title !== 'Đánh giá' ? (
-            currentTab?.detail.map((a, idx) => <p key={idx}>{a}</p>)
+            // currentTab?.detail.map((a, idx) => <p key={idx}>{a}</p>)
+            <p>{currentTab?.detail}</p>
           ) : (
             <div>
-              Tất cả đánh giá ({data.reviews.length})
+              Tất cả đánh giá ({currentTab?.detail?.length})
               <div className="flex flex-wrap justify-between gap-2">
-                {data.reviews.map((review, idx) => (
-                  <div key={idx} className="w-[calc(50%-8px)] rounded-xl border bg-white p-4 shadow-md">
+                {currentTab?.detail.map((review, idx) => (
+                  <div
+                    key={idx}
+                    className="w-[calc(50%-8px)] rounded-xl border bg-white p-4 shadow-md"
+                  >
                     <MoreOutlined className="absolute right-4 top-4 cursor-pointer text-gray-500" />
-                    <Rate disabled defaultValue={review.rating} className="text-yellow-500 mb-2" />
+                    <Rate
+                      disabled
+                      defaultValue={review.rating}
+                      className="text-yellow-500 mb-2"
+                    />
                     <div className="flex items-center space-x-2">
-                      <span className="text-lg font-semibold">{review.reviewer}</span>
+                      <span className="text-lg font-semibold">
+                        {review.reviewer}
+                      </span>
                       <CheckCircleFilled className="text-green-500" />
                     </div>
                     <p className="mt-2 text-gray-600">{review.content}</p>
