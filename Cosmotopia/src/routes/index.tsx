@@ -14,11 +14,13 @@ import { Suspense, lazy } from 'react';
 import { Navigate, Outlet, useRoutes } from 'react-router-dom';
 
 const SystemLayout = lazy(() => import('@/components/layout/layout'));
+const ProfileLayout = lazy(() => import('@/components/layout/layoutProfile'));
 const HomePage = lazy(() => import('@/pages/Home/index'));
-const ProfilePage = lazy(() => import('@/pages/ProfilePage/index'));
+const ProfilePage = lazy(() => import('@/pages/ProfilePage/ProfilePage'));
 const LoginPage = lazy(() => import('@/pages/AuthPage/Login/index'));
 const RegisterPage = lazy(() => import('@/pages/AuthPage/Register/index'));
-
+const OrderTracking = lazy(() => import('@/pages/ProfilePage/OrderTracking'))
+const ProductGridPage = lazy(() => import('@/pages/ProductGrid/index'))
 // ----------------------------------------------------------------------
 
 export default function AppRouter() {
@@ -39,10 +41,10 @@ export default function AppRouter() {
           element: <HomePage />,
           index: true
         },
-        {
-          path: '/profile',
-          element: <ProfilePage />
-        },
+        // {
+        //   path: '/profile',
+        //   element: <ProfilePage />
+        // },
         {
           path: '/login',
           element: <LoginPage />
@@ -70,10 +72,34 @@ export default function AppRouter() {
         {
           path: '/cart',
           element: <Cart />
+        },
+        {
+          path: '/productGrid',
+          element: <ProductGridPage />
         }
+      ]
+    },
+    {
+      path: '/profile',
+      element: (
+        <ProfileLayout>
+          <Suspense>
+            <ScrollToTop />
+            <Outlet />
+          </Suspense>
+        </ProfileLayout>
+      ),
+      children: [
+        {
+          path: '',
+          element: <ProfilePage />,
+          index: true
+        },
+        { path: "orders", element: <OrderTracking /> }
       ]
     }
   ];
+
   const AdminRoutes = [
     {
       path: '/dashboard',

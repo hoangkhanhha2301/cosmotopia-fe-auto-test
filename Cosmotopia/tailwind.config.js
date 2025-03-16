@@ -17,8 +17,12 @@ module.exports = {
       }
     },
     extend: {
+      backgroundImage: {
+        'gradient-primary': 'linear-gradient(to right, #9C3CFD, #BF38FF)',
+      },
       fontFamily: {
         montserrat: ['Montserrat', 'sans-serif'], 
+        openSans: ['Open Sans', 'sans-serif'],
       },
       colors: {
         border: 'hsl(var(--border))',

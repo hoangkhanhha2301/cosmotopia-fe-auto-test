@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-export default function PageHead({ title = 'Quản trị Happy Kids' }) {
+export default function PageHead({ title = 'Cosmotopia' }) {
   return (
     <Helmet>
       <title> {title} </title>
