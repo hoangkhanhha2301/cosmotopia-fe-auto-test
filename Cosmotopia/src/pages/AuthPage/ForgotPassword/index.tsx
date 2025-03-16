@@ -1,12 +1,34 @@
 import BasePages from '@/components/shared/base-pages.js';
-import { Checkbox, Form } from 'antd';
-
-import FacebookIcon from '@mui/icons-material/Facebook';
+import { Checkbox, Form, message } from 'antd';
 import { useRouter } from '@/routes/hooks';
 import { ro } from 'date-fns/locale';
+import { forgotPassword } from '@/queries/user.api';
+import { useDispatch } from 'react-redux';
+import { turnOffSpin, turnOnSpin } from '@/redux/spin.slice';
+import { useNavigate } from 'react-router-dom';
+
 export default function ForgotPassword() {
-  // const { mutateAsync: OTPAccount } = useOTP();
-  const onFinish = (values) => {};
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const onFinish = (values) => {
+    dispatch(turnOnSpin());
+
+    forgotPassword(values.email)
+      .then((data) => {
+        if (data.success) {
+          message.success(data.message);
+          navigate('/');
+        } else {
+          message.error(data.message);
+        }
+      })
+      .catch((err) => {
+        message.error(err.message);
+      })
+      .finally(() => {
+        dispatch(turnOffSpin());
+      });
+  };
   const router = useRouter();
   return (
     <>

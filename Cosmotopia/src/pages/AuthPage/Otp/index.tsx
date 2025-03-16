@@ -31,7 +31,7 @@ export default function OtgPage() {
       .then((data: any) => {
         if (data?.success) {
           message.success('OTP verified successfully');
-          navigate('/');
+          navigate('/login');
         } else {
           message.error(data?.message);
         }
@@ -65,7 +65,7 @@ export default function OtgPage() {
                 onChange={(text) => {
                   setOtp(text);
 
-                  onFinish(text);
+                  // onFinish(text);
                 }}
                 size="large"
               />

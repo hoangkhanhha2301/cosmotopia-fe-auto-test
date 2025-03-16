@@ -1,10 +1,41 @@
 import BasePages from '@/components/shared/base-pages.js';
-import { Checkbox, Form } from 'antd';
+import { Checkbox, Form, message } from 'antd';
 
 import FacebookIcon from '@mui/icons-material/Facebook';
 import { useRouter } from '@/routes/hooks';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { turnOffSpin, turnOnSpin } from '@/redux/spin.slice';
+import { resetPassword } from '@/queries/user.api';
 export default function NewPassword() {
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get('token');
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const onFinish = (values) => {
+    dispatch(turnOnSpin());
+    const model = {
+      token: token,
+      newPassword: values.password,
+      confirmPassword: values.confirmPassword
+    };
+    console.log(model);
+
+    resetPassword(model)
+      .then((data: any) => {
+        if (data?.success) {
+          message.success('Password change successfully');
+          navigate('/login');
+        } else {
+          message.error(data?.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        dispatch(turnOffSpin());
+      });
     console.log('Success:', values);
   };
   const router = useRouter();
@@ -44,7 +75,7 @@ export default function NewPassword() {
                 />
               </Form.Item>
               <Form.Item
-                name="confirm-password"
+                name="confirmPassword"
                 rules={[
                   {
                     required: true,

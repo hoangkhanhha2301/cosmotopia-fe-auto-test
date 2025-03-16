@@ -215,7 +215,7 @@ export default function Cart() {
               }}
               //   footer={() => 'Footer'}
             />
-            {/* <Button onClick={handleSelectAll} type="default">
+            {/* <Button onClick={handleSelectAll} type="primary">
               {isAllSelected ? 'Bỏ chọn tất cả' : 'Chọn tất cả'}
             </Button> */}
             <div>

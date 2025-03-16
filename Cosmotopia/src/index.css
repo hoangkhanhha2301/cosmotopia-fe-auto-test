@@ -85,3 +85,9 @@
 * {
   font-family: 'Inter', sans-serif;
 }
+body {
+  margin: 0;
+}
+.ant-btn-primary {
+  background-color: #1677ff;
+}

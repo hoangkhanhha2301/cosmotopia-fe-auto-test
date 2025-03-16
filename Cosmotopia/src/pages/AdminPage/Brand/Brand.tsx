@@ -30,9 +30,9 @@ import {
   Table,
   Upload
 } from 'antd';
-import { da } from 'date-fns/locale';
+
 import dayjs from 'dayjs';
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 interface BrandProps {}
 
@@ -184,7 +184,7 @@ export const Brand: FC<BrandProps> = ({}) => {
     UpdateBrand(model, dataId)
       .then((data) => {
         console.log(data);
-        message.success('Update new Brand success!!!');
+        message.success('Update Brand success!!!');
         handleCancel();
         getData();
       })
@@ -279,7 +279,6 @@ export const Brand: FC<BrandProps> = ({}) => {
                 onClick={() => {
                   form.submit();
                 }}
-                style={{ backgroundColor: '#4096ff' }}
               >
                 {` ${dataId?.length > 1 ? 'Update' : 'Add New'} Brand`}
               </Button>
@@ -306,28 +305,28 @@ export const Brand: FC<BrandProps> = ({}) => {
                       </Col>
                     </Row>
                     {/* <Row gutter={24}>
-                      <Col span={24}>
-                        <Form.Item
-                          name="dateRange"
-                          label="Date Range"
-                          rules={[
-                            {
-                              required: true,
-                              message:
-                                'Please select the date range for the campaign!'
-                            }
-                          ]}
-                        >
-                          <DatePicker.RangePicker
-                            style={{ width: '100%' }}
-                            placeholder={[
-                              'Select Start Date',
-                              'Select End Date'
-                            ]}
-                          />
-                        </Form.Item>
-                      </Col>
-                    </Row> */}
+                          <Col span={24}>
+                            <Form.Item
+                              name="dateRange"
+                              label="Date Range"
+                              rules={[
+                                {
+                                  required: true,
+                                  message:
+                                    'Please select the date range for the campaign!'
+                                }
+                              ]}
+                            >
+                              <DatePicker.RangePicker
+                                style={{ width: '100%' }}
+                                placeholder={[
+                                  'Select Start Date',
+                                  'Select End Date'
+                                ]}
+                              />
+                            </Form.Item>
+                          </Col>
+                        </Row> */}
                     <Row gutter={24}>
                       <Form.Item
                         name="isPremium"
@@ -344,7 +343,7 @@ export const Brand: FC<BrandProps> = ({}) => {
               </Form>
             </div>
           </Modal>
-          <Button onClick={() => showModal('0')} type="default">
+          <Button onClick={() => showModal('0')} type="primary">
             Add new Brand
           </Button>
         </div>

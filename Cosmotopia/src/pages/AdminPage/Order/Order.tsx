@@ -1,9 +1,12 @@
 import {
-  AddCategory,
-  DeleteBrand,
+  AddOrder,
+  AddProduct,
+  DeleteOrder,
+  getAllOrder,
   getAllCategory,
-  getCategoryById,
-  UpdateCategory
+  getAllProduct,
+  getOrderById,
+  UpdateOrder
 } from '@/queries/dashboard/dashboardAdmin.query';
 import {
   DeleteOutlined,
@@ -27,19 +30,19 @@ import {
   Table,
   Upload
 } from 'antd';
-import TextArea from 'antd/es/input/TextArea';
-import { da } from 'date-fns/locale';
+
 import dayjs from 'dayjs';
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
-interface CategoryProps {}
+interface OrderProps {}
 
-export const Category: FC<CategoryProps> = ({}) => {
+export const Order: FC<OrderProps> = ({}) => {
   const [dataTable, setDataTable] = useState<null | any[]>(null);
   const [valueSearch, setValueSearch] = useState<string>('');
   const { Search } = Input;
   const [dataId, setDataId] = useState<string>('');
   const [form] = Form.useForm();
+  console.log(dataTable, 'dataTable');
   const columns = [
     {
       title: 'Name',
@@ -50,9 +53,12 @@ export const Category: FC<CategoryProps> = ({}) => {
       }
     },
     {
-      title: 'description',
-      dataIndex: 'description',
-      key: 'description'
+      title: 'isPremium',
+      dataIndex: 'isPremium',
+      key: 'isActive',
+      render: (n, o) => {
+        return <>{n ? 'true' : 'false'}</>;
+      }
     },
     {
       title: 'CreateAt',
@@ -74,7 +80,7 @@ export const Category: FC<CategoryProps> = ({}) => {
           //   record.admin_approve != "0" && user.role != 0 ? true : false
           // }
           onClick={() => {
-            showModal(record.categoryId);
+            showModal(record.brandId);
             console.log(record);
             // SIdCampaign.set(record.id);
           }}
@@ -115,7 +121,7 @@ export const Category: FC<CategoryProps> = ({}) => {
           <Button danger>
             <DeleteOutlined
               onClick={() => {
-                deleteData(record.categoryId);
+                // deleteData(record.brandId);
                 // SIdCampaign.set(record.id);
                 console.log('okeee');
               }}
@@ -153,20 +159,20 @@ export const Category: FC<CategoryProps> = ({}) => {
   };
   useEffect(() => {
     if (dataId.length > 1) {
-      getCategoryById(dataId).then((data) => {
+      getBrandById(dataId).then((data) => {
         const dataCurrent = data?.data;
         form.setFieldsValue({
           name: dataCurrent.name,
-          description: dataCurrent.description
+          isPremium: dataCurrent.isPremium
         });
       });
     }
   }, [dataId]);
   const addData = (model) => {
-    AddCategory(model)
+    AddBrand(model)
       .then((data) => {
         console.log(data);
-        message.success('add new Category success!!!');
+        message.success('add new Brand success!!!');
         handleCancel();
         getData();
       })
@@ -176,10 +182,10 @@ export const Category: FC<CategoryProps> = ({}) => {
       });
   };
   const updateData = (model) => {
-    UpdateCategory(model, dataId)
+    UpdateBrand(model, dataId)
       .then((data) => {
         console.log(data);
-        message.success('Update Category success!!!');
+        message.success('Update Brand success!!!');
         handleCancel();
         getData();
       })
@@ -204,16 +210,15 @@ export const Category: FC<CategoryProps> = ({}) => {
     console.log(values);
     const model = {
       name: values.name,
-      description: values.description
+      isPremium: values.isPremium
     };
     dataId == '0' ? addData(model) : updateData(model);
   };
   const getData = () => {
-    console.log('oke');
-    getAllCategory()
-      .then((data) => {
+    getAllOrder()
+      .then((data: any) => {
         console.log(data);
-        setDataTable(data?.data);
+        setDataTable(data);
       })
       .catch((error) => {
         console.log(error);
@@ -250,17 +255,17 @@ export const Category: FC<CategoryProps> = ({}) => {
         }}
       >
         <h1 style={{ fontSize: '32px', color: 'rgb(38, 164, 255)' }}>
-          Manage Category
+          Manage Order
         </h1>
         <Search
-          placeholder="Search Name Category"
+          placeholder="Search Name Order"
           onSearch={onSearch}
           enterButton
           style={{ maxWidth: '600px' }}
         />
         <div>
           <Modal
-            title={`${dataId?.length > 1 ? 'Update' : 'Add New'}  Category`}
+            title={`${dataId?.length > 1 ? 'Update' : 'Add New'}  Order`}
             visible={dataId.length > 0 ? true : false}
             onCancel={handleCancel}
             width={500}
@@ -275,7 +280,7 @@ export const Category: FC<CategoryProps> = ({}) => {
                   form.submit();
                 }}
               >
-                {` ${dataId?.length > 1 ? 'Update' : 'Add New'} Category`}
+                {` ${dataId?.length > 1 ? 'Update' : 'Add New'} Order`}
               </Button>
             ]}
           >
@@ -288,54 +293,47 @@ export const Category: FC<CategoryProps> = ({}) => {
                         <Form.Item
                           name="name"
                           label="Name"
-                          className="w-full"
                           rules={[
                             {
                               required: true,
-                              message: 'Please Enter Name of Category!'
+                              message: 'Please Enter Name of Order!'
                             }
                           ]}
                         >
-                          <Input placeholder="Enter Name Category" />
+                          <Input placeholder="Enter Name Order" />
                         </Form.Item>
                       </Col>
                     </Row>
                     {/* <Row gutter={24}>
-                      <Col span={24}>
-                        <Form.Item
-                          name="dateRange"
-                          label="Date Range"
-                          rules={[
-                            {
-                              required: true,
-                              message:
-                                'Please select the date range for the campaign!'
-                            }
-                          ]}
-                        >
-                          <DatePicker.RangePicker
-                            style={{ width: '100%' }}
-                            placeholder={[
-                              'Select Start Date',
-                              'Select End Date'
-                            ]}
-                          />
-                        </Form.Item>
-                      </Col>
-                    </Row> */}
+                          <Col span={24}>
+                            <Form.Item
+                              name="dateRange"
+                              label="Date Range"
+                              rules={[
+                                {
+                                  required: true,
+                                  message:
+                                    'Please select the date range for the campaign!'
+                                }
+                              ]}
+                            >
+                              <DatePicker.RangePicker
+                                style={{ width: '100%' }}
+                                placeholder={[
+                                  'Select Start Date',
+                                  'Select End Date'
+                                ]}
+                              />
+                            </Form.Item>
+                          </Col>
+                        </Row> */}
                     <Row gutter={24}>
                       <Form.Item
-                        name="description"
-                        label="Description"
-                        rules={[
-                          {
-                            required: true,
-                            message: 'Please enter description for Category!'
-                          }
-                        ]}
-                        className="w-full"
+                        name="isPremium"
+                        valuePropName="checked"
+                        rules={[]}
                       >
-                        <TextArea rows={4}></TextArea>
+                        <Checkbox>Premium</Checkbox>
                       </Form.Item>
                     </Row>
                   </Col>
@@ -346,7 +344,7 @@ export const Category: FC<CategoryProps> = ({}) => {
             </div>
           </Modal>
           <Button onClick={() => showModal('0')} type="primary">
-            Add new Category
+            Add new Order
           </Button>
         </div>
         {/* <AddNewAccount GetProfileFunction={getProfile}></AddNewAccount> */}
