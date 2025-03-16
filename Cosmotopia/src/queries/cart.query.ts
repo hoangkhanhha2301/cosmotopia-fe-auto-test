@@ -1,4 +1,4 @@
-import BaseRequest from '@/config/axios.config';
+import BaseRequest, { api } from '@/config/axios.config';
 import { PagingModel } from '@/constants/data';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
@@ -101,9 +101,18 @@ export const useGetAllOrders = (page = 1, pageSize = 3) => {
   return useQuery({
     queryKey: ['get_all_orders', page, pageSize],
     queryFn: async () => {
-      const response = await BaseRequest.Get(`/api/Order/user/orders?page=${page}&pageSize=${pageSize}`);
-      console.log("API Response:", response); // Debug API response
-      return response || []; // Tránh trả về undefined
+      const response = await BaseRequest.Get2(`/api/Order/user/orders?page=${page}&pageSize=${pageSize}`);
+      return response || []; 
     },
   });
 };
+// export const useGetAllOrders = (page = 1, pageSize = 3) => {
+//   return useQuery({
+//     queryKey: ['get_all_orders', page, pageSize],
+//     queryFn: async () => {
+//       const data = await api.get(`api/Order/user/orders?page=${page}&pageSize=${pageSize}`);;
+//       console.log("API Response:", data); 
+//       return data || []; 
+//     },
+//   });
+// };

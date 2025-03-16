@@ -79,7 +79,7 @@ export default function AppRouter() {
           element: <ForgotPassword />
         },
         {
-          path: '/product',
+          path: '/product/:id',
           element: <ProductDetail />
         },
         {
