@@ -25,6 +25,8 @@ const LoginPage = lazy(() => import('@/pages/AuthPage/Login/index'));
 const RegisterPage = lazy(() => import('@/pages/AuthPage/Register/index'));
 const OrderTracking = lazy(() => import('@/pages/ProfilePage/OrderTracking'));
 const ProductGridPage = lazy(() => import('@/pages/ProductGrid/index'));
+const PaymentPage = lazy(() => import('@/pages/Payment/index'));
+const SuccessPage = lazy(() => import('@/pages/Payment/Success'));
 import helper from '@/helpers/index';
 // ----------------------------------------------------------------------
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -89,6 +91,14 @@ export default function AppRouter() {
         {
           path: '/productGrid',
           element: <ProductGridPage />
+        },
+        {
+          path: '/payment',
+          element: <PaymentPage/>
+        },
+        {
+          path:'/success',
+          element: <SuccessPage/>
         }
       ]
     },
