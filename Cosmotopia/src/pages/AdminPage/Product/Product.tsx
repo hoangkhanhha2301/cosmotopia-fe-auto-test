@@ -131,7 +131,6 @@ export const Product: FC<ProductProps> = ({}) => {
     formData.append('file', file);
     formData.append('upload_preset', 'Cometis');
     formData.append('cloud_name', 'dhylbhwvb');
-
     const response = await fetch(
       `https://api.cloudinary.com/v1_1/dhylbhwvb/image/upload`,
       {
@@ -251,7 +250,7 @@ export const Product: FC<ProductProps> = ({}) => {
     getAllProduct()
       .then((data) => {
         console.log(data);
-        setDataTable(data?.data);
+        setDataTable(data?.products);
       })
       .catch((error) => {
         console.log(error);
@@ -285,6 +284,11 @@ export const Product: FC<ProductProps> = ({}) => {
     setValueSearch(value.length > 0 ? value : '');
   };
 
+  useEffect(() => {
+    getData();
+    getCategory();
+    getBrand();
+  }, []);
   useEffect(() => {
     getData();
     getCategory();

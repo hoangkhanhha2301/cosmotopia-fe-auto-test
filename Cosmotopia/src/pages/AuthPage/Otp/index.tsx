@@ -1,13 +1,10 @@
 import BasePages from '@/components/shared/base-pages.js';
-import { Checkbox, Form, Input, message } from 'antd';
-
-import FacebookIcon from '@mui/icons-material/Facebook';
-import { useRouter } from '@/routes/hooks';
+import { Input, message } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useOTP } from '@/queries/auth.query';
 import { useDispatch } from 'react-redux';
-import { turnOffSpin, turnOnSpin } from '@/redux/spin.slice';
+import { sSpin } from '@/store/spin';
 export default function OtgPage() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,7 +18,7 @@ export default function OtgPage() {
     }
   }, [email, navigate]);
   const onFinish = async (values) => {
-    dispatch(turnOnSpin());
+    sSpin.set(true);
     const model = {
       email: email,
       otp: values
@@ -40,7 +37,7 @@ export default function OtgPage() {
         console.log(err);
       })
       .finally(() => {
-        dispatch(turnOffSpin());
+        sSpin.set(false);
       });
     console.log('Success:', values);
   };

@@ -4,17 +4,17 @@ import { useRouter } from '@/routes/hooks';
 import { ro } from 'date-fns/locale';
 import { forgotPassword } from '@/queries/user.api';
 import { useDispatch } from 'react-redux';
-import { turnOffSpin, turnOnSpin } from '@/redux/spin.slice';
 import { useNavigate } from 'react-router-dom';
+import { sSpin } from '@/store/spin';
 
 export default function ForgotPassword() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const onFinish = (values) => {
-    dispatch(turnOnSpin());
+    sSpin.set(true);
 
     forgotPassword(values.email)
-      .then((data) => {
+      .then((data: any) => {
         if (data.success) {
           message.success(data.message);
           navigate('/');
@@ -26,7 +26,7 @@ export default function ForgotPassword() {
         message.error(err.message);
       })
       .finally(() => {
-        dispatch(turnOffSpin());
+        sSpin.set(false);
       });
   };
   const router = useRouter();

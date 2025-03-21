@@ -353,7 +353,9 @@ export const Account: FC<AccountProps> = ({}) => {
           dataSource={
             valueSearch
               ? dataTable.filter((a) =>
-                  a?.name?.toUpperCase().includes(valueSearch.toUpperCase())
+                  (a?.firstName + a?.lastName)
+                    ?.toUpperCase()
+                    .includes(valueSearch.toUpperCase())
                 )
               : dataTable
           }
