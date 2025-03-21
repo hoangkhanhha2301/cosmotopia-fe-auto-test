@@ -28,6 +28,11 @@ const ProductGridPage = lazy(() => import('@/pages/ProductGrid/index'));
 const PaymentPage = lazy(() => import('@/pages/Payment/index'));
 const SuccessPage = lazy(() => import('@/pages/Payment/Success'));
 import helper from '@/helpers/index';
+import KOLPage from '@/pages/KOLPage/KOLpage';
+import { Tongquan } from '@/pages/KOLPage/TongQuan/Tongquan';
+import { ThongKe } from '@/pages/KOLPage/Thongke/ThongKe';
+import { DanhSach } from '@/pages/KOLPage/Danhsach/DanhSach';
+import { CreateLink } from '@/pages/KOLPage/CreateLink/CreateLink';
 // ----------------------------------------------------------------------
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const userObject = JSON.parse(helper.cookie_get('user'));
@@ -123,7 +128,12 @@ export default function AppRouter() {
     }
   ];
 
-  const routes = useRoutes([...systemRoute, ...publicRoutes, ...AdminRoutes]);
+  const routes = useRoutes([
+    ...systemRoute,
+    ...publicRoutes,
+    ...AdminRoutes,
+    ...KOLRoutes
+  ]);
 
   return routes;
 }
@@ -192,6 +202,40 @@ const AdminRoutes = [
     //     path="/dashboard/jobapplication"
     //     element={<JobApplication />}
     //   />,
+  }
+];
+const KOLRoutes = [
+  {
+    path: '/kol',
+    element: <KOLPage />,
+
+    children: [
+      {
+        path: '/kol/tongquan',
+        element: <Tongquan />
+        // index: true
+      },
+      {
+        path: '/kol/thongke',
+        element: <ThongKe />
+        // index: true
+      },
+      {
+        path: '/kol/danhsach',
+        element: <DanhSach />
+        // index: true
+      },
+      {
+        path: '/kol/profile',
+        element: <Profile />
+        // index: true
+      },
+      {
+        path: '/kol/createLink',
+        element: <CreateLink />
+        // index: true
+      }
+    ]
   }
 ];
 

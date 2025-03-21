@@ -8,6 +8,7 @@ import {
   getOrderById,
   UpdateOrder
 } from '@/queries/dashboard/dashboardAdmin.query';
+import { sSpin } from '@/store/spin';
 import {
   DeleteOutlined,
   QuestionCircleOutlined,
@@ -42,34 +43,57 @@ export const Order: FC<OrderProps> = ({}) => {
   const { Search } = Input;
   const [dataId, setDataId] = useState<string>('');
   const [form] = Form.useForm();
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+    total: 100
+  });
   console.log(dataTable, 'dataTable');
   const columns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: 'Customer Name',
+      dataIndex: 'customerName',
+      key: 'customerName',
       render: (n, o) => {
         return <>{n ? n : '-'}</>;
       }
     },
     {
-      title: 'isPremium',
-      dataIndex: 'isPremium',
-      key: 'isActive',
+      title: 'Affiliate ID',
+      dataIndex: 'affiliateProfileId',
+      key: 'affiliateProfileId',
       render: (n, o) => {
-        return <>{n ? 'true' : 'false'}</>;
+        return <>{n ? n : '-'}</>;
       }
     },
     {
-      title: 'CreateAt',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
+      title: 'OrderAt',
+      dataIndex: 'orderDate',
+      key: 'orderDate',
       render: (date) => (date ? dayjs(date).format('DD/MM/YYYY') : '')
       // render: (n, o) => {
       //   return <>{getRole(n)}</>;
       // },
     },
-
+    {
+      title: 'Payment Method',
+      dataIndex: 'paymentMethod',
+      key: 'paymentMethod'
+    },
+    {
+      title: 'Payment Status',
+      dataIndex: 'paymentStatus',
+      key: 'paymentStatus'
+    },
+    {
+      title: 'OrderAt',
+      dataIndex: 'orderDate',
+      key: 'orderDate',
+      render: (date) => (date ? dayjs(date).format('DD/MM/YYYY') : '')
+      // render: (n, o) => {
+      //   return <>{getRole(n)}</>;
+      // },
+    },
     {
       title: 'Edit',
       key: 'action',
@@ -80,8 +104,8 @@ export const Order: FC<OrderProps> = ({}) => {
           //   record.admin_approve != "0" && user.role != 0 ? true : false
           // }
           onClick={() => {
-            showModal(record.brandId);
-            console.log(record);
+            showModal(record?.orderId);
+
             // SIdCampaign.set(record.id);
           }}
         >
@@ -148,7 +172,9 @@ export const Order: FC<OrderProps> = ({}) => {
       }
     }
   };
-
+  const handleTableChange = (pagination) => {
+    setPagination(pagination);
+  };
   const showModal = (id) => {
     setDataId(id);
   };
@@ -215,16 +241,19 @@ export const Order: FC<OrderProps> = ({}) => {
     dataId == '0' ? addData(model) : updateData(model);
   };
   const getData = () => {
+    sSpin.set(true);
     getAllOrder()
       .then((data: any) => {
         console.log(data);
-        setDataTable(data);
+        setDataTable(data.orders);
       })
       .catch((error) => {
         console.log(error);
         setDataTable([]);
       })
-      .finally(() => {});
+      .finally(() => {
+        sSpin.set(false);
+      });
   };
   //     getAllCategory()
   //       .then((data) => {
@@ -244,6 +273,9 @@ export const Order: FC<OrderProps> = ({}) => {
   useEffect(() => {
     getData();
   }, []);
+  useEffect(() => {
+    getData(pagination.current, pagination.pageSize);
+  }, [pagination.current, pagination.pageSize]);
   return (
     <div>
       <div
@@ -257,12 +289,12 @@ export const Order: FC<OrderProps> = ({}) => {
         <h1 style={{ fontSize: '32px', color: 'rgb(38, 164, 255)' }}>
           Manage Order
         </h1>
-        <Search
+        {/* <Search
           placeholder="Search Name Order"
           onSearch={onSearch}
           enterButton
           style={{ maxWidth: '600px' }}
-        />
+        /> */}
         <div>
           <Modal
             title={`${dataId?.length > 1 ? 'Update' : 'Add New'}  Order`}
@@ -343,38 +375,26 @@ export const Order: FC<OrderProps> = ({}) => {
               </Form>
             </div>
           </Modal>
-          <Button onClick={() => showModal('0')} type="primary">
+          {/* <Button onClick={() => showModal('0')} type="primary">
             Add new Order
-          </Button>
+          </Button> */}
         </div>
         {/* <AddNewAccount GetProfileFunction={getProfile}></AddNewAccount> */}
       </div>
-      {!dataTable ? (
-        <Spin
-          size="large"
-          // style={{
-          //   width: "100%",
-          //   marginTop: "150px",
-          // }}
-          fullscreen
-        ></Spin>
-      ) : (
-        <Table
-          dataSource={
-            valueSearch
-              ? dataTable.filter((a) =>
-                  a?.name?.toUpperCase().includes(valueSearch.toUpperCase())
-                )
-              : dataTable
-          }
-          columns={columns}
-          pagination={{
-            pageSize: 8
-          }}
-          style={{ marginTop: '24px' }}
-          // onChange={onChangePaging}
-        />
-      )}
+      <Table
+        dataSource={
+          valueSearch
+            ? dataTable.filter((a) =>
+                a?.name?.toUpperCase().includes(valueSearch.toUpperCase())
+              )
+            : dataTable
+        }
+        columns={columns}
+        pagination={pagination}
+        onChange={handleTableChange}
+        style={{ marginTop: '24px' }}
+        // onChange={onChangePaging}
+      />
     </div>
   );
 };

@@ -1,8 +1,9 @@
 import BasePages from '@/components/shared/base-pages.js';
 import Footer from '@/components/shared/footer';
 import { useRegister } from '@/queries/auth.query';
-import { turnOffSpin, turnOnSpin } from '@/redux/spin.slice';
+
 import { useRouter } from '@/routes/hooks';
+import { sSpin } from '@/store/spin';
 import { Col, Form, message, Row } from 'antd';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -14,7 +15,7 @@ export default function RegisterPage() {
   const { mutateAsync: registerAccount, isPending } = useRegister();
   const onFinish = async (values) => {
     console.log(values);
-    dispatch(turnOnSpin());
+    sSpin.set(true);
 
     const model = {
       email: values.email,
@@ -38,7 +39,7 @@ export default function RegisterPage() {
         message.error('Something went wrong');
       })
       .finally(() => {
-        dispatch(turnOffSpin());
+        sSpin.set(false);
       });
 
     // helper.cookie_set('RT', data.refreshToken);

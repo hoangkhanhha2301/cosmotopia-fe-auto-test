@@ -3,13 +3,11 @@ import authReducer from './auth.slice';
 import cartReducer from './cart.slice';
 import { useDispatch } from 'react-redux';
 import customReducer from './custom.slice';
-import spinReducer from './spin.slice';
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     cart: cartReducer,
-    custom: customReducer,
-    spin: spinReducer
+    custom: customReducer
   }
 });
 

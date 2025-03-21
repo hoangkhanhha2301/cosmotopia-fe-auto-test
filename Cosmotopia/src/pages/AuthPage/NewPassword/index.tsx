@@ -5,15 +5,15 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import { useRouter } from '@/routes/hooks';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { turnOffSpin, turnOnSpin } from '@/redux/spin.slice';
 import { resetPassword } from '@/queries/user.api';
+import { sSpin } from '@/store/spin';
 export default function NewPassword() {
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const onFinish = (values) => {
-    dispatch(turnOnSpin());
+    sSpin.set(true);
     const model = {
       token: token,
       newPassword: values.password,
@@ -34,7 +34,7 @@ export default function NewPassword() {
         console.log(err);
       })
       .finally(() => {
-        dispatch(turnOffSpin());
+        sSpin.set(false);
       });
     console.log('Success:', values);
   };

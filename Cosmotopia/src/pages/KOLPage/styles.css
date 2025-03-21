@@ -1,0 +1,16 @@
+.menu-item {
+  color: black; /* Màu mặc định */
+  transition: all 0.3s ease-in-out;
+}
+
+.menu-item:hover {
+  background: linear-gradient(90deg, #ff00ff, #5a00ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.isSelected {
+  background: linear-gradient(90deg, #ff00ff, #5a00ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
