@@ -5,11 +5,16 @@ import { useEffect, useState } from 'react';
 import { MoreOutlined, CheckCircleFilled } from '@ant-design/icons';
 import { useGetDetailProduct } from '@/queries/product.query';
 import { useParams } from 'react-router-dom';
+interface TabContent {
+  title: string;
+  detail: string | string[];
+}
 
 export default function ProductDetail() {
   const router = useRouter();
   const { id } = useParams<{ id: string }>(); // Get product ID from URL
   const { data, isLoading } = useGetDetailProduct(id); // Fetch product details
+  console.log("Product: ", data);
   const [listContent, setListContent] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
   const [indexImg, setIndexImg] = useState(0);
@@ -21,7 +26,7 @@ export default function ProductDetail() {
   //   { title: 'Đánh giá', detail: data?.reviews || [] },
   // ];
 
-  const [currentTab, setCurrentTab] = useState();
+  const [currentTab, setCurrentTab] = useState<TabContent | null>(null);
   useEffect(() => {
     if (data) {
       setListContent([
@@ -82,13 +87,13 @@ export default function ProductDetail() {
     return <p className="text-red-500 text-center">Không tìm thấy sản phẩm!</p>;
   }
 
-  const listImg = data?.images || []; // Ảnh từ API
+  const listImg = data?.imageUrls || []; // Ảnh từ API
   const length = listImg.length;
-
+  console.log("Image URL:", listImg[indexImg]);
   return (
     <BasePages
       className="relative mx-auto w-[80%] flex-1 p-4"
-      pageHead="dataDetail"
+      pageHead="Cosmotopia"
     >
       <div className="flex items-center gap-4 " style={{ height: '670px' }}>
         {/* Danh sách ảnh nhỏ */}
@@ -129,7 +134,7 @@ export default function ProductDetail() {
         </div>
 
         {/* Thông tin sản phẩm */}
-        <div className="w-4/12">
+        <div className="flex w-1/3 flex-col ">
           <h2 className="text-3xl font-bold text-[#3D3D3D]">{data.name}</h2>
           <div className="mt-3 flex items-center justify-between">
             <Rate disabled defaultValue={data.rating} />

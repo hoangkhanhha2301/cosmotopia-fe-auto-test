@@ -20,12 +20,7 @@ export default function OrderTracking() {
   console.log(data);
   if (isLoading) return <p>Đang tải đơn hàng...</p>;
   if (error) return <p>Lỗi khi tải đơn hàng!</p>;
-  // const getData = ()=>{
-  //   getAllOrder(1,3).then(data=>{console.log(data)})
-  // }
-  // useEffect(()=>{
-  //   getData()
-  // })
+ 
   const allOrders = data?.orders || [];
 
   // Lọc đơn hàng theo trạng thái
@@ -47,7 +42,7 @@ export default function OrderTracking() {
               setActiveStatus(status.id);
               setCurrentPage(1); 
             }}
-            className={`rounded-xl px-4 py-3 text-sm transition-colors ${
+            className={`rounded-xl px-4 py-3 text-sm transition-colors font-montserrat ${
               activeStatus === status.id
                 ? "bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] bg-clip-text font-medium text-transparent"
                 : "text-[#4E4663]"
@@ -64,7 +59,7 @@ export default function OrderTracking() {
           {/* Delivery Status */}
           <div className="mb-6 flex items-center gap-2 border-b border-gray-200/50 pb-6">
             <Truck className="h-6 w-6 text-[#9C3CFD]" />
-            <span className="bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] bg-clip-text text-sm font-normal text-transparent">
+            <span className="bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] bg-clip-text text-sm font-normal text-transparent font-montserrat">
               Đơn hàng {order.status === 3 ? "đã được giao thành công" : "đang xử lý"}
             </span>
           </div>
@@ -74,17 +69,17 @@ export default function OrderTracking() {
             <div key={item.orderDetailId} className="mb-6 flex items-start justify-between border-b border-gray-200/50 pb-6">
               <div className="flex gap-3">
                 <div className="h-20 w-20 overflow-hidden rounded-xl">
-                  <Image src="/placeholder.svg" alt="Sản phẩm" width={80} height={80} className="h-full w-full object-cover" />
+                <Image src={item.imageUrl[0]} alt="Sản phẩm" width={80} height={80} className="h-full w-full object-cover rounded-xl" />
                 </div>
                 <div>
-                  <h3 className="text-base text-[#4E4663]">Sản phẩm {item.productId}</h3>
-                  <div className="mt-2 bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] bg-clip-text text-xl font-bold text-transparent">
+                  <h3 className="text-lg text-[#4E4663]"><b className="font-montserrat">{item.name}</b></h3>
+                  <div className="mt-2 bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] bg-clip-text text-xl font-bold text-transparent font-montserrat">
                     {item.unitPrice.toLocaleString()} VNĐ
                   </div>
                 </div>
               </div>
               <div className="text-right">
-                <span className="text-base text-[#4E4663]">Số lượng: {item.quantity}</span>
+                <span className="text-base text-[#4E4663] font-montserrat"><b className="font-montserrat">Số lượng: {item.quantity}</b> </span>
               </div>
             </div>
           ))}
@@ -92,16 +87,16 @@ export default function OrderTracking() {
           {/* Total and Actions */}
           <div className="flex justify-between">
             <div className="flex items-center gap-4">
-              <span className="text-lg font-medium text-[#4E4663]">Tổng:</span>
-              <span className="text-xl font-bold text-[#347B28]">
+              <span className="text-lg font-medium text-[#4E4663] font-montserrat">Tổng:</span>
+              <span className="text-xl font-bold text-[#347B28] font-montserrat">
                 {order.totalAmount.toLocaleString()} VNĐ
               </span>
             </div>
             <div className="flex gap-6">
-              <button className="rounded-full bg-white px-12 py-3 text-lg font-bold text-[#6C5DD3] shadow-sm">
+              <button className="rounded-full bg-gradient-to-r from-[#ED1DBF] via-[#A831F1] to-[#3561FE] bg-clip-text text-transparent px-12 py-3 text-lg font-bold shadow-sm font-montserrat">
                 Đánh giá
               </button>
-              <button className="rounded-full bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] px-12 py-3 text-lg font-bold text-white shadow-lg">
+              <button className="rounded-full bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] px-12 py-3 text-lg font-bold text-white shadow-lg font-montserrat">
                 Mua lại
               </button>
             </div>
@@ -114,15 +109,15 @@ export default function OrderTracking() {
         <button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
-          className="px-4 py-2 rounded-lg bg-gray-300 disabled:opacity-50"
+          className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] font-bold text-white shadow-lg disabled:opacity-50 font-montserrat"
         >
           Trước
         </button>
-        <span className="text-lg font-medium">{currentPage} / {totalPages}</span>
+        <span className="text-lg font-medium flex items-center">{currentPage} / {totalPages}</span>
         <button
           onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
           disabled={currentPage === totalPages}
-          className="px-4 py-2 rounded-lg bg-gray-300 disabled:opacity-50"
+          className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] font-bold text-white shadow-lg disabled:opacity-50 font-montserrat"
         >
           Tiếp
         </button>

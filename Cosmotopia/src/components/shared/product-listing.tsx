@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { ProductCard } from "@/components/shared/product-card"
 import { useRouter } from '@/routes/hooks';
 import ProductImage from '@/assets/category/Category.png'
+import { useGetListProductsByPaging } from "@/queries/product.query"
 
 const categories = [
   { name: "Tất cả", href: "#" },
@@ -17,18 +18,24 @@ const categories = [
   { name: "Tẩy trang", href: "#" },
 ]
 
-const products = Array(6).fill({
-  title: "Kem nền SOUL MAN",
-  description: "Anti-Aging Face Serum, With Purifying",
-  price: "379.000 VND",
-  rating: 4.5,
-  isNew: true,
-  image: ProductImage,
-})
 
 export function ProductListing() {
   const [activeCategory, setActiveCategory] = React.useState("Tất cả")
   const router = useRouter();
+  const [currentPage, setCurrentPage] = React.useState(1);
+
+  const pageSize = 9;
+
+  // Gọi API với trang hiện tại và kích thước trang
+  const { data, isPending, isError } = useGetListProductsByPaging({
+    page: currentPage,
+    pageSize: pageSize
+  });
+
+  console.log(data);
+
+  const products = data?.products || [];
+  console.log(products);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -84,10 +91,10 @@ export function ProductListing() {
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold text-[#2D2D2D]">Sản phẩm nổi bật</h2>
-            <Button 
-            onClick={() => router.push('/productGrid')}
-            variant="link" 
-            className="text-purple-600">
+            <Button
+              onClick={() => router.push('/productGrid')}
+              variant="link"
+              className="text-purple-600">
               Xem tất cả
               <ChevronRight className="ml-1 h-4 w-4" />
             </Button>
@@ -98,11 +105,11 @@ export function ProductListing() {
               <TooltipProvider key={i}>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <div onClick={() => router.push('/product')}
+                    <div onClick={() => router.push(`/product/${product.productId}`)}
                       className="cursor-pointer"
-                      >
+                    >
                       <ProductCard
-                        title={product.title}
+                        title={product.name}
                         description={product.description}
                         price={product.price}
                         rating={product.rating}

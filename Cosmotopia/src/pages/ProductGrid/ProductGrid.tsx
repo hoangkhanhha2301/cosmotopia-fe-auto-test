@@ -2,34 +2,78 @@ import { Tooltip, TooltipProvider, TooltipTrigger } from "@/components/ui/toolti
 import { ProductCard } from "@/components/shared/product-card";
 import { useRouter } from "@/routes/hooks";
 import { useGetListProductsByPaging } from "@/queries/product.query";
+import { Pagination } from "antd";
+import { useState } from "react";
 
-export function ProductGrid() {
+type Filters = {
+  categories: string[];
+  brands: string[];
+  prices: string[];
+};
+
+type ProductGridProps = {
+  filters: Filters;
+};
+
+export function ProductGrid({ filters }: ProductGridProps) {
   const router = useRouter();
-  const { data: products = [], isPending, isError } = useGetListProductsByPaging({ page: 1, pageSize: 9 });
-  console.log(products);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 9;
+
+  // Gọi API với trang hiện tại, kích thước trang và các tham số filter
+  const { data, isPending, isError } = useGetListProductsByPaging({
+    page: currentPage,
+    pageSize: pageSize,
+    // Giả sử API nhận tham số filter có tên là filters, hoặc bạn có thể truyền từng thuộc tính riêng:
+    filters: {
+      categories: filters.categories,
+      brands: filters.brands,
+      prices: filters.prices,
+    },
+  });
+
+  console.log(data);
+
+  const products = data?.products || [];
+  const totalProducts = data?.totalCount || 0;
+
   if (isPending) return <p>Loading...</p>;
   if (isError) return <p>Error loading products</p>;
 
   return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {products.map((product: any, i: number) => (
-        <TooltipProvider key={product.productId || i}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div onClick={() => router.push(`/product/${product.productId}`)} className="cursor-pointer">
-                <ProductCard
-                  title={product.name}
-                  description={product.description}
-                  price={`${product.price} VND`}
-                  rating={product.commissionRate}
-                  image={product.imageUrls?.[0] || ""}
-                  isNew={product.isActive}
-                />
-              </div>
-            </TooltipTrigger>
-          </Tooltip>
-        </TooltipProvider>
-      ))}
+    <div>
+      {/* Grid sản phẩm */}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {products.map((product: any, i: number) => (
+          <TooltipProvider key={product.productId || i}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div onClick={() => router.push(`/product/${product.productId}`)} className="cursor-pointer">
+                  <ProductCard
+                    title={product.name}
+                    description={product.description}
+                    price={`${product.price} VND`}
+                    rating={product.commissionRate}
+                    image={product.imageUrls?.[0] || ""}
+                    isNew={product.isActive}
+                  />
+                </div>
+              </TooltipTrigger>
+            </Tooltip>
+          </TooltipProvider>
+        ))}
+      </div>
+
+      {/* Pagination */}
+      <div className="flex justify-center mt-6">
+        <Pagination
+          current={currentPage}
+          pageSize={pageSize}
+          total={totalProducts}
+          onChange={(page) => setCurrentPage(page)}
+          showSizeChanger={false}
+        />
+      </div>
     </div>
   );
 }

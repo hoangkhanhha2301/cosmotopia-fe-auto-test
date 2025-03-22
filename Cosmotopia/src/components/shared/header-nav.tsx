@@ -70,7 +70,7 @@ export default function HeaderNav({
   }
 
   return (
-    <nav className="border-b border-gray-200 drop-shadow-md">
+    <nav className="relative border-b border-gray-200 drop-shadow-md z-[50]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ul className="flex flex-wrap justify-center sm:justify-start space-x-8 py-4">
           <li>

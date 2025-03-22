@@ -19,7 +19,7 @@ export default function ShopPage() {
       </div>
       <BasePages
         className="relative mx-auto w-full flex-1 overflow-y-auto bg-white"
-        pageHead="Trang chủ | Cosmotopia"
+        pageHead="Trang chủ"
       >
         <ProductCategories/>
         <ProductListing/>

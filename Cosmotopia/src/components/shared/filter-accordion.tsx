@@ -35,13 +35,13 @@ export function FilterAccordion({ items, className }: FilterAccordionProps) {
         const isOpen = openItems[item.id]
 
         return (
-          <div key={item.id} className="overflow-hidden rounded-xl bg-white shadow-sm">
+          <div key={item.id} className="overflow-hidden rounded-xl bg-white shadow-lg">
             <button
               type="button"
               onClick={() => toggleItem(item.id)}
               className="flex w-full items-center justify-between px-4 py-3.5"
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
                 <Icon className="size-5 text-gray-600" />
                 <span className="text-base font-medium text-gray-700">{item.title}</span>
               </div>

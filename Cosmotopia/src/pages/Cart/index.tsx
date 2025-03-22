@@ -2,16 +2,10 @@ import BasePages from '@/components/shared/base-pages.js';
 import './styles.css';
 import { useRouter } from '@/routes/hooks';
 import {
-  Button,
   Checkbox,
-  Form,
-  Image,
-  InputNumber,
-  Rate,
   Select,
   Table
 } from 'antd';
-import { PhanLoai } from './PhanLoai';
 import { useState } from 'react';
 
 export default function Cart() {
@@ -197,7 +191,7 @@ export default function Cart() {
     <>
       <BasePages
         className="relative mx-auto w-[80%] flex-1 p-4 "
-        pageHead="ProductDetail"
+        pageHead="Giỏ hàng"
       >
         <h2 className=" mb-4 text-xl font-bold text-gray-800">Giỏ Hàng</h2>
         <div className="flex gap-5">
