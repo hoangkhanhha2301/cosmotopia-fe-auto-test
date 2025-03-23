@@ -4,6 +4,7 @@ import {
   AuditOutlined,
   BorderOutlined,
   ContactsOutlined,
+  HomeOutlined,
   LogoutOutlined,
   MenuOutlined,
   ProductOutlined,
@@ -53,15 +54,6 @@ export default function KOLPage() {
 
   useEffect(() => {
     setItems([
-      // getItem('', '', '', [
-      //     getItem('Tổng quan', 'account'),
-      //     getItem('Danh sách', 'product'),
-      //     getItem('Chiến dịch', 'brand'),
-      //     getItem('Hỗ trợ', 'category'),
-      //     getItem('Thông tin cá nhân', 'order')
-      //     getItem('Tạo liên kết', 'order')
-      //     // getItem('Category', 'category', <MenuOutlined />)
-      //   ])
       getItem('Tổng quan', 'tongquan'),
       getItem('Danh sách', 'danhsach'),
       //   getItem('Chiến dịch', 'category'),
@@ -224,11 +216,11 @@ export default function KOLPage() {
               </p> */}
             </div>
             <div>
-              <LogoutOutlined
+              <HomeOutlined
                 type="primary"
                 onClick={() => {
-                  helper.cookie_delete('AT');
-                  dispatch(logout());
+                  // helper.cookie_delete('AT');
+                  // dispatch(logout());
                   navigate('/');
                 }}
                 style={{

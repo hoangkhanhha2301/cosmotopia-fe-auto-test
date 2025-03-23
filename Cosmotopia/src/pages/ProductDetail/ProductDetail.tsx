@@ -1,10 +1,11 @@
 import BasePages from '@/components/shared/base-pages.js';
 import { useRouter } from '@/routes/hooks';
-import { Image, Rate, Spin } from 'antd';
+import { Button, ConfigProvider, Image, Rate, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { MoreOutlined, CheckCircleFilled } from '@ant-design/icons';
 import { useGetDetailProduct } from '@/queries/product.query';
 import { useParams } from 'react-router-dom';
+import { FormRating } from './FormRating';
 interface TabContent {
   title: string;
   detail: string | string[];
@@ -14,7 +15,7 @@ export default function ProductDetail() {
   const router = useRouter();
   const { id } = useParams<{ id: string }>(); // Get product ID from URL
   const { data, isLoading } = useGetDetailProduct(id); // Fetch product details
-  console.log("Product: ", data);
+  console.log('Product: ', data);
   const [listContent, setListContent] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
   const [indexImg, setIndexImg] = useState(0);
@@ -89,7 +90,7 @@ export default function ProductDetail() {
 
   const listImg = data?.imageUrls || []; // Ảnh từ API
   const length = listImg.length;
-  console.log("Image URL:", listImg[indexImg]);
+  console.log('Image URL:', listImg[indexImg]);
   return (
     <BasePages
       className="relative mx-auto w-[80%] flex-1 p-4"
@@ -216,7 +217,10 @@ export default function ProductDetail() {
             <p>{currentTab?.detail}</p>
           ) : (
             <div>
-              Tất cả đánh giá ({currentTab?.detail?.length})
+              <div className="mb-4 flex justify-between">
+                <p> Tất cả đánh giá ({currentTab?.detail?.length})</p>
+                {id && <FormRating ProductID={id} />}
+              </div>
               <div className="flex flex-wrap justify-between gap-2">
                 {currentTab?.detail.map((review, idx) => (
                   <div

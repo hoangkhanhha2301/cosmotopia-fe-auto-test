@@ -286,9 +286,7 @@ export const Order: FC<OrderProps> = ({}) => {
           padding: '0px 16px'
         }}
       >
-        <h1 style={{ fontSize: '32px', color: 'rgb(38, 164, 255)' }}>
-          Manage Order
-        </h1>
+        <h1 style={{ fontSize: '32px', color: '#FF9538' }}>Manage Order</h1>
         {/* <Search
           placeholder="Search Name Order"
           onSearch={onSearch}

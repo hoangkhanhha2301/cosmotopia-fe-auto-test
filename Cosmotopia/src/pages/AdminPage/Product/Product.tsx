@@ -38,6 +38,15 @@ export const Product: FC<ProductProps> = ({}) => {
   const { Search } = Input;
   const [productId, setProductId] = useState<string>('');
   const [form] = Form.useForm();
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 8,
+    total: 0
+  });
+  const handleTableChange = (pagination) => {
+    console.log(pagination);
+    setPagination(pagination);
+  };
   const columns = [
     // {
     //   title: 'ProductID',
@@ -203,6 +212,7 @@ export const Product: FC<ProductProps> = ({}) => {
       });
     }
   }, [productId]);
+
   const addData = (model) => {
     AddProduct(model)
       .then((data) => {
@@ -245,12 +255,16 @@ export const Product: FC<ProductProps> = ({}) => {
     };
     productId.length > 1 ? updateData(model) : addData(model);
   };
-  const getData = () => {
+  const getData = (Parampage?, PrampageSize?) => {
+    const page = Parampage ?? 1;
+    const pageSize = PrampageSize ?? 8;
     console.log('oke');
-    getAllProduct()
+    console.log(page, pageSize);
+    getAllProduct(page, pageSize, '')
       .then((data) => {
         console.log(data);
         setDataTable(data?.products);
+        setPagination((prev) => ({ ...prev, total: data?.totalCount }));
       })
       .catch((error) => {
         console.log(error);
@@ -289,11 +303,13 @@ export const Product: FC<ProductProps> = ({}) => {
     getCategory();
     getBrand();
   }, []);
+  // useEffect(() => {
+  //   setPagination((prev) => ({ ...prev, current: 1 }));
+  // }, [valueSearch]);
   useEffect(() => {
-    getData();
-    getCategory();
-    getBrand();
-  }, []);
+    console.log('oke');
+    getData(pagination.current, pagination.pageSize);
+  }, [pagination.current, pagination.pageSize]);
   return (
     <div>
       <div
@@ -304,9 +320,7 @@ export const Product: FC<ProductProps> = ({}) => {
           padding: '0px 16px'
         }}
       >
-        <h1 style={{ fontSize: '32px', color: 'rgb(38, 164, 255)' }}>
-          Manage Product
-        </h1>
+        <h1 style={{ fontSize: '32px', color: '#FF9538' }}>Manage Product</h1>
         <Search
           placeholder="Search Name Product"
           onSearch={onSearch}
@@ -631,10 +645,9 @@ export const Product: FC<ProductProps> = ({}) => {
                 )
               : dataTable
           }
+          onChange={handleTableChange}
           columns={columns}
-          pagination={{
-            pageSize: 8
-          }}
+          pagination={pagination}
           style={{ marginTop: '24px' }}
           // onChange={onChangePaging}
         />
