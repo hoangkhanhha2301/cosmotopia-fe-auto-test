@@ -65,9 +65,7 @@ export const Profile: FC<ProfileProps> = ({}) => {
   };
   return (
     <div>
-      <h1 style={{ fontSize: '32px', color: 'rgb(38, 164, 255)' }}>
-        Profile Account
-      </h1>
+      <h1 style={{ fontSize: '32px', color: '#FF9538' }}>Profile Account</h1>
       <Form form={form} layout="vertical" onFinish={onFinish}>
         <Row gutter={24}>
           <Col span={24}>

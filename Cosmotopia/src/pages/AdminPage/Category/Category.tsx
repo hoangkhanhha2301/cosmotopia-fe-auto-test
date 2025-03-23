@@ -40,6 +40,15 @@ export const Category: FC<CategoryProps> = ({}) => {
   const { Search } = Input;
   const [dataId, setDataId] = useState<string>('');
   const [form] = Form.useForm();
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 8,
+    total: 0
+  });
+  const handleTableChange = (pagination) => {
+    console.log(pagination);
+    setPagination(pagination);
+  };
   const columns = [
     {
       title: 'Name',
@@ -125,24 +134,10 @@ export const Category: FC<CategoryProps> = ({}) => {
       )
     }
   ];
-  const props = {
-    name: 'file',
-    // action: 'https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload',
-    // headers: {
-    //   authorization: 'authorization-text'
-    // },
-    onChange(info) {
-      if (info.file.status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    }
-  };
-
+  useEffect(() => {
+    console.log('oke');
+    getData(pagination.current, pagination.pageSize);
+  }, [pagination.current, pagination.pageSize]);
   const showModal = (id) => {
     setDataId(id);
   };
@@ -208,12 +203,15 @@ export const Category: FC<CategoryProps> = ({}) => {
     };
     dataId == '0' ? addData(model) : updateData(model);
   };
-  const getData = () => {
+  const getData = (Parampage?, PrampageSize?) => {
+    const page = Parampage ?? 1;
+    const pageSize = PrampageSize ?? pagination?.current;
     console.log('oke');
     getAllCategory()
       .then((data) => {
         console.log(data);
-        setDataTable(data?.data);
+        setDataTable(data?.categories);
+        setPagination((prev) => ({ ...prev, total: data?.totalCount }));
       })
       .catch((error) => {
         console.log(error);
@@ -236,6 +234,7 @@ export const Category: FC<CategoryProps> = ({}) => {
   const onSearch = (value, _e, info) => {
     setValueSearch(value.length > 0 ? value : null);
   };
+
   useEffect(() => {
     getData();
   }, []);
@@ -249,9 +248,7 @@ export const Category: FC<CategoryProps> = ({}) => {
           padding: '0px 16px'
         }}
       >
-        <h1 style={{ fontSize: '32px', color: 'rgb(38, 164, 255)' }}>
-          Manage Category
-        </h1>
+        <h1 style={{ fontSize: '32px', color: '#FF9538' }}>Manage Category</h1>
         <Search
           placeholder="Search Name Category"
           onSearch={onSearch}
@@ -370,11 +367,9 @@ export const Category: FC<CategoryProps> = ({}) => {
               : dataTable
           }
           columns={columns}
-          pagination={{
-            pageSize: 8
-          }}
+          pagination={pagination}
           style={{ marginTop: '24px' }}
-          // onChange={onChangePaging}
+          onChange={handleTableChange}
         />
       )}
     </div>

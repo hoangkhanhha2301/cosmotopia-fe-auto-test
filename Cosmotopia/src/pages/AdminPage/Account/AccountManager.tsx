@@ -200,7 +200,7 @@ export const Account: FC<AccountProps> = ({}) => {
           padding: '0px 16px'
         }}
       >
-        <h1 style={{ fontSize: '32px', color: 'rgb(38, 164, 255)' }}>
+        <h1 style={{ fontSize: '32px', color: '#FF9538' }}>
           Manage User
         </h1>
         <Search

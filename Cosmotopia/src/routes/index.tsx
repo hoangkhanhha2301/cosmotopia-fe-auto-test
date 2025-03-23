@@ -33,6 +33,7 @@ import { Tongquan } from '@/pages/KOLPage/TongQuan/Tongquan';
 import { ThongKe } from '@/pages/KOLPage/Thongke/ThongKe';
 import { DanhSach } from '@/pages/KOLPage/Danhsach/DanhSach';
 import { CreateLink } from '@/pages/KOLPage/CreateLink/CreateLink';
+
 // ----------------------------------------------------------------------
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const userObject = JSON.parse(helper.cookie_get('user'));
@@ -99,11 +100,11 @@ export default function AppRouter() {
         },
         {
           path: '/payment',
-          element: <PaymentPage/>
+          element: <PaymentPage />
         },
         {
-          path:'/success',
-          element: <SuccessPage/>
+          path: '/success',
+          element: <SuccessPage />
         }
       ]
     },

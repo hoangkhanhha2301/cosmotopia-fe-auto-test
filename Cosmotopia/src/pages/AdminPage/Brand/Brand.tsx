@@ -41,7 +41,13 @@ export const Brand: FC<BrandProps> = ({}) => {
   const [valueSearch, setValueSearch] = useState<string>('');
   const { Search } = Input;
   const [dataId, setDataId] = useState<string>('');
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 2,
+    total: 0
+  });
   const [form] = Form.useForm();
+
   const columns = [
     {
       title: 'Name',
@@ -153,6 +159,10 @@ export const Brand: FC<BrandProps> = ({}) => {
     setDataId('');
     form.resetFields();
   };
+  const handleTableChange = (pagination) => {
+    console.log(pagination);
+    setPagination(pagination);
+  };
   useEffect(() => {
     if (dataId.length > 1) {
       getBrandById(dataId).then((data) => {
@@ -164,6 +174,10 @@ export const Brand: FC<BrandProps> = ({}) => {
       });
     }
   }, [dataId]);
+  useEffect(() => {
+    console.log('dmm');
+    getData(pagination.current, pagination.pageSize);
+  }, [pagination.current, pagination.pageSize]);
   const addData = (model) => {
     AddBrand(model)
       .then((data) => {
@@ -210,12 +224,15 @@ export const Brand: FC<BrandProps> = ({}) => {
     };
     dataId == '0' ? addData(model) : updateData(model);
   };
-  const getData = () => {
+  const getData = (Parampage?, PrampageSize?) => {
     console.log('oke');
-    getAllBrand()
+    const page = Parampage ?? pagination.current;
+    const pageSize = PrampageSize ?? pagination.pageSize;
+    getAllBrand(page, pageSize)
       .then((data) => {
         console.log(data);
-        setDataTable(data?.data);
+        setDataTable(data?.brands);
+        setPagination((prev) => ({ ...prev, total: data.totalCount }));
       })
       .catch((error) => {
         console.log(error);
@@ -251,9 +268,7 @@ export const Brand: FC<BrandProps> = ({}) => {
           padding: '0px 16px'
         }}
       >
-        <h1 style={{ fontSize: '32px', color: 'rgb(38, 164, 255)' }}>
-          Manage Brand
-        </h1>
+        <h1 style={{ fontSize: '32px', color: '#FF9538' }}>Manage Brand</h1>
         <Search
           placeholder="Search Name Brand"
           onSearch={onSearch}
@@ -365,11 +380,9 @@ export const Brand: FC<BrandProps> = ({}) => {
               : dataTable
           }
           columns={columns}
-          pagination={{
-            pageSize: 8
-          }}
+          pagination={pagination}
           style={{ marginTop: '24px' }}
-          // onChange={onChangePaging}
+          onChange={handleTableChange}
         />
       )}
     </div>

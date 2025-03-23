@@ -14,7 +14,7 @@ import {
   UserOutlined
 } from '@ant-design/icons';
 import cosmeLogo from '@/assets/logo/cosme_logo_2.png';
-import { Layout, Menu, theme } from 'antd';
+import { ConfigProvider, Layout, Menu, theme } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
@@ -145,130 +145,155 @@ export default function DashBoard() {
   //   });
   // };
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Sider
-        style={{ backgroundColor: '#CDC9C9' }}
-        collapsible
-        collapsed={collapsed}
-        onCollapse={(value) => setCollapsed(value)}
-        // style={{ backgroundColor: "yellow" }}
-      >
-        <Menu
+    <ConfigProvider
+      theme={{
+        components: {
+          Menu: {
+            itemSelectedBg: '#222020BA', // Màu nền khi active
+            itemSelectedColor: '#FDCD3C', // Màu chữ khi active
+            subMenuItemSelectedColor: '#7E6109FF'
+          },
+          Button: {
+            primaryColor: '#FDCD3C',
+            defaultBg: '#222020'
+          }
+        }
+      }}
+    >
+      <Layout style={{ minHeight: '100vh' }}>
+        <Sider
           style={{ backgroundColor: '#CDC9C9' }}
-          defaultSelectedKeys={['profile']}
-          mode="inline"
-          selectedKeys={currentURI}
-          openKeys={openKeys}
-          onOpenChange={handleSubMenuOpen}
-          // items={items}
+          collapsible
+          collapsed={collapsed}
+          onCollapse={(value) => setCollapsed(value)}
+          // style={{ backgroundColor: "yellow" }}
         >
-          {items.map((item) =>
-            item.children ? (
-              <Menu.SubMenu key={item.key} icon={item.icon} title={item.label}>
-                {item.children.map((subItem) => (
-                  <Menu.Item
-                    key={subItem.key}
-                    icon={subItem.icon}
-                    title={subItem.label}
-                    onClick={(e) => handleSelectKey(e.keyPath[1])}
-                  >
-                    <Link to={`/dashboard/${subItem.key}`}>
-                      {subItem.label}
-                    </Link>
-                  </Menu.Item>
-                ))}
-              </Menu.SubMenu>
-            ) : (
-              <Menu.Item key={item.key} icon={item.icon}>
-                <Link to={`/dashboard/${item.key}`}>{item.label}</Link>
-              </Menu.Item>
-            )
-          )}
-        </Menu>
-      </Sider>
-      <Layout>
-        <Header
-          style={{ background: colorBgContainer, boxSizing: 'border-box' }}
-          className="mt-2"
-        >
-          <div
-            style={{
-              textAlign: 'center',
+          <Menu
+            style={{ backgroundColor: '#CDC9C9' }}
+            defaultSelectedKeys={['profile']}
+            mode="inline"
+            selectedKeys={currentURI}
+            openKeys={openKeys}
+            onOpenChange={handleSubMenuOpen}
+            // items={items}
+          >
+            {items.map((item) =>
+              item.children ? (
+                <Menu.SubMenu
+                  key={item.key}
+                  icon={item.icon}
+                  title={item.label}
+                >
+                  {item.children.map((subItem) => (
+                    <Menu.Item
+                      key={subItem.key}
+                      icon={subItem.icon}
+                      title={subItem.label}
+                      onClick={(e) => handleSelectKey(e.keyPath[1])}
+                    >
+                      <Link to={`/dashboard/${subItem.key}`}>
+                        {subItem.label}
+                      </Link>
+                    </Menu.Item>
+                  ))}
+                </Menu.SubMenu>
+              ) : (
+                <Menu.Item key={item.key} icon={item.icon}>
+                  <Link to={`/dashboard/${item.key}`}>{item.label}</Link>
+                </Menu.Item>
+              )
+            )}
+          </Menu>
+        </Sider>
 
-              position: 'relative'
-            }}
-            className="flex items-center justify-between px-4"
+        <Layout>
+          <Header
+            style={{ background: colorBgContainer, boxSizing: 'border-box' }}
+            className="mt-2"
           >
             <div
               style={{
-                // position: 'absolute',
-                // left: '20px',
-                textAlign: 'left',
-                color: 'black',
-                border: 'none',
-                // borderRadius: '5px',
-                // padding: '10px 12px',
-                fontSize: '15px',
-                lineHeight: '23px'
+                textAlign: 'center',
+
+                position: 'relative'
               }}
+              className="flex items-center justify-between px-4"
             >
-              <span>
-                Hi👋:{'  '} {`${userObject?.firstName} ${userObject?.lastName}`}
-                {/* {user?.name} */}
-              </span>
-              <p>
-                Role:{`${userObject?.role}`}
-                {/* {getRole(user?.role)} */}
-              </p>
-            </div>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px'
-              }}
-            >
-              <img
-                src={cosmeLogo}
-                alt=""
-                style={{ maxWidth: '200px' }}
-                // onClick={handleClick}
-              />
-              {/* <p style={{ maxWidth: '200px', marginBottom: '16px' }}>
-                COMESTICS
-              </p> */}
-            </div>
-            <div>
-              <LogoutOutlined
-                type="primary"
-                onClick={() => {
-                  helper.cookie_delete('AT');
-                  dispatch(logout());
-                  navigate('/');
-                }}
+              <div
                 style={{
                   // position: 'absolute',
-                  // right: '30px',
-                  // top: '15px',
-                  backgroundColor: '#1677ff',
-                  color: 'white',
+                  // left: '20px',
+                  textAlign: 'left',
+                  color: 'black',
                   border: 'none',
-                  borderRadius: '5px',
-                  padding: '6px 12px',
-                  fontSize: '16px',
-                  cursor: 'pointer',
-                  height: '35px',
+                  // borderRadius: '5px',
+                  // padding: '10px 12px',
+                  fontSize: '15px',
                   lineHeight: '23px'
                 }}
-              />
+              >
+                <span>
+                  Hi👋:{'  '}{' '}
+                  {`${userObject?.firstName} ${userObject?.lastName}`}
+                  {/* {user?.name} */}
+                </span>
+                <p>
+                  Role:{`${userObject?.role}`}
+                  {/* {getRole(user?.role)} */}
+                </p>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px'
+                }}
+              >
+                <img
+                  src={cosmeLogo}
+                  alt=""
+                  style={{ maxWidth: '200px' }}
+                  // onClick={handleClick}
+                />
+                {/* <p style={{ maxWidth: '200px', marginBottom: '16px' }}>
+                COMESTICS
+              </p> */}
+              </div>
+              <div>
+                <LogoutOutlined
+                  type="primary"
+                  onClick={() => {
+                    helper.cookie_delete('AT');
+                    dispatch(logout());
+                    navigate('/');
+                  }}
+                  style={{
+                    // position: 'absolute',
+                    // right: '30px',
+                    // top: '15px',
+                    backgroundColor: '#1677ff',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '5px',
+                    padding: '6px 12px',
+                    fontSize: '16px',
+                    cursor: 'pointer',
+                    height: '35px',
+                    lineHeight: '23px'
+                  }}
+                />
+              </div>
             </div>
-          </div>
-        </Header>
-        <Content
-          style={{ margin: '0 16px', display: 'flex', flexDirection: 'column' }}
-        >
-          {/* <Breadcrumb>
+          </Header>
+          <Content
+            style={{
+              margin: '0 16px',
+              display: 'flex',
+              flexDirection: 'column'
+            }}
+          >
+            {/* <Breadcrumb>
               {location.pathname.split("/").map((path, index, paths) => {
                 const url = paths.slice(0, index + 1).join("/");
                 console.log(url);
@@ -279,22 +304,23 @@ export default function DashBoard() {
                 );
               })}
             </Breadcrumb> */}
-          <div
-            style={{
-              marginTop: 24,
-              padding: '24px 48px',
-              marginBottom: 24,
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
-              flexGrow: 1,
-              display: 'flex',
-              flexDirection: 'column'
-            }}
-          >
-            <Outlet style={{ flexGrow: 1, display: 'flex' }} />
-          </div>
-        </Content>
+            <div
+              style={{
+                marginTop: 24,
+                padding: '24px 48px',
+                marginBottom: 24,
+                background: colorBgContainer,
+                borderRadius: borderRadiusLG,
+                flexGrow: 1,
+                display: 'flex',
+                flexDirection: 'column'
+              }}
+            >
+              <Outlet style={{ flexGrow: 1, display: 'flex' }} />
+            </div>
+          </Content>
+        </Layout>
       </Layout>
-    </Layout>
+    </ConfigProvider>
   );
 }

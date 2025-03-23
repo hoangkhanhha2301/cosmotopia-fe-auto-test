@@ -1,6 +1,15 @@
+import { Image } from 'antd';
 import React, { FC } from 'react';
 
 interface TongquanProps {}
+const campaigns = Array(5).fill({
+  name: 'Phấn mắt Flower Know',
+  category: 'Mắt',
+  revenue: '4.406.888 vnd',
+  clicks: 124,
+  cr: '7,2 %',
+  image: '/logo.png' // Thay bằng URL hình thật
+});
 
 export const Tongquan: FC<TongquanProps> = ({}) => {
   return (
@@ -21,7 +30,6 @@ export const Tongquan: FC<TongquanProps> = ({}) => {
         </div>
         <p className="mt-2 text-sm text-gray-600">15/03/2025</p>
       </div>
-
       {/* Thống kê */}
       <div className="mt-6 grid grid-cols-4 gap-4">
         {/* Card 1 */}
@@ -95,6 +103,49 @@ export const Tongquan: FC<TongquanProps> = ({}) => {
             style={{ width: '55px' }}
             className="absolute right-1 top-1"
           />
+        </div>
+      </div>
+      <div className="mt-6 rounded-2xl bg-white p-6 shadow-md">
+        <h2 className="mb-4 text-xl font-semibold">Top 5 Campaigns</h2>
+        <div className="space-y-4">
+          {campaigns?.map((campaign, index) => (
+            <div key={index} className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <Image
+                  preview={false}
+                  src={campaign.image}
+                  alt="product"
+                  height={36}
+                  width={36}
+                  className="h-12 w-12 rounded-md"
+                />
+                <div>
+                  <p className="font-medium">{campaign.name}</p>
+                  <p className="text-base  text-gray-500">
+                    {campaign.category}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-10">
+                <div className="text-right">
+                  <p className="text-base ">Doanh Thu</p>
+                  <p className="font-semibold text-gray-500">
+                    {campaign.revenue}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="text-base ">Click</p>
+                  <p className="font-semibold text-gray-500">
+                    {campaign.clicks}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="text-base ">CR</p>
+                  <p className="font-semibold text-gray-500">{campaign.cr}</p>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

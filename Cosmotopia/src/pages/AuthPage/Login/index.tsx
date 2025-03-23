@@ -28,7 +28,7 @@ export default function LoginPage() {
       helper.cookie_set('user', JSON.stringify({ ...data, token: '' }));
       // helper.cookie_set('RT', data.refreshToken);
       dispatch(login());
-      if (data.role == 'Customers') {
+      if (['Customers', 'Affiliates'].includes(data.role)) {
         router.push('/');
       } else router.push('/dashboard');
     } catch (err) {

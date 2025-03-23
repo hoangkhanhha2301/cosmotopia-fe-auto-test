@@ -10,14 +10,27 @@ export const updateAccountByAdmin = (model, id) =>
 
 // Product
 // const SUB_URL = `api/Product`;
-export const getAllProduct = () => api.get('api/Product/GetAllProduct');
+export const getAllProduct = (page, pageSize, search) =>
+  api.get(`api/Product/GetAllProduct`, {
+    params: {
+      page: page,
+      pageSize: pageSize,
+      search: search
+    }
+  });
 export const getProductDetail = (id) =>
   api.get(`api/Product/GetProductBy/${id}`);
 export const AddProduct = (data) => api.post(`api/Product/CreateProduct`, data);
 export const UpdateProduct = (data, id) =>
   api.put(`api/Product/UpdateProduct/${id}`, data);
 // Category
-export const getAllCategory = () => api.get('api/Category/GetAllCategory');
+export const getAllCategory = (page?, pageSize?) =>
+  api.get('api/Category/GetAllCategory', {
+    params: {
+      page: page,
+      pageSize: pageSize
+    }
+  });
 export const getCategoryById = (id) =>
   api.get(`api/Category/GetCategoryBy/${id}`);
 export const AddCategory = (model) =>
@@ -27,7 +40,13 @@ export const UpdateCategory = (model, id) =>
 export const DeleteCategory = (id) =>
   api.delete(`api/Category/DeleteCategoryBy/${id}`);
 // Brand
-export const getAllBrand = () => api.get('api/Brand/GetAllBrand');
+export const getAllBrand = (page?, pageSize?) =>
+  api.get('api/Brand/GetAllBrand', {
+    params: {
+      page: page,
+      pageSize: pageSize
+    }
+  });
 export const getBrandById = (id) => api.get(`api/Brand/GetBrandBy/${id}`);
 export const AddBrand = (model) => api.post('api/Brand/CreateBrand', model);
 export const UpdateBrand = (model, id) =>
