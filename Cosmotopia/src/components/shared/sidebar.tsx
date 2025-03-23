@@ -28,11 +28,11 @@ export default function Sidebar() {
   const dropdownRef = useRef(null);
 
   const { data: productData, refetch } = useGetListProductsByPaging({
-    page: 1, 
-    pageSize: 4, 
+    page: 1,
+    pageSize: 4,
     search: searchQuery
   });
-  
+
   const products = productData?.products || [];
 
   useEffect(() => {
@@ -67,12 +67,16 @@ export default function Sidebar() {
 
   return (
     <nav className={cn(`relative z-10 mx-auto w-[80%] flex-none md:block`)}>
-      <div className="mx-auto w-full px-0 justify-center">
+      <div className="mx-auto w-full justify-center px-0">
         <div className="flex items-center justify-between border-b border-gray-200 py-4 drop-shadow-md">
-          <span onClick={() => router.push('/')} className="flex items-center text-[36px] cursor-pointer">
-            <img src={cosmeLogo} alt="cosme-logo" className="mr-2 h-8 w-8" /> Cosmotopia
+          <span
+            onClick={() => router.push('/')}
+            className="flex cursor-pointer items-center text-[36px]"
+          >
+            <img src={cosmeLogo} alt="cosme-logo" className="mr-2 h-8 w-8" />{' '}
+            Cosmotopia
           </span>
-          <div className="flex-1 px-12 relative" ref={dropdownRef}>
+          <div className="relative z-50 ml-12 mr-12 flex-1 " ref={dropdownRef}>
             <div className="relative">
               <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-gray-400">
                 <Search className="h-5 w-5" />
@@ -86,7 +90,7 @@ export default function Sidebar() {
               />
             </div>
             {isOpen && (
-              <div className="absolute left-0 right-0 z-[999] max-h-60 overflow-y-auto rounded-xl border border-gray-300 bg-white shadow-md">
+              <div className="absolute left-0 right-0 z-[999] ml-6 mr-6 mt-0.5  max-h-60 overflow-y-auto rounded-xl border border-gray-300 bg-white">
                 {products.length > 0 ? (
                   products.map((product) => (
                     <Link
@@ -99,7 +103,9 @@ export default function Sidebar() {
                     </Link>
                   ))
                 ) : (
-                  <div className="px-6 py-3 text-gray-500">Không có kết quả nào</div>
+                  <div className="px-6 py-3 text-gray-500">
+                    Không có kết quả nào
+                  </div>
                 )}
               </div>
             )}
@@ -107,7 +113,12 @@ export default function Sidebar() {
           <div className="flex items-center gap-6">
             <div className="cart">
               <ShoppingCartIcon className="text-blue-500 mr-1 h-6 w-6" />
-              <span onClick={() => router.push('/cart')} className="cursor-pointer font-montserrat">Giỏ hàng</span>
+              <span
+                onClick={() => router.push('/cart')}
+                className="cursor-pointer font-montserrat"
+              >
+                Giỏ hàng
+              </span>
             </div>
             <div className="user flex items-center">
               <UserAccountMenu auth={auth} handleLogout={handleLogout} />
@@ -115,7 +126,7 @@ export default function Sidebar() {
           </div>
         </div>
         <div className="space-y-4 pb-4">
-          <HeaderNav items={navItems}/>
+          <HeaderNav items={navItems} />
         </div>
       </div>
     </nav>

@@ -70,31 +70,46 @@ export default function HeaderNav({
   }
 
   return (
-    <nav className="relative border-b border-gray-200 drop-shadow-md z-[50]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <ul className="flex flex-wrap justify-center sm:justify-start space-x-8 py-4">
+    <nav className="relative -z-20 border-b border-gray-200 drop-shadow-md">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <ul className="flex flex-wrap justify-center space-x-8 py-4 sm:justify-start">
           <li>
-            <a href="#" className="text-gray-600 hover:text-gray-900 transition-colors duration-200">
+            <a
+              href="#"
+              className="text-gray-600 transition-colors duration-200 hover:text-gray-900"
+            >
               Sản phẩm
             </a>
           </li>
           <li>
-            <a href="#" className="text-gray-600 hover:text-gray-900 transition-colors duration-200">
+            <a
+              href="#"
+              className="text-gray-600 transition-colors duration-200 hover:text-gray-900"
+            >
               Top Brand
             </a>
           </li>
           <li>
-            <a href="#" className="text-gray-600 hover:text-gray-900 transition-colors duration-200">
+            <a
+              href="#"
+              className="text-gray-600 transition-colors duration-200 hover:text-gray-900"
+            >
               Top Reviews
             </a>
           </li>
           <li>
-            <a href="#" className="text-gray-600 hover:text-gray-900 transition-colors duration-200">
+            <a
+              href="#"
+              className="text-gray-600 transition-colors duration-200 hover:text-gray-900"
+            >
               Personal color test
             </a>
           </li>
           <li>
-            <a href="#" className="text-gray-600 hover:text-gray-900 transition-colors duration-200">
+            <a
+              href="#"
+              className="text-gray-600 transition-colors duration-200 hover:text-gray-900"
+            >
               Lorem
             </a>
           </li>
