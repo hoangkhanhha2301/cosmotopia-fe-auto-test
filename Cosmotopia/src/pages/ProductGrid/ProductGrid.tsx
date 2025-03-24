@@ -9,6 +9,7 @@ type Filters = {
   categories: string[];
   brands: string[];
   prices: string[];
+  search: string;
 };
 
 type ProductGridProps = {
@@ -20,10 +21,11 @@ export function ProductGrid({ filters }: ProductGridProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 9;
 
-  // Gọi API với trang hiện tại, kích thước trang và các tham số filter
+  console.log(filters.search);
   const { data, isPending, isError } = useGetListProductsByPaging({
     page: currentPage,
     pageSize: pageSize,
+    search: filters.search,
     // Giả sử API nhận tham số filter có tên là filters, hoặc bạn có thể truyền từng thuộc tính riêng:
     filters: {
       categories: filters.categories,

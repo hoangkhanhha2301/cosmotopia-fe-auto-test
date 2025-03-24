@@ -9,12 +9,14 @@ type FiltersPageProps = {
     categories: string[];
     brands: string[];
     prices: string[];
+    search: string;
   };
   setFilters: React.Dispatch<
     React.SetStateAction<{
       categories: string[];
       brands: string[];
       prices: string[];
+      search: string;
     }>
   >;
 };

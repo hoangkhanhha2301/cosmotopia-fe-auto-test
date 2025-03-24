@@ -65,6 +65,13 @@ export default function Sidebar() {
     dispatch(logout());
   };
 
+  const handleSearchEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && searchQuery.trim() !== "") {
+      router.push(`/productGrid?query=${encodeURIComponent(searchQuery.trim())}`);
+      setIsOpen(false);
+    }
+  };
+
   return (
     <nav className={cn(`relative z-10 mx-auto w-[80%] flex-none md:block`)}>
       <div className="mx-auto w-full justify-center px-0">
@@ -87,6 +94,7 @@ export default function Sidebar() {
                 className="w-full rounded-full bg-gray-100 py-3 pl-10 pr-4 text-sm focus:ring-2 focus:ring-gray-200"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleSearchEnter} 
               />
             </div>
             {isOpen && (

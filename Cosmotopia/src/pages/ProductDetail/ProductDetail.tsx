@@ -4,7 +4,7 @@ import { Button, ConfigProvider, Image, Rate, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { MoreOutlined, CheckCircleFilled } from '@ant-design/icons';
 import { useGetDetailProduct } from '@/queries/product.query';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FormRating } from './FormRating';
 interface TabContent {
   title: string;
@@ -20,6 +20,7 @@ export default function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [indexImg, setIndexImg] = useState(0);
   console.log(data?.description);
+  const navigate = useNavigate();
   // const listContent = [
   //   // { title: 'Chi tiết sản phẩm', detail: data?.description || [] },
   //   { title: 'Cách dùng', detail: data?.usage || [] },
@@ -186,7 +187,20 @@ export default function ProductDetail() {
             <button className="w-96 rounded-full bg-[#F5F5F5] px-6 py-3 text-base font-medium text-black">
               Thêm vào giỏ hàng
             </button>
-            <button className="w-80 rounded-full bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] px-6 py-3 text-base font-medium text-white">
+            <button 
+            // onClick={() => router.push(`/payment?productId=${id}&quantity=${quantity}`)}
+            onClick={() => {
+              navigate('/payment', {
+                state: [{
+                  productId: id,
+                  name: data.name,
+                  price: data.price,
+                  quantity: quantity,
+                  imageUrl: listImg[0] || 'abc',
+                },],
+              });
+            }}
+            className="w-80 rounded-full bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] px-6 py-3 text-base font-medium text-white">
               Mua ngay
             </button>
           </div>

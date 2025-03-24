@@ -1,14 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FiltersPage from "./FilterPage";
 import { ProductGrid } from "./ProductGrid";
+import { useSearchParams } from "react-router-dom";
 
 export default function Page() {
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get("query") || "";
   // Giả sử các filter là các mảng chứa id của lựa chọn
   const [filters, setFilters] = useState({
     categories: [] as string[],
     brands: [] as string[],
     prices: [] as string[],
+    search: searchQuery,
   });
+
+  useEffect(() => {
+    setFilters((prev) => ({ ...prev, search: searchQuery }));
+  }, [searchQuery]);
+
+  console.log(filters);
 
   return (
     <main className="min-h-screen bg-gray-50 p-4">

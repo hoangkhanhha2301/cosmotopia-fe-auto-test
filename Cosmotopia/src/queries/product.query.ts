@@ -39,7 +39,7 @@ export const useGetListProductsByPaging = ({ page, pageSize, search, filters }: 
           queryParams.append("sortBy", filters.prices.join(","));
         }
       }
-      console.log(queryParams.toString());
+      console.log("Query: ",queryParams.toString());
       const url = `/${SUB_URL}/GetAllProduct?${queryParams.toString()}`;
       return await BaseRequest.Get2(url);
     },

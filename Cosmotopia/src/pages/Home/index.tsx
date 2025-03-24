@@ -1,7 +1,7 @@
 import BasePages from '@/components/shared/base-pages.js';
 // import Footer from '@/components/shared/footer';
 import Banner from '@/components/shared/banner';
-import BannerImage from '@/assets/banner/banner.jpg';
+import BannerImage from '@/assets/banner/Banner1.png';
 import ProductCategories from '@/components/shared/category';
 import { ProductListing } from '@/components/shared/product-listing';
 import MakeupTones from '@/components/shared/style';

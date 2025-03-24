@@ -1,10 +1,13 @@
 "use client"
 
 import { Image } from "antd"
-import { useState } from "react"
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 export default function PaymentMethods() {
+  const location = useLocation();
   const [selectedMethod, setSelectedMethod] = useState("credit")
+  
 
   return (
     <div className="w-[935px] flex flex-col">
