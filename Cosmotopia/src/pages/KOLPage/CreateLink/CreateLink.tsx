@@ -1,61 +1,120 @@
 import { generalLink } from '@/queries/affilate.api';
+import { getProductDetail } from '@/queries/dashboard/dashboardAdmin.query';
 import { ShareAltOutlined } from '@ant-design/icons';
-import { Button, ConfigProvider, Form, Input, message, Space } from 'antd';
-import React, { FC } from 'react';
+import {
+  Button,
+  Card,
+  ConfigProvider,
+  Form,
+  Input,
+  message,
+  Space
+} from 'antd';
+import { link } from 'fs';
+import React, { FC, useState } from 'react';
 
 interface CreateLinkProps {}
 
 export const CreateLink: FC<CreateLinkProps> = ({}) => {
   const [form] = Form.useForm();
+  const [productSelected, setProductSelected] = useState(null);
+  const [linkShare, setLinkShare] = useState(null);
   const handleShare = async () => {
+    if (!linkShare) {
+      return;
+    }
     try {
-      await navigator.clipboard.writeText(form.getFieldValue('link'));
+      await navigator.clipboard.writeText(linkShare);
       message.success('Đã sao chép vào clipboard!');
     } catch (err) {
       message.error('Lỗi khi sao chép!');
     }
   };
-  const onFinish = (values) => {
-    console.log(values);
-    const segments = values.url.split('/');
+  const onSearch = (value) => {
+    const segments = value.split('/');
     const productId = segments[segments.length - 1];
+    getProductDetail(productId)
+      .then((data) => {
+        // console.log(data);
+        setProductSelected(data?.data);
+      })
+      .catch((err) => {
+        setProductSelected(null);
+        message.error('Không tìm thấy sản phẩm từ link');
+      });
+  };
+  const onFinish = (values) => {
+    if (productSelected == null) {
+      message.error('Bạn phải chọn sản phẩm trước khi tạo link');
+      return;
+    }
+    console.log(values);
+
+    const productId = productSelected.productId;
     console.log(productId);
     const model = {
       productId: productId
     };
-    generalLink(model)
-      .then((data) => {
-        console.log(data);
-        // form.setFieldValue('link', data)
-      })
-      .catch((err) => {
-        message.error('something went wrong');
-      })
-      .finally(() => {});
+
+    setLinkShare('link share ne');
+    // generalLink(model)
+    //   .then((data) => {
+    //     console.log(data);
+    //     // form.setFieldValue('link', setdata)
+    //   })
+    //   .catch((err) => {
+    //     message.error('something went wrong');
+    //     console.log(err);
+    //   })
+    //   .finally(() => {});
   };
   return (
     <div>
-      {' '}
       <h2 className="mb-4 text-lg font-semibold">Tạo liên kết affiliate</h2>
+      <Form.Item
+        name="url"
+        className="mb-0"
+        rules={[
+          {
+            required: true,
+            message: 'Please Enter link of Products!'
+          }
+        ]}
+      >
+        <Input.Search
+          placeholder="Dán link sản phẩm"
+          className="h-10"
+          onSearch={onSearch}
+        />
+      </Form.Item>
       <Form layout="vertical" form={form} onFinish={onFinish}>
         {/* Nhập link sản phẩm */}
-        <Form.Item
-          name="url"
-          className="mb-0"
-          rules={[
-            {
-              required: true,
-              message: 'Please Enter link of Products!'
-            }
-          ]}
-        >
-          <Input placeholder="Dán link sản phẩm" className="h-10" />
-        </Form.Item>
-        <div className="mb-2 mt-0 cursor-pointer text-right text-sm text-gray-500 hover:underline">
-          Chọn sản phẩm từ trang web
-        </div>
-        {/* Nút tạo link */}
 
+        {/* <div className="mb-2 mt-0 cursor-pointer text-right text-sm text-gray-500 hover:underline">
+          Chọn sản phẩm từ trang web
+        </div> */}
+        {/* Nút tạo link */}
+        <div style={{ minHeight: '200px' }}>
+          {productSelected ? (
+            <Card
+              style={{ margin: '16px 0', textAlign: 'left' }}
+              cover={
+                <img
+                  src={'/logo.png'}
+                  alt={productSelected?.name}
+                  style={{ height: '200px', width: '200px' }}
+                />
+              }
+            >
+              <h3>{productSelected?.name}</h3>
+              <p>Giá: {productSelected?.price}</p>
+            </Card>
+          ) : (
+            <>
+              <p className="mt-2">Dán link vào để hiển thị sản phẩm</p>
+            </>
+          )}
+        </div>
         <ConfigProvider
           theme={{
             components: {
@@ -67,6 +126,7 @@ export const CreateLink: FC<CreateLinkProps> = ({}) => {
           }}
         >
           <Button
+            disabled={!productSelected}
             htmlType="submit"
             type="primary"
             className="mb-4 h-10 w-full rounded-full bg-gradient-to-r from-[#A933FF] to-[#7000FF] text-base font-semibold text-white"
@@ -81,14 +141,15 @@ export const CreateLink: FC<CreateLinkProps> = ({}) => {
             <Input
               placeholder="Link sẽ hiển thị sau khi tạo"
               readOnly
-              disabled
+              disabled={!linkShare}
+              value={linkShare || ''}
             />
             <Button
               icon={<ShareAltOutlined />}
               className="h-10"
               onClick={handleShare}
             >
-              Chia sẻ
+              Coppy
             </Button>
           </Space.Compact>
         </Form.Item>
