@@ -1,12 +1,16 @@
-import * as React from "react";
-import { ChevronRight } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Tooltip, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Button } from "@/components/ui/button";
-import { ProductCard } from "@/components/shared/product-card";
-import { useRouter } from "@/routes/hooks";
-import { useGetListProductsByPaging } from "@/queries/product.query";
-import { useGetAllCategories } from "@/queries/category.query"; // Import API lấy danh mục
+import * as React from 'react';
+import { ChevronRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import {
+  Tooltip,
+  TooltipProvider,
+  TooltipTrigger
+} from '@/components/ui/tooltip';
+import { Button } from '@/components/ui/button';
+import { ProductCard } from '@/components/shared/product-card';
+import { useRouter } from '@/routes/hooks';
+import { useGetListProductsByPaging } from '@/queries/product.query';
+import { useGetAllCategories } from '@/queries/category.query'; // Import API lấy danh mục
 
 export function ProductListing() {
   const router = useRouter();
@@ -14,25 +18,35 @@ export function ProductListing() {
   const pageSize = 6;
 
   // Lấy danh mục từ API
-  const { data: categoriesData, isPending: isCategoriesLoading, isError: isCategoriesError } = useGetAllCategories();
+  const {
+    data: categoriesData,
+    isPending: isCategoriesLoading,
+    isError: isCategoriesError
+  } = useGetAllCategories();
 
   // Xử lý danh mục (Thêm "Tất cả" vào danh sách)
-  const categories = [{ categoryId: "all", name: "Tất cả" }, ...(categoriesData?.categories || [])];
+  const categories = [
+    { categoryId: 'all', name: 'Tất cả' },
+    ...(categoriesData?.categories || [])
+  ];
   console.log(categories);
   // Nếu danh mục chưa có dữ liệu, mặc định "Tất cả"
-  const [activeCategoryId, setActiveCategoryId] = React.useState("all");
+  const [activeCategoryId, setActiveCategoryId] = React.useState('all');
 
   // Lấy danh sách sản phẩm theo danh mục
   const { data, isPending, isError } = useGetListProductsByPaging({
     page: currentPage,
     pageSize: pageSize,
-    filters: activeCategoryId !== "all" ? { categories: [activeCategoryId] } : undefined, // Nếu chọn "Tất cả" thì không lọc
+    filters:
+      activeCategoryId !== 'all'
+        ? { categories: [activeCategoryId] }
+        : undefined // Nếu chọn "Tất cả" thì không lọc
   });
   const products = data?.products || [];
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[312px_1fr] py-7">
+      <div className="grid grid-cols-1 gap-8 py-7 lg:grid-cols-[312px_1fr]">
         {/* Sidebar */}
         <div className="flex flex-col gap-3 py-12">
           <nav className="w-[312px] space-y-2 p-2">
@@ -48,15 +62,21 @@ export function ProductListing() {
                       <button
                         onClick={() => setActiveCategoryId(category.categoryId)}
                         className={cn(
-                          "flex w-full items-center justify-between rounded-xl shadow-lg bg-white p-3 text-left transition-all hover:bg-purple-50",
-                          activeCategoryId === category.categoryId ? "text-purple-600" : "text-gray-700 hover:text-purple-600",
+                          'flex w-full items-center justify-between rounded-xl bg-white p-3 text-left shadow-lg transition-all hover:bg-purple-50',
+                          activeCategoryId === category.categoryId
+                            ? 'text-purple-600'
+                            : 'text-gray-700 hover:text-purple-600'
                         )}
                       >
-                        <span className="text-base font-normal font-montserrat">{category.name}</span>
+                        <span className="font-montserrat text-base font-normal">
+                          {category.name}
+                        </span>
                         <ChevronRight
                           className={cn(
-                            "h-4 w-4 transition-colors",
-                            activeCategoryId === category.id ? "text-purple-600" : "text-gray-400",
+                            'h-4 w-4 transition-colors',
+                            activeCategoryId === category.id
+                              ? 'text-purple-600'
+                              : 'text-gray-400'
                           )}
                         />
                       </button>
@@ -71,8 +91,14 @@ export function ProductListing() {
         {/* Product Grid */}
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-[#2D2D2D]">Sản phẩm nổi bật</h2>
-            <Button onClick={() => router.push("/productGrid")} variant="link" className="text-purple-600">
+            <h2 className="text-2xl font-bold text-[#2D2D2D]">
+              Sản phẩm nổi bật
+            </h2>
+            <Button
+              onClick={() => router.push('/productGrid')}
+              variant="link"
+              className="text-purple-600"
+            >
               Xem tất cả
               <ChevronRight className="ml-1 h-4 w-4" />
             </Button>
@@ -83,13 +109,18 @@ export function ProductListing() {
               <TooltipProvider key={i}>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <div onClick={() => router.push(`/product/${product.productId}`)} className="cursor-pointer">
+                    <div
+                      onClick={() =>
+                        router.push(`/product/${product.productId}`)
+                      }
+                      className="cursor-pointer"
+                    >
                       <ProductCard
                         title={product.name}
                         description={product.description}
                         price={product.price}
                         rating={product.rating}
-                        image={product.image}
+                        image={product.imageUrls[0]}
                         isNew={product.isNew}
                       />
                     </div>

@@ -45,7 +45,11 @@ export default function DashBoard() {
   const currentURI =
     location.pathname.split('/')[location.pathname.split('/').length - 1];
 
-  const userObject = JSON.parse(helper.cookie_get('user'));
+  const auth = useSelector((state: RootState) => state.auth.isLogin);
+  const token = helper.cookie_get('AT');
+  const userObject = token
+    ? JSON.parse(helper.cookie_get('user'))
+    : { role: 'Guest' };
   const role = userObject.role;
   const dataOpen = JSON.parse(localStorage.getItem('keys')) ?? [];
 

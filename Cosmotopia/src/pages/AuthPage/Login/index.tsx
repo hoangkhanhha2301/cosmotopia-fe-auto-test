@@ -1,18 +1,20 @@
 import BasePages from '@/components/shared/base-pages.js';
 import { Checkbox, Form, message } from 'antd';
 import { useRouter } from '@/routes/hooks';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLogin } from '@/queries/auth.query';
 import helper from '@/helpers/index';
 import { login } from '@/redux/auth.slice';
 
 import { sSpin } from '@/store/spin';
+import { useEffect } from 'react';
+import { RootState } from '@/redux/store';
 
 export default function LoginPage() {
   const router = useRouter();
   const dispatch = useDispatch();
   const { mutateAsync: loginAccount, isPending } = useLogin();
-
+  const auth = useSelector((state: RootState) => state.auth.isLogin);
   const onFinish = async (values) => {
     sSpin.set(true);
     try {
@@ -23,14 +25,19 @@ export default function LoginPage() {
       };
       var data = await loginAccount(model);
       console.log(data);
+      if (data.role == 'Staff Shipper') {
+        message.error('Shipper must login in mobile');
+        return;
+      }
       helper.cookie_set('AT', data.token);
-      helper.cookie_set('role', data.role);
       helper.cookie_set('user', JSON.stringify({ ...data, token: '' }));
       // helper.cookie_set('RT', data.refreshToken);
       dispatch(login());
       if (['Customers', 'Affiliates'].includes(data.role)) {
         router.push('/');
-      } else router.push('/dashboard');
+      } else {
+        router.push('/dashboard');
+      }
     } catch (err) {
       console.error('Login error:', err); // Log the exact error
       message.error('Tên đăng nhập hoặc mật khẩu không đúng.');
@@ -38,6 +45,18 @@ export default function LoginPage() {
       sSpin.set(false);
     }
   };
+  useEffect(() => {
+    // console.log('');
+    // const token = helper.cookie_get('AT');
+    // const userObject = token
+    //   ? JSON.parse(helper.cookie_get('user'))
+    //   : { role: 'Guest' };
+    // if (['Customers', 'Affiliates'].includes(userObject.role)) {
+    //   router.push('/');
+    // } else {
+    //   router.push('/dashboard');
+    // }
+  }, []);
   return (
     <>
       <BasePages

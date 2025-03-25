@@ -113,9 +113,11 @@ export const RegisterAffiliate: FC<RegisterAffiliateProps> = ({}) => {
     current == 1 && setAgreed(false);
     setCurrent(current - 1);
   };
-  const userObject = auth
+  const token = helper.cookie_get('AT');
+  const userObject = token
     ? JSON.parse(helper.cookie_get('user'))
     : { role: 'Guest' };
+
   // const userObject = { role: 'Affiliates' };
   const role = userObject?.role ?? 'Guest';
   console.log(role);
@@ -303,7 +305,7 @@ export const RegisterAffiliate: FC<RegisterAffiliateProps> = ({}) => {
           </div>
         )}
         <div style={{ marginTop: 24 }}>
-          {current > 0 && (
+          {current > 0 && current < 2 && (
             <Button style={{ marginRight: 8 }} onClick={prev}>
               Quay lại
             </Button>
@@ -333,7 +335,7 @@ export const RegisterAffiliate: FC<RegisterAffiliateProps> = ({}) => {
                 // next();
               }}
             >
-              Xác nhân đăng ký
+              Xác nhận đăng ký
             </Button>
           )}
         </div>

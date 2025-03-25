@@ -52,21 +52,20 @@ export const CreateLink: FC<CreateLinkProps> = ({}) => {
 
     const productId = productSelected.productId;
     console.log(productId);
-    const model = {
-      productId: productId
-    };
-
-    setLinkShare('link share ne');
-    // generalLink(model)
-    //   .then((data) => {
-    //     console.log(data);
-    //     // form.setFieldValue('link', setdata)
-    //   })
-    //   .catch((err) => {
-    //     message.error('something went wrong');
-    //     console.log(err);
-    //   })
-    //   .finally(() => {});
+    // const model = {
+    //   productId: productId
+    // };
+    generalLink(productId)
+      .then((data) => {
+        console.log(data);
+        setLinkShare(data?.affiliateProductUrl);
+        // form.setFieldValue('link', setdata)
+      })
+      .catch((err) => {
+        message.error('something went wrong');
+        console.log(err);
+      })
+      .finally(() => {});
   };
   return (
     <div>

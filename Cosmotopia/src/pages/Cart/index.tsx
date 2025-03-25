@@ -1,85 +1,86 @@
 import BasePages from '@/components/shared/base-pages.js';
 import './styles.css';
 import { useRouter } from '@/routes/hooks';
-import {
-  Checkbox,
-  Select,
-  Table
-} from 'antd';
-import { useState } from 'react';
+import { Button, Checkbox, ConfigProvider, message, Select, Table } from 'antd';
+import { useEffect, useRef, useState } from 'react';
+import helper from '@/helpers/index';
+import { useNavigate } from 'react-router-dom';
+import { DeleteCart, getAllCart, UpdateCart } from '@/queries/cart.api';
+import { DeleteOutlined } from '@ant-design/icons';
+import { sSpin } from '@/store/spin';
 
+const dataFake = [
+  {
+    key: 1,
+    name: 'Flower Knows',
+    description: 'Bảng phấn mắt',
+    variant: ['L01', 'L02', 'L03'],
+    selectedVariant: 'L01',
+    image: './detail.png',
+    price: 379000,
+    quantity: 1,
+    selected: true
+  },
+  {
+    key: 2,
+    name: 'Flower Knows',
+    description: 'Bảng phấn mắt',
+    variant: ['L01', 'L02', 'L03', 'L04'],
+    selectedVariant: 'L01',
+    image: './detail.png',
+    price: 379000,
+    quantity: 1,
+    selected: true
+  },
+  {
+    key: 3,
+    name: 'Flower Knows',
+    description: 'Bảng phấn mắt',
+    variant: ['L01', 'L02', 'L033'],
+    selectedVariant: 'L01',
+    image: './detail.png',
+    price: 379000,
+    quantity: 1,
+    selected: true
+  },
+  {
+    key: 4,
+    name: 'Flower Knows',
+    description: 'Bảng phấn mắt',
+    variant: ['L01', 'L02', 'L033'],
+    selectedVariant: 'L01',
+    image: './detail.png',
+    price: 379000,
+    quantity: 1,
+    selected: true
+  },
+  {
+    key: 5,
+    name: 'Flower Knows',
+    description: 'Bảng phấn mắt',
+    variant: ['L01', 'L02', 'L033'],
+    selectedVariant: 'L01',
+    image: './detail.png',
+    price: 379000,
+    quantity: 1,
+    selected: true
+  }
+];
 export default function Cart() {
-  const router = useRouter();
-  const [data, setData] = useState<any>([
-    {
-      key: 1,
-      name: 'Flower Knows',
-      description: 'Bảng phấn mắt',
-      variant: ['L01', 'L02', 'L03'],
-      selectedVariant: 'L01',
-      image: './detail.png',
-      price: 379000,
-      quantity: 1,
-      selected: true
-    },
-    {
-      key: 2,
-      name: 'Flower Knows',
-      description: 'Bảng phấn mắt',
-      variant: ['L01', 'L02', 'L03', 'L04'],
-      selectedVariant: 'L01',
-      image: './detail.png',
-      price: 379000,
-      quantity: 1,
-      selected: true
-    },
-    {
-      key: 3,
-      name: 'Flower Knows',
-      description: 'Bảng phấn mắt',
-      variant: ['L01', 'L02', 'L033'],
-      selectedVariant: 'L01',
-      image: './detail.png',
-      price: 379000,
-      quantity: 1,
-      selected: true
-    },
-    {
-      key: 4,
-      name: 'Flower Knows',
-      description: 'Bảng phấn mắt',
-      variant: ['L01', 'L02', 'L033'],
-      selectedVariant: 'L01',
-      image: './detail.png',
-      price: 379000,
-      quantity: 1,
-      selected: true
-    },
-    {
-      key: 5,
-      name: 'Flower Knows',
-      description: 'Bảng phấn mắt',
-      variant: ['L01', 'L02', 'L033'],
-      selectedVariant: 'L01',
-      image: './detail.png',
-      price: 379000,
-      quantity: 1,
-      selected: true
-    }
-  ]);
+  const [data, setData] = useState<any>([]);
 
-  console.log('re-render');
-  const handleChangeData = (key, record) => {
-    console.log('oke');
-    setData((pre) => pre.map((item) => (item.key == key ? record : item)));
-  };
   const [selectedKeyRows, setSelectedKeyRows] = useState([]);
+  const navigate = useNavigate();
   const keySet = new Set(selectedKeyRows);
-
+  const [tempQuantity, setTempQuantity] = useState(null);
   const selectedRows = data.filter((item) => keySet.has(item.key));
+  // const handleChangeData = (key, record) => {
+  //   console.log('oke');
+  //   setData((pre) => pre.map((item) => (item.key == key ? record : item)));
+  // };
   const totalPrice = selectedRows
     ?.reduce((total, product) => {
-      return total + product?.price * product?.quantity;
+      return total + product?.product.price * product?.quantity;
     }, 0)
     .toLocaleString('vi-VN');
   const columns = [
@@ -91,31 +92,21 @@ export default function Cart() {
           {/* <Image src={record.image} width={80} preview={false} /> */}
           <div className="rounded-lg bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 p-[1px]">
             <img
-              src={record.image} // Thay bằng ảnh sản phẩm
+              src={record?.product?.imageUrls[0]} // Thay bằng ảnh sản phẩm
               alt="Flower Knows"
               className="h-20 w-20 rounded-lg bg-white object-cover p-1"
             />
           </div>
           <div>
-            <h3 className="text-base font-bold text-[#4E4663]">
-              {record.name}
+            <h3
+              className="cursor-pointer text-base font-bold text-[#4E4663] hover:underline"
+              onClick={() => navigate(`/product/${record.productId}`)}
+            >
+              {record?.product.name}
             </h3>
-            <p className="mb-1 text-gray-500">{record.description}</p>
+            <p className="mb-1 text-gray-500">{record?.product.description}</p>
             <div>
-              <Select
-                style={{
-                  width: 80,
-                  height: 25
-                }}
-                defaultValue={record.selectedVariant}
-                onChange={(a) => {
-                  console.log(a);
-                }}
-                options={record.variant.map((v, index) => ({
-                  value: v,
-                  label: v
-                }))}
-              />
+              <p>Còn {record?.product.stockQuantity} sản phẩm </p>
             </div>
           </div>
         </div>
@@ -125,44 +116,23 @@ export default function Cart() {
       title: 'Số lượng',
       dataIndex: 'quantity',
       render: (quantity, record) => (
-        <div className="flex  w-32 items-center justify-between rounded-xl bg-gray-100 ">
-          <button
-            className="border-none px-3 py-2 text-xl font-bold text-gray-600"
-            onClick={() => {
-              handleChangeData(record.key, {
-                ...record,
-                quantity: quantity > 1 ? quantity - 1 : 1
-              });
-            }}
-          >
-            -
-          </button>
-          <input
-            min={0}
-            value={quantity}
-            // type="number"
-
-            onChange={(e) => {
-              const value = Number(e.target.value);
-              // setQuantity(value);
-              //   quantity = value > 123 ? 123 : value;
-              handleChangeData(record.key, { ...record, quantity: value });
-            }}
-            className="w-12 border-none bg-gray-100  py-2 text-center font-bold text-[#9C3CFD]"
-          />
-
-          <button
-            className="text-b border-none px-3 py-2 font-bold text-gray-600"
-            onClick={() =>
-              handleChangeData(record.key, {
-                ...record,
-                quantity: quantity + 1
-              })
+        <input
+          min={0}
+          value={quantity}
+          type="number"
+          max={Number(record.product?.stockQuantity)}
+          onChange={(e) => {
+            if (e.target.value == '') {
+              updateCart(1, record.product?.productId);
+            } else {
+              updateCart(e.target.value, record.product?.productId);
             }
-          >
-            +
-          </button>
-        </div>
+
+            // setQuantity(value);
+            //   quantity = value > 123 ? 123 : value;
+          }}
+          className="w-12 border-none bg-gray-100  py-2 text-center font-bold text-[#9C3CFD]"
+        />
       )
     },
     {
@@ -170,11 +140,47 @@ export default function Cart() {
       dataIndex: 'price',
       render: (price, record) => (
         <span className="text-base font-bold text-[#9C3CFD]">
-          {Number(price).toLocaleString('vi-VN')} VNĐ
+          {Number(record.product.price).toLocaleString('vi-VN')} VNĐ
         </span>
+      )
+    },
+    {
+      title: 'Delete',
+      key: 'action',
+      render: (record) => (
+        // <Button
+        //   type="dashed"
+        //   style={{ backgroundColor: 'red' }}
+        //   // disabled={
+        //   //   record.admin_approve != "0" && user.role != 0 ? true : false
+        //   // }
+        //   onClick={() => {
+        //     console.log(record.brandId);
+        //     // SIdCampaign.set(record.id);
+        //   }}
+        // >
+        //   Delete
+        // </Button>
+        <Button danger>
+          <DeleteOutlined
+            onClick={() => {
+              deleteCart(record?.productId);
+              // SIdCampaign.set(record.id);
+            }}
+          />
+        </Button>
       )
     }
   ];
+  useEffect(() => {
+    const token = helper.cookie_get('AT');
+    if (!token) {
+      navigate(-1);
+      message.error('Bạn phải đăng nhập mới có thể sử dụng tính năng này');
+    } else {
+      getCart();
+    }
+  }, []);
   // const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([]);
 
   // const onSelectChange = (newSelectedRowKeys) => {
@@ -182,11 +188,56 @@ export default function Cart() {
   // };
   const rowSelection = {
     selectedRowKeys: selectedKeyRows,
-    onChange: (newSelectedRowkeys, NewSelectedRows) => {
+    onChange: (newSelectedRowkeys) => {
+      console.log(newSelectedRowkeys);
       setSelectedKeyRows(newSelectedRowkeys);
     }
   };
 
+  const getCart = () => {
+    getAllCart().then((data) => {
+      console.log(data);
+      const dataHaveKey = data?.map((data, index) => ({ ...data, key: index }));
+
+      setData(dataHaveKey);
+    });
+  };
+  const updateCart = (quantity, productId) => {
+    const model = {
+      productId: productId,
+      quantity: quantity
+    };
+    console.log(model);
+    UpdateCart(model).then((data) => {
+      console.log(data);
+      getCart();
+    });
+  };
+  const deleteCart = (productId) => {
+    // console.log(productId);
+    // sSpin.set(true);
+    DeleteCart(productId)
+      .then((data) => {
+        console.log(data);
+        getCart();
+      })
+      .finally(() => {
+        // sSpin.set(false);
+      });
+  };
+  const handleCheckout = () => {
+    const productsToOrder = data
+      .filter((product) => selectedKeyRows.includes(product?.key))
+      .map((cart) => ({
+        productId: cart.productId,
+        name: cart.product.name,
+        price: cart.product.price,
+        quantity: cart.quantity,
+        imageUrl: cart.product?.imageUrls[0] || 'abc'
+      }));
+    console.log(productsToOrder);
+    navigate('/payment', { state: productsToOrder });
+  };
   return (
     <>
       <BasePages
@@ -196,33 +247,43 @@ export default function Cart() {
         <h2 className=" mb-4 text-xl font-bold text-gray-800">Giỏ Hàng</h2>
         <div className="flex gap-5">
           <div className="w-2/3 rounded-2xl bg-white p-6 shadow-lg">
-            <Table
-              columns={columns}
-              dataSource={data}
-              rowSelection={{
-                type: 'checkbox',
-                ...rowSelection,
-                // onChange(selectedRowKeys, selectedRows, info) {
-                //   console.log(selectedRowKeys);
-                // },
-                columnTitle: <></>
-              }}
-              //   footer={() => 'Footer'}
-            />
             {/* <Button onClick={handleSelectAll} type="primary">
               {isAllSelected ? 'Bỏ chọn tất cả' : 'Chọn tất cả'}
             </Button> */}
-            <div>
-              <Checkbox
-                checked={selectedKeyRows?.length == data.length}
-                onChange={(a) => {
-                  a.target.checked
-                    ? setSelectedKeyRows(data.map((a) => a.key))
-                    : setSelectedKeyRows([]);
-                }}
-              />
-              Chọn tất cả
-            </div>
+            {data?.length > 0 ? (
+              <>
+                <Table
+                  columns={columns}
+                  dataSource={data}
+                  rowSelection={{
+                    type: 'checkbox',
+                    ...rowSelection,
+                    // onChange(selectedRowKeys, selectedRows, info) {
+                    //   console.log(selectedRowKeys);
+                    // },
+                    columnTitle: <></>
+                  }}
+                  //   footer={() => 'Footer'}
+                />
+                <div>
+                  <Checkbox
+                    checked={selectedKeyRows?.length == data.length}
+                    onChange={(a) => {
+                      a.target.checked
+                        ? setSelectedKeyRows(data.map((a) => a.key))
+                        : setSelectedKeyRows([]);
+                    }}
+                  />
+                  Chọn tất cả
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="text-center">
+                  Chưa có sản phẩm nào trong giỏ hàng của bạn
+                </p>
+              </>
+            )}
           </div>
           <div className="flex-1">
             <div className="rounded-2xl bg-white p-6 shadow-lg">
@@ -249,7 +310,7 @@ export default function Cart() {
               <hr className="my-3 border-purple-400" />
               <div className="flex justify-between text-lg font-bold text-gray-900">
                 <span>Tổng thanh toán</span>
-                <span>{totalPrice}</span>
+                <span>{totalPrice} VNĐ</span>
               </div>
             </div>
 
@@ -258,7 +319,10 @@ export default function Cart() {
               <span>&rarr;</span>
             </div>
 
-            <button className="mt-4 w-full rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 py-3 font-bold text-white shadow-lg">
+            <button
+              className="mt-4 w-full rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 py-3 font-bold text-white shadow-lg"
+              onClick={handleCheckout}
+            >
               Thanh toán
             </button>
           </div>

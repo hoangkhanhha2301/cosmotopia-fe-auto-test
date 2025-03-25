@@ -1,11 +1,15 @@
 import BasePages from '@/components/shared/base-pages.js';
 import { useRouter } from '@/routes/hooks';
-import { Button, ConfigProvider, Image, Rate, Spin } from 'antd';
+import { Button, ConfigProvider, Image, message, Rate, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { MoreOutlined, CheckCircleFilled } from '@ant-design/icons';
 import { useGetDetailProduct } from '@/queries/product.query';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { FormRating } from './FormRating';
+import { trackClick } from '@/queries/affilate.api';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
+import { AddCart } from '@/queries/cart.api';
 interface TabContent {
   title: string;
   detail: string | string[];
@@ -13,21 +17,47 @@ interface TabContent {
 
 export default function ProductDetail() {
   const router = useRouter();
+  const [searchParams] = useSearchParams();
   const { id } = useParams<{ id: string }>(); // Get product ID from URL
   const { data, isLoading } = useGetDetailProduct(id); // Fetch product details
+  const auth = useSelector((state: RootState) => state.auth.isLogin);
   console.log('Product: ', data);
   const [listContent, setListContent] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
   const [indexImg, setIndexImg] = useState(0);
   console.log(data?.description);
   const navigate = useNavigate();
+  const handleAddCart = () => {
+    console.log('oke');
+    console.log(auth);
+    if (!auth) {
+      message.error('Bạn phải đăng nhập mới có thể thêm sản phẩm vào giỏ hàng');
+      navigate('/login');
+    } else {
+      const model = {
+        productId: id,
+        quantity: quantity
+      };
+      AddCart(model).then((data) => {
+        console.log(data);
+        message.success('Bạn đã thêm sản phẩm vào giỏ hàng thành công');
+      });
+    }
+  };
   // const listContent = [
   //   // { title: 'Chi tiết sản phẩm', detail: data?.description || [] },
   //   { title: 'Cách dùng', detail: data?.usage || [] },
   //   { title: 'Thành phần', detail: data?.ingredients || [] },
   //   { title: 'Đánh giá', detail: data?.reviews || [] },
   // ];
-
+  const ref = searchParams.get('ref');
+  useEffect(() => {
+    if (ref) {
+      trackClick(ref).then((data) => {
+        console.log(data);
+      });
+    }
+  }, []);
   const [currentTab, setCurrentTab] = useState<TabContent | null>(null);
   useEffect(() => {
     if (data) {
@@ -139,8 +169,8 @@ export default function ProductDetail() {
         <div className="flex w-1/3 flex-col ">
           <h2 className="text-3xl font-bold text-[#3D3D3D]">{data.name}</h2>
           <div className="mt-3 flex items-center justify-between">
-            <Rate disabled defaultValue={data.rating} />
-            <span>{data.rating}/5</span>
+            <Rate disabled defaultValue={data?.rating || 4} />
+            <span>{data?.rating || 4}/5</span>
           </div>
           <div className="mt-2 flex items-center justify-between">
             <span className="text-2xl font-semibold text-purple-500">
@@ -168,39 +198,49 @@ export default function ProductDetail() {
                 value={quantity}
                 onChange={(e) => {
                   const value = Number(e.target.value);
-                  setQuantity(value > data.stock ? data.stock : value);
+                  setQuantity(
+                    value > data.stockQuantity ? data.stockQuantity : value
+                  );
                 }}
                 className="w-12 border-none bg-gray-100 py-2 text-center text-[#9C3CFD]"
               />
               <button
                 className="border-none px-3 py-2 text-xl font-bold text-gray-600"
-                onClick={() => setQuantity(Math.min(data.stock, quantity + 1))}
+                onClick={() =>
+                  setQuantity(Math.min(data.stockQuantity, quantity + 1))
+                }
               >
                 +
               </button>
             </div>
-            <span>{data.stock} Sản phẩm có sẵn</span>
+            <span>{data?.stockQuantity} Sản phẩm có sẵn</span>
           </div>
 
           {/* Nút hành động */}
           <div className="mt-4 flex items-center gap-6">
-            <button className="w-96 rounded-full bg-[#F5F5F5] px-6 py-3 text-base font-medium text-black">
+            <button
+              className="w-96 rounded-full bg-[#F5F5F5] px-6 py-3 text-base font-medium text-black"
+              onClick={handleAddCart}
+            >
               Thêm vào giỏ hàng
             </button>
-            <button 
-            // onClick={() => router.push(`/payment?productId=${id}&quantity=${quantity}`)}
-            onClick={() => {
-              navigate('/payment', {
-                state: [{
-                  productId: id,
-                  name: data.name,
-                  price: data.price,
-                  quantity: quantity,
-                  imageUrl: listImg[0] || 'abc',
-                },],
-              });
-            }}
-            className="w-80 rounded-full bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] px-6 py-3 text-base font-medium text-white">
+            <button
+              // onClick={() => router.push(`/payment?productId=${id}&quantity=${quantity}`)}
+              onClick={() => {
+                navigate('/payment', {
+                  state: [
+                    {
+                      productId: id,
+                      name: data.name,
+                      price: data.price,
+                      quantity: quantity,
+                      imageUrl: listImg[0] || 'abc'
+                    }
+                  ]
+                });
+              }}
+              className="w-80 rounded-full bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] px-6 py-3 text-base font-medium text-white"
+            >
               Mua ngay
             </button>
           </div>

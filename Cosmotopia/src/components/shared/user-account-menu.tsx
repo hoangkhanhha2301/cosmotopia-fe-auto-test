@@ -17,7 +17,8 @@ export function UserAccountMenu({ auth, handleLogout }: UserAccountMenuProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
-  const userObject = auth
+  const token = helper.cookie_get('AT');
+  const userObject = token
     ? JSON.parse(helper.cookie_get('user'))
     : { role: 'Guest' };
 

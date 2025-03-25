@@ -33,12 +33,25 @@ import { Tongquan } from '@/pages/KOLPage/TongQuan/Tongquan';
 import { ThongKe } from '@/pages/KOLPage/Thongke/ThongKe';
 import { DanhSach } from '@/pages/KOLPage/Danhsach/DanhSach';
 import { CreateLink } from '@/pages/KOLPage/CreateLink/CreateLink';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
+import { ChangePassWordPage } from '@/pages/ChangePassWordPage';
 
 // ----------------------------------------------------------------------
+
+// case 0: return "Administrator";
+// case 1: return "Manager";
+// case 2: return "Affiliates";
+// case 3: return "Customers";
+// case 4: return "Sales Staff";
+// case 5: return "Shipper Staff";
 const ProtectedRoute = ({ children, allowedRoles }) => {
-  const userObject = JSON.parse(helper.cookie_get('user'));
-  const userRole = userObject.role;
-  console.log(userRole);
+  const token = helper.cookie_get('AT');
+  const userObject = token
+    ? JSON.parse(helper.cookie_get('user'))
+    : { role: 'Guest' };
+  const userRole = userObject?.role;
+
   if (!allowedRoles.includes(userRole)) {
     return <Navigate to="/401" replace />;
   }
@@ -68,55 +81,97 @@ export default function AppRouter() {
         // },
         {
           path: '/login',
-          element: <LoginPage />
+          element: (
+            <ProtectedRoute allowedRoles={['Guest']}>
+              <LoginPage />
+            </ProtectedRoute>
+          )
         },
         {
           path: '/register',
-          element: <RegisterPage />
+          element: (
+            <ProtectedRoute allowedRoles={['Guest']}>
+              <RegisterPage />
+            </ProtectedRoute>
+          )
         },
         {
           path: '/otp',
-          element: <OtgPage />
+          element: (
+            <ProtectedRoute allowedRoles={['Guest']}>
+              <OtgPage />
+            </ProtectedRoute>
+          )
         },
         {
           path: '/newPass',
-          element: <NewPassword />
+          element: (
+            <ProtectedRoute allowedRoles={['Guest']}>
+              <NewPassword />
+            </ProtectedRoute>
+          )
         },
         {
           path: '/forgotPassword',
-          element: <ForgotPassword />
+          element: (
+            <ProtectedRoute allowedRoles={['Guest']}>
+              <ForgotPassword />
+            </ProtectedRoute>
+          )
         },
         {
           path: '/product/:id',
-          element: <ProductDetail />
+          element: (
+            <ProtectedRoute allowedRoles={['Guest', 'Customers', 'Affiliates']}>
+              <ProductDetail />
+            </ProtectedRoute>
+          )
         },
         {
           path: '/cart',
-          element: <Cart />
+          element: (
+            <ProtectedRoute allowedRoles={['Customers', 'Affiliates', 'Guest']}>
+              <Cart />
+            </ProtectedRoute>
+          )
         },
         {
           path: '/productGrid',
-          element: <ProductGridPage />
+          element: (
+            <ProtectedRoute allowedRoles={['Customers', 'Affiliates', 'Guest']}>
+              <ProductGridPage />
+            </ProtectedRoute>
+          )
         },
         {
           path: '/payment',
-          element: <PaymentPage />
+          element: (
+            <ProtectedRoute allowedRoles={['Customers', 'Affiliates']}>
+              <PaymentPage />
+            </ProtectedRoute>
+          )
         },
         {
           path: '/success',
-          element: <SuccessPage />
+          element: (
+            <ProtectedRoute allowedRoles={['Customers', 'Affiliates', 'Guest']}>
+              <SuccessPage />
+            </ProtectedRoute>
+          )
         }
       ]
     },
     {
       path: '/profile',
       element: (
-        <ProfileLayout>
-          <Suspense>
-            <ScrollToTop />
-            <Outlet />
-          </Suspense>
-        </ProfileLayout>
+        <ProtectedRoute allowedRoles={['Customers', 'Affiliates']}>
+          <ProfileLayout>
+            <Suspense>
+              <ScrollToTop />
+              <Outlet />
+            </Suspense>
+          </ProfileLayout>
+        </ProtectedRoute>
       ),
       children: [
         {
@@ -124,7 +179,8 @@ export default function AppRouter() {
           element: <ProfilePage />,
           index: true
         },
-        { path: 'orders', element: <OrderTracking /> }
+        { path: 'orders', element: <OrderTracking /> },
+        { path: 'password', element: <ChangePassWordPage /> }
       ]
     }
   ];
