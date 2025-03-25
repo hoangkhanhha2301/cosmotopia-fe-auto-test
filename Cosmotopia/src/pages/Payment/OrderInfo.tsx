@@ -1,46 +1,63 @@
-"use client";
+'use client';
 
-import { Image } from "antd";
-import { useLocation } from "react-router-dom";
+import { Image } from 'antd';
+import { useLocation } from 'react-router-dom';
 
 export default function OrderInfo() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const productId = queryParams.get("productId");
-  const quantity = queryParams.get("quantity");
-  console.log(productId, quantity);
+  // const productId = queryParams.get("productId");
+  // const quantity = queryParams.get("quantity");
+  // console.log(productId, quantity);
 
   // Đảm bảo location.state là một mảng hoặc rỗng
-  const products = [...location.state, ...location.state, ...location.state] || [];
-  
+  const products = location.state || [];
+  console.log(products);
   // Tính tổng giá trị đơn hàng
-  const totalPrice = products.reduce((sum, product) => sum + product.price * product.quantity, 0);
+  const totalPrice = products.reduce(
+    (sum, product) => sum + product.price * product.quantity,
+    0
+  );
 
   // Lấy sản phẩm đầu tiên
   const firstProduct = products[0];
 
   return (
-    <div className="relative flex flex-col w-[413px] h-auto bg-white shadow-md rounded-xl overflow-hidden">
+    <div className="relative flex h-auto w-[413px] flex-col overflow-hidden rounded-xl bg-white shadow-md">
       {/* Header */}
-      <div className="flex justify-center items-start gap-4 w-full mb-6 pt-2">
-        <h1 className="font-bold text-2xl text-[#3D3D3D] text-center capitalize font-montserrat">Thông Tin Đơn Hàng</h1>
+      <div className="mb-6 flex w-full items-start justify-center gap-4 pt-2">
+        <h1 className="text-center font-montserrat text-2xl font-bold capitalize text-[#3D3D3D]">
+          Thông Tin Đơn Hàng
+        </h1>
       </div>
 
       {/* Order details */}
-      <div className="flex flex-col gap-3 mx-6">
-        <div className="flex justify-between items-start w-full">
-          <span className="font-normal text-lg text-[#4E4663] font-montserrat">Tổng cộng</span>
-          <span className="font-normal text-xl text-[#434343] font-montserrat">{totalPrice.toLocaleString()} VNĐ</span>
+      <div className="mx-6 flex flex-col gap-3">
+        <div className="flex w-full items-start justify-between">
+          <span className="font-montserrat text-lg font-normal text-[#4E4663]">
+            Tổng cộng
+          </span>
+          <span className="font-montserrat text-xl font-normal text-[#434343]">
+            {totalPrice.toLocaleString()} VNĐ
+          </span>
         </div>
 
-        <div className="flex justify-between items-start w-full">
-          <span className="font-normal text-lg text-[#4E4663] font-montserrat">Giảm giá</span>
-          <span className="font-normal text-xl text-[#434343] font-montserrat">0 VNĐ</span>
+        <div className="flex w-full items-start justify-between">
+          <span className="font-montserrat text-lg font-normal text-[#4E4663]">
+            Giảm giá
+          </span>
+          <span className="font-montserrat text-xl font-normal text-[#434343]">
+            0 VNĐ
+          </span>
         </div>
 
-        <div className="flex justify-between items-start w-full">
-          <span className="font-normal text-lg text-[#4E4663] font-montserrat">Phí vận chuyển</span>
-          <span className="font-normal text-xl text-[#434343] font-montserrat">0 VNĐ</span>
+        <div className="flex w-full items-start justify-between">
+          <span className="font-montserrat text-lg font-normal text-[#4E4663]">
+            Phí vận chuyển
+          </span>
+          <span className="font-montserrat text-xl font-normal text-[#434343]">
+            0 VNĐ
+          </span>
         </div>
       </div>
 
@@ -48,16 +65,20 @@ export default function OrderInfo() {
       <div className="mx-6 my-5 border-t border-[#A10550]"></div>
 
       {/* Total payment */}
-      <div className="flex justify-between items-end mx-6">
-        <span className="font-bold text-lg text-[#4E4663] font-montserrat">Tổng thanh toán</span>
-        <span className="font-bold text-2xl text-[#347B28] font-montserrat">{totalPrice.toLocaleString()} VNĐ</span>
+      <div className="mx-6 flex items-end justify-between">
+        <span className="font-montserrat text-lg font-bold text-[#4E4663]">
+          Tổng thanh toán
+        </span>
+        <span className="font-montserrat text-2xl font-bold text-[#347B28]">
+          {totalPrice.toLocaleString()} VNĐ
+        </span>
       </div>
 
       {/* Product List */}
-      <div className="flex flex-col gap-3 mx-6 mt-4">
+      <div className="mx-6 mt-4 flex flex-col gap-3">
         {firstProduct && (
-          <div className="flex gap-3 items-center">
-            <div className="w-20 h-20 rounded-xl overflow-hidden border border-gray-200">
+          <div className="flex items-center gap-3">
+            <div className="h-20 w-20 overflow-hidden rounded-xl border border-gray-200">
               <Image
                 src={firstProduct.imageUrl}
                 alt={firstProduct.name}
@@ -67,8 +88,10 @@ export default function OrderInfo() {
               />
             </div>
             <div className="flex flex-col">
-              <span className="font-normal text-base text-[#4E4663] font-montserrat">{firstProduct.name}</span>
-              <span className="font-bold text-xl bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] bg-clip-text text-transparent font-montserrat">
+              <span className="font-montserrat text-base font-normal text-[#4E4663]">
+                {firstProduct.name}
+              </span>
+              <span className="bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] bg-clip-text font-montserrat text-xl font-bold text-transparent">
                 {firstProduct.price.toLocaleString()} VNĐ
               </span>
             </div>
@@ -77,7 +100,7 @@ export default function OrderInfo() {
 
         {/* Remaining products */}
         {products.length > 1 && (
-          <div className="text-sm text-gray-500 mb-2">
+          <div className="mb-2 text-sm text-gray-500">
             + {products.length - 1} sản phẩm khác
           </div>
         )}

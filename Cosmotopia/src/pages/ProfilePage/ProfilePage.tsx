@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import { Label } from "@/components/ui/label";
-import { useGetProfile, useEditProfile } from "@/queries/auth.query";
-import { toast } from "@/components/ui/use-toast";
+import { useState, useEffect } from 'react';
+import { Label } from '@/components/ui/label';
+import { useGetProfile, useEditProfile } from '@/queries/auth.query';
+import { toast } from '@/components/ui/use-toast';
 
 export default function ProfilePage() {
   const { data: infoUser, isPending, refetch, isError } = useGetProfile();
@@ -13,14 +13,14 @@ export default function ProfilePage() {
   } = useEditProfile();
 
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    gender: "female"
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    gender: 'female'
   });
 
-   const [isEditing, setIsEditing] = useState({
+  const [isEditing, setIsEditing] = useState({
     firstName: false,
     lastName: false,
     phone: false
@@ -33,18 +33,18 @@ export default function ProfilePage() {
         lastName: infoUser.lastName,
         email: infoUser.email,
         phone: infoUser.phone,
-        gender: infoUser.gender === 1 ? "male" : "female"
+        gender: infoUser.gender === 1 ? 'male' : 'female'
       });
     }
   }, [infoUser]);
 
   useEffect(() => {
     if (isEdited) {
-      toast({ variant: "success", title: "Cập nhật thành công!" });
+      toast({ variant: 'success', title: 'Cập nhật thành công!' });
       refetch();
     }
     if (isEditFailed) {
-      toast({ variant: "destructive", title: "Cập nhật thất bại!" });
+      toast({ variant: 'destructive', title: 'Cập nhật thất bại!' });
     }
   }, [isEdited, isEditFailed, refetch]);
 
@@ -65,7 +65,7 @@ export default function ProfilePage() {
   const handleSave = async () => {
     const updatedData = {
       ...formData,
-      gender: formData.gender === "male" ? 1 : 2
+      gender: formData.gender === 'male' ? 1 : 2
     };
     await editProfile(updatedData);
     setIsEditing({ firstName: false, lastName: false, phone: false });
@@ -93,35 +93,35 @@ export default function ProfilePage() {
             <input
               type="text"
               value={formData.firstName}
-              onChange={(e) => handleChange("firstName", e.target.value)}
-              className="border rounded-md px-2 py-1 text-sm"
+              onChange={(e) => handleChange('firstName', e.target.value)}
+              className="rounded-md border px-2 py-1 text-sm"
             />
           ) : (
             <span className="text-sm text-[#4E4663]">{formData.firstName}</span>
           )}
           <button
-            onClick={() => handleEditClick("firstName")}
-            className="text-sm text-blue-500 hover:text-[#9C3CFD]"
+            onClick={() => handleEditClick('firstName')}
+            className="text-blue-500 text-sm hover:text-[#9C3CFD]"
           >
             Thay đổi
           </button>
         </div>
-          {/* Tên */}
-          <div className="grid grid-cols-[116px_1fr_auto] items-center gap-4">
+        {/* Tên */}
+        <div className="grid grid-cols-[116px_1fr_auto] items-center gap-4">
           <Label className="text-sm text-[#4E4663]">Tên</Label>
           {isEditing.lastName ? (
             <input
               type="text"
               value={formData.lastName}
-              onChange={(e) => handleChange("lastName", e.target.value)}
-              className="border rounded-md px-2 py-1 text-sm"
+              onChange={(e) => handleChange('lastName', e.target.value)}
+              className="rounded-md border px-2 py-1 text-sm"
             />
           ) : (
             <span className="text-sm text-[#4E4663]">{formData.lastName}</span>
           )}
           <button
-            onClick={() => handleEditClick("lastName")}
-            className="text-sm text-blue-500 hover:text-[#9C3CFD]"
+            onClick={() => handleEditClick('lastName')}
+            className="text-blue-500 text-sm hover:text-[#9C3CFD]"
           >
             Thay đổi
           </button>
@@ -139,15 +139,15 @@ export default function ProfilePage() {
             <input
               type="text"
               value={formData.phone}
-              onChange={(e) => handleChange("phone", e.target.value)}
-              className="border rounded-md px-2 py-1 text-sm"
+              onChange={(e) => handleChange('phone', e.target.value)}
+              className="rounded-md border px-2 py-1 text-sm"
             />
           ) : (
             <span className="text-sm text-[#4E4663]">{formData.phone}</span>
           )}
           <button
-            onClick={() => handleEditClick("phone")}
-            className="text-sm text-blue-500 hover:text-[#9C3CFD]"
+            onClick={() => handleEditClick('phone')}
+            className="text-blue-500 text-sm hover:text-[#9C3CFD]"
           >
             Thay đổi
           </button>

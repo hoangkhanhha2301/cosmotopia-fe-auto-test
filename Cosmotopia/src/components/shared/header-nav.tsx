@@ -46,8 +46,8 @@ export default function HeaderNav({
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
   const [pagingModel, setPagingModel] = useState(PagingModel);
   const { mutateAsync: searchShoes, data, isPending } = useSearchShoes();
-  const auth = useSelector((state: RootState) => state.auth);
-  const cart = useSelector((state: RootState) => state.cart.cartDetail);
+  // const auth = useSelector((state: RootState) => state.auth);
+  // const cart = useSelector((state: RootState) => state.cart.cartDetail);
   useEffect(() => {
     if (debouncedSearchTerm) {
       handleSearch();

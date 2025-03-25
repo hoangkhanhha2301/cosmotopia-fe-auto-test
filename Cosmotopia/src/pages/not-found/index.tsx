@@ -1,17 +1,21 @@
 import { useRouter } from '@/routes/hooks';
 import { Button } from '@/components/ui/button';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getAccountSelf } from '@/queries/user.api';
-const dashboardRole = [0, 1];
+import __helpers from '@/helpers';
+const dashboardRole = ['Administrator', 'Manager'];
 export default function NotFound() {
   const [urlBack, setUrlBack] = useState('/');
   const router = useRouter();
   useEffect(() => {
-    getAccountSelf().then((data) => {
-      if (dashboardRole.includes(data.role)) {
-        setUrlBack('/dashboard');
-      }
-    });
+    const token = __helpers.cookie_get('AT');
+    const userObject = token
+      ? JSON.parse(__helpers.cookie_get('user'))
+      : { role: 'Guest' };
+
+    if (dashboardRole.includes(userObject.role)) {
+      setUrlBack('/dashboard');
+    }
   });
 
   return (
