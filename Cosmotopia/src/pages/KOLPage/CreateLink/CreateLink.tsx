@@ -99,7 +99,7 @@ export const CreateLink: FC<CreateLinkProps> = ({}) => {
               style={{ margin: '16px 0', textAlign: 'left' }}
               cover={
                 <img
-                  src={'/logo.png'}
+                  src={productSelected?.imageUrls[0]}
                   alt={productSelected?.name}
                   style={{ height: '200px', width: '200px' }}
                 />
@@ -110,7 +110,10 @@ export const CreateLink: FC<CreateLinkProps> = ({}) => {
             </Card>
           ) : (
             <>
-              <p className="mt-2">Dán link vào để hiển thị sản phẩm</p>
+              <Card>
+                {' '}
+                <p className="mt-2">Dán link vào để hiển thị sản phẩm</p>
+              </Card>
             </>
           )}
         </div>

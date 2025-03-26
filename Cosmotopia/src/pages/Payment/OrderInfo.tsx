@@ -1,18 +1,21 @@
 'use client';
 
 import { Image } from 'antd';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function OrderInfo() {
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
   // const productId = queryParams.get("productId");
   // const quantity = queryParams.get("quantity");
   // console.log(productId, quantity);
+  const navigate = useNavigate();
 
-  // Đảm bảo location.state là một mảng hoặc rỗng
+  const location = useLocation();
   const products = location.state || [];
-  console.log(products);
+  if (products.length == 0) {
+    navigate('/');
+  }
+  // Đảm bảo location.state là một mảng hoặc rỗng
+
   // Tính tổng giá trị đơn hàng
   const totalPrice = products.reduce(
     (sum, product) => sum + product.price * product.quantity,
