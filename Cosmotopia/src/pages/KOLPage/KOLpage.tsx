@@ -58,10 +58,11 @@ export default function KOLPage() {
   useEffect(() => {
     setItems([
       getItem('Tổng quan', 'tongquan'),
-      getItem('Danh sách', 'danhsach'),
+      getItem('Danh sách ', 'danhsach'),
       //   getItem('Chiến dịch', 'category'),
       //   getItem('Hỗ trợ', 'order'),
       getItem('Tạo liên kết', 'createLink'),
+      getItem('Quản lý số dư', 'ballance'),
       getItem('Thông tin cá nhân', 'profile')
     ]);
   }, []);

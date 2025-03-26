@@ -226,6 +226,9 @@ export default function Cart() {
       });
   };
   const handleCheckout = () => {
+    if (selectedKeyRows?.length < 1) {
+      return;
+    }
     const productsToOrder = data
       .filter((product) => selectedKeyRows.includes(product?.key))
       .map((cart) => ({

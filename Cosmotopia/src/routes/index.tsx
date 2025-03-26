@@ -36,6 +36,7 @@ import { CreateLink } from '@/pages/KOLPage/CreateLink/CreateLink';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { ChangePassWordPage } from '@/pages/ChangePassWordPage';
+import { Ballance } from '@/pages/KOLPage/Ballance/Ballance';
 
 // ----------------------------------------------------------------------
 
@@ -280,6 +281,11 @@ const KOLRoutes = [
       {
         path: '/kol/danhsach',
         element: <DanhSach />
+        // index: true
+      },
+      {
+        path: '/kol/ballance',
+        element: <Ballance />
         // index: true
       },
       {
