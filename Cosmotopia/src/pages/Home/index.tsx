@@ -21,7 +21,7 @@ export default function ShopPage() {
         className="relative mx-auto w-full flex-1 overflow-y-auto bg-white"
         pageHead="Trang chủ"
       >
-        <ProductCategories/>
+        {/* <ProductCategories/> */}
         <ProductListing/>
         <MakeupTones/>
         <ColorTest/>

@@ -20,6 +20,7 @@ import { PagingModel } from '@/constants/data';
 import { Button } from '../ui/button';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
+import { sOpen } from '@/store/spin';
 interface DashboardNavProps {
   items: NavItem[];
   setOpen?: Dispatch<SetStateAction<boolean>>;
@@ -38,7 +39,7 @@ export default function HeaderNav({
   isMobileNav = false
 }: DashboardNavProps) {
   const path = usePathname();
-  const route = useRouter();
+  const router = useRouter();
   const { isMinimized } = useSidebar();
   const [searchTerm, setSearchTerm] = useState('');
   const [products, setProducts] = useState<ProductType[]>([]);
@@ -48,6 +49,8 @@ export default function HeaderNav({
   const { mutateAsync: searchShoes, data, isPending } = useSearchShoes();
   const auth = useSelector((state: RootState) => state.auth);
   const cart = useSelector((state: RootState) => state.cart.cartDetail);
+  const isOpen = sOpen.use();
+  
   useEffect(() => {
     if (debouncedSearchTerm) {
       handleSearch();
@@ -68,18 +71,18 @@ export default function HeaderNav({
   if (!items?.length) {
     return null;
   }
-
+  
   return (
-    <nav className="relative -z-20 border-b border-gray-200 drop-shadow-md">
+    <nav className={`relative ${isOpen ? "-z-20" : 'z-10'} border-b border-gray-200 drop-shadow-md`}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <ul className="flex flex-wrap justify-center space-x-8 py-4 sm:justify-start">
           <li>
-            <a
-              href="#"
-              className="text-gray-600 transition-colors duration-200 hover:text-gray-900"
+            <button
+              onClick={() => router.push("/productGrid")}
+              className="text-gray-600 transition-colors duration-200 hover:text-gray-900 focus:outline-none"
             >
               Sản phẩm
-            </a>
+            </button>
           </li>
           <li>
             <a
