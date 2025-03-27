@@ -2,6 +2,7 @@ import { Image } from 'antd';
 import { Truck } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useGetAllOrders } from '@/queries/cart.query'; // Import hook gọi API
+import dayjs from 'dayjs';
 
 const orderStatuses = [
   { id: 'all', label: 'Tất cả' },
@@ -21,7 +22,10 @@ export default function OrderTracking() {
   if (isLoading) return <p>Đang tải đơn hàng...</p>;
   if (error) return <p>Lỗi khi tải đơn hàng!</p>;
 
-  const allOrders = data?.orders || [];
+  const allOrders =
+    data?.orders.sort(
+      (a, b) => new Date(b.orderDate) - new Date(a.orderDate)
+    ) || [];
 
   // Lọc đơn hàng theo trạng thái
   const filteredOrders =
@@ -61,14 +65,19 @@ export default function OrderTracking() {
             className="rounded-3xl bg-white p-6 shadow-lg"
           >
             {/* Delivery Status */}
-            <div className="mb-6 flex items-center gap-2 border-b border-gray-200/50 pb-6">
-              <Truck className="h-6 w-6 text-[#9C3CFD]" />
+            <div className="flex justify-between">
+              <div className="mb-6 flex items-center gap-2 border-b border-gray-200/50 pb-6">
+                <Truck className="h-6 w-6 text-[#9C3CFD]" />
+                <span className="bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] bg-clip-text font-montserrat text-sm font-normal text-transparent">
+                  Đơn hàng{' '}
+                  {(order.status === 3 && 'đã được giao thành công') ||
+                    (order.status === 2 && 'đang giao') ||
+                    (order.status === 1 && 'đã xác nhận') ||
+                    (order.status === 0 && 'chờ thanh toán')}
+                </span>
+              </div>
               <span className="bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] bg-clip-text font-montserrat text-sm font-normal text-transparent">
-                Đơn hàng{' '}
-                {(order.status === 3 && 'đã được giao thành công') ||
-                  (order.status === 2 && 'đang giao') ||
-                  (order.status === 1 && 'đã xác nhận') ||
-                  (order.status === 0 && 'chờ thanh toán')}
+                {dayjs(order.orderDate).format('hh:ss DD/MM/MYYYY')}
               </span>
             </div>
 
