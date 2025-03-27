@@ -15,6 +15,7 @@ import { UserAccountMenu } from './user-account-menu';
 import { Input } from '../ui/input';
 import { useGetListProductsByPaging } from '@/queries/product.query';
 import { Link } from 'react-router-dom';
+import { sOpen } from '@/store/spin';
 
 export default function Sidebar() {
   const router = useRouter();
@@ -22,9 +23,9 @@ export default function Sidebar() {
   const auth = useSelector((state: RootState) => state.auth.isLogin);
   const { mutateAsync: logoutAccount } = useLogout();
   const dispatch = useDispatch();
-
+  const isOpen = sOpen.use();
   const [searchQuery, setSearchQuery] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, sOpen.set] = useState(false);
   const dropdownRef = useRef(null);
 
   const { data: productData, refetch } = useGetListProductsByPaging({
@@ -38,7 +39,7 @@ export default function Sidebar() {
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
+        sOpen.set(false);
       }
     }
 
@@ -51,9 +52,9 @@ export default function Sidebar() {
   useEffect(() => {
     if (searchQuery.length > 0) {
       refetch();
-      setIsOpen(true);
+      sOpen.set(true);
     } else {
-      setIsOpen(false);
+      sOpen.set(false);
     }
   }, [searchQuery, refetch]);
 
@@ -67,11 +68,11 @@ export default function Sidebar() {
   };
 
   const handleSearchEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && searchQuery.trim() !== '') {
-      router.push(
-        `/productGrid?query=${encodeURIComponent(searchQuery.trim())}`
-      );
-      setIsOpen(false);
+    if (e.key === "Enter" && searchQuery.trim() !== "") {
+      router.push(`/productGrid?query=${encodeURIComponent(searchQuery.trim())}`);
+      sOpen.set(false);
+
+
     }
   };
 
@@ -108,7 +109,7 @@ export default function Sidebar() {
                       to={`/product/${product.productId}`}
                       key={product.productId}
                       className="block px-6 py-3 hover:bg-gray-100 "
-                      onClick={() => setIsOpen(false)}
+                      onClick={() => sOpen.set(false)}
                     >
                       {product.name}
                     </Link>
