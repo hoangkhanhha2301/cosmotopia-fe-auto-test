@@ -120,10 +120,17 @@ export default function Cart() {
           min={0}
           value={quantity}
           type="number"
-          max={Number(record.product?.stockQuantity)}
+          // max={Number(record.product?.stockQuantity)}
           onChange={(e) => {
-            if (e.target.value == '') {
-              updateCart(1, record.product?.productId);
+            if (e.target.value == '' || Number(e.target.value) <= 0) {
+              updateCart(0, record.product?.productId);
+            } else if (
+              Number(e.target.value) > Number(record.product?.stockQuantity)
+            ) {
+              updateCart(
+                record.product?.stockQuantity,
+                record.product?.productId
+              );
             } else {
               updateCart(e.target.value, record.product?.productId);
             }
@@ -161,13 +168,14 @@ export default function Cart() {
         // >
         //   Delete
         // </Button>
-        <Button danger>
-          <DeleteOutlined
-            onClick={() => {
-              deleteCart(record?.productId);
-              // SIdCampaign.set(record.id);
-            }}
-          />
+        <Button
+          danger
+          onClick={() => {
+            deleteCart(record?.productId);
+            // SIdCampaign.set(record.id);
+          }}
+        >
+          <DeleteOutlined />
         </Button>
       )
     }
@@ -197,7 +205,11 @@ export default function Cart() {
   const getCart = () => {
     getAllCart().then((data) => {
       console.log(data);
-      const dataHaveKey = data?.map((data, index) => ({ ...data, key: index }));
+      const dataHaveKey = data?.map((cart, index) => ({
+        ...cart,
+        quantity: Math.min(cart.quantity, cart.product?.stockQuantity),
+        key: index
+      }));
 
       setData(dataHaveKey);
     });
@@ -216,6 +228,7 @@ export default function Cart() {
   const deleteCart = (productId) => {
     // console.log(productId);
     // sSpin.set(true);
+    console.log('delete');
     DeleteCart(productId)
       .then((data) => {
         console.log(data);

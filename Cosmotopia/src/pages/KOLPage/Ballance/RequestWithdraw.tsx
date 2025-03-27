@@ -12,7 +12,8 @@ import {
 } from 'antd';
 import React, { FC, useEffect, useRef, useState } from 'react';
 
-export const RequestWithdraw: FC = ({ getData }) => {
+export const RequestWithdraw: FC = ({ getData, profile }) => {
+  console.log(profile);
   const [isModal, setIsModal] = useState(false);
   const [form] = Form.useForm();
   const [urlLogo, setUrlLogo] = useState(null);
@@ -47,6 +48,10 @@ export const RequestWithdraw: FC = ({ getData }) => {
 
   const showModal = () => {
     // GET LABEL Ở ĐÂY LUÔN NÈ
+    form.setFieldValue(
+      'bank',
+      ` ${profile?.bankBranch}-${profile?.bankName}-${profile?.bankAccountNumber}-${profile?.firstName}${profile?.lastName}`
+    );
     setIsModal(true);
   };
 
@@ -135,7 +140,7 @@ export const RequestWithdraw: FC = ({ getData }) => {
                     }
                   ]}
                 >
-                  <Input placeholder="Tài khoản ngân hàng" />
+                  <Input placeholder="Tài khoản ngân hàng" readOnly />
                 </Form.Item>
               </Col>
             </Row>

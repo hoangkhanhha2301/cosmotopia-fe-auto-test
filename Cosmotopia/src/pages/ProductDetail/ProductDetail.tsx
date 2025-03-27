@@ -63,8 +63,18 @@ export default function ProductDetail() {
     if (data) {
       setListContent([
         { title: 'Chi tiết sản phẩm', detail: data?.description || [] },
-        { title: 'Cách dùng', detail: data?.usage || [] },
-        { title: 'Thành phần', detail: data?.ingredients || [] },
+        {
+          title: 'Cách dùng',
+          detail:
+            data?.usage ||
+            'Làm ướt mặt bằng nước ấm. Lấy một lượng sữa rửa mặt vừa đủ, tạo bọt nhẹ nhàng. Massage theo chuyển động tròn trong 30-60 giây. Rửa sạch lại với nước và lau khô bằng khăn mềm.'
+        },
+        {
+          title: 'Thành phần',
+          detail:
+            data?.ingredients ||
+            'Hyaluronic Acid, Niacinamide (Vitamin B3), Salicylic Acid (BHA), Retinol (Vitamin A), Vitamin C, Collagen, Peptide, Ceramide, AHA (Glycolic Acid, Lactic Acid), Benzoyl Peroxide, Centella Asiatica (Rau má), Zinc Oxide, Titanium Dioxide, Glycerin, Allantoin, Green Tea Extract, Snail Mucin, Arbutin, Kojic Acid, Ferulic Acid'
+        },
         {
           title: 'Đánh giá',
           detail: data?.reviews || [

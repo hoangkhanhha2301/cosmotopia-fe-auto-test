@@ -37,6 +37,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { ChangePassWordPage } from '@/pages/ChangePassWordPage';
 import { Ballance } from '@/pages/KOLPage/Ballance/Ballance';
+import { Withdraw } from '@/pages/AdminPage/WithDraw/Withdraw';
 
 // ----------------------------------------------------------------------
 
@@ -73,7 +74,11 @@ export default function AppRouter() {
       children: [
         {
           path: '/',
-          element: <HomePage />,
+          element: (
+            <ProtectedRoute allowedRoles={['Guest', 'Customers', 'Affiliates']}>
+              <HomePage />,
+            </ProtectedRoute>
+          ),
           index: true
         },
         // {
@@ -242,6 +247,11 @@ const AdminRoutes = [
       {
         path: '/dashboard/profile',
         element: <Profile />
+        // index: true
+      },
+      {
+        path: '/dashboard/withdraw',
+        element: <Withdraw />
         // index: true
       }
     ]

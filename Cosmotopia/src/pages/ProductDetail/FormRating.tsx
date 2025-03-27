@@ -35,7 +35,7 @@ export const FormRating: FC<FormRatingProps> = ({ ProductID }) => {
         width={800}
         open={isShow}
         onCancel={() => setIsShow(false)}
-        title="Đánh gía trả phẩm"
+        title="Đánh giá sản phẩm"
       >
         <Form form={form} layout="vertical" onFinish={onFinish}>
           <Row gutter={24}>
