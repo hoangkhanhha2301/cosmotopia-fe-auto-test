@@ -16,16 +16,17 @@ export default function Payment() {
 
   useEffect(() => {
     const state = location.state;
-    if (state.type === 'Order') {
+    if (state.type === 'Đặt hàng') {
       setContent({
-        type: 'Order',
-        message: 'Bạn đã order thành công, hãy thanh toán mã QR VNPay'
+        type: 'Đặt hàng',
+        message: 'Bạn đã đặt thành công, hãy thanh toán mã QR VNPay'
       });
     }
+    window.open(state.url, '_blank');
   }, []);
   return (
     <>
-      <BasePages className="relative mx-auto min-h-screen w-[80%] flex-1 p-4">
+      <BasePages className="relative mx-auto w-[80%] flex-1 p-4">
         <div className="flex w-full flex-col items-center justify-center gap-6">
           {/* Success Image */}
           <div className="relative h-[435px] w-[435px]">

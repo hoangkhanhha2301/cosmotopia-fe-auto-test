@@ -215,7 +215,7 @@ export default function PaymentMethods({ ConfirmPayMent }) {
             ConfirmPayMent();
           }}
         >
-          Thanh toán
+          Đặt hàng
         </button>
       </div>
     </div>

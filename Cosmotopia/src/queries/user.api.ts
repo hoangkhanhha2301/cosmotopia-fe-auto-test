@@ -12,3 +12,7 @@ export const getAllOrder = (page, size) =>
 //   api.get(`https://provinces.open-api.vn/api/?depth=2`);
 
 export const postOrder = (model) => api.post(`/api/Order`, model);
+
+// payment
+export const postPayment = (model) =>
+  api.post(`/api/Payment/create-payment`, model);
