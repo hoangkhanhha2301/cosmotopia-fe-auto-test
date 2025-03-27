@@ -2,9 +2,9 @@ import BasePages from '@/components/shared/base-pages.js';
 import OrderInfo from './OrderInfo';
 import { MapPin } from 'lucide-react';
 import PaymentMethods from './PaymentMethod';
-import { getAccountSelf, postOrder } from '@/queries/user.api';
+import { getAccountSelf, postOrder, postPayment } from '@/queries/user.api';
 import { useEffect, useState } from 'react';
-import { Button, Form, Input, Modal, Select } from 'antd';
+import { Button, Form, Input, message, Modal, Select } from 'antd';
 import axios from 'axios';
 import { dataAddressJSOn } from '@/store/dataAddress';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -47,12 +47,23 @@ export default function Payment() {
     };
     console.log(model);
     postOrder(model)
-      .then((data) => {
-        console.log(data);
-        navigate('/success', {
-          state: {
-            type: 'Order'
-          }
+      .then((order) => {
+        console.log(order);
+        const modelPayemnt = {
+          orderId: order.orderId,
+          amount: order.totalAmount,
+          returnUrl: '',
+          paymentMethod: 'Vnpay'
+        };
+        postPayment(modelPayemnt).then((data) => {
+          console.log(data);
+          message.success('oke');
+          navigate('/success', {
+            state: {
+              type: 'Đặt hàng',
+              url: data.paymentUrl
+            }
+          });
         });
       })
       .catch((err) => {
@@ -88,7 +99,10 @@ export default function Payment() {
   return (
     <>
       <BasePages className="relative mx-auto max-h-screen w-[80%] flex-1 p-4">
-        <div className="mb-8 flex  w-full justify-between gap-10">
+        <h2 className="mb-8 ml-4 bg-gradient-to-r from-[#936EFF] to-[#936EFF] bg-clip-text   font-montserrat text-2xl text-3xl font-bold capitalize text-[#3D3D3D] text-transparent">
+          Xem trước thông tin đơn hàng
+        </h2>
+        <div className="mb-8 flex  w-full items-start justify-between gap-10">
           <div className="flex w-2/5 flex-col gap-5">
             <OrderInfo />
           </div>

@@ -38,6 +38,7 @@ import { RootState } from '@/redux/store';
 import { ChangePassWordPage } from '@/pages/ChangePassWordPage';
 import { Ballance } from '@/pages/KOLPage/Ballance/Ballance';
 import { Withdraw } from '@/pages/AdminPage/WithDraw/Withdraw';
+import HandlePayment from '@/pages/Payment/HandlePayment';
 
 // ----------------------------------------------------------------------
 
@@ -162,6 +163,14 @@ export default function AppRouter() {
           element: (
             <ProtectedRoute allowedRoles={['Customers', 'Affiliates', 'Guest']}>
               <SuccessPage />
+            </ProtectedRoute>
+          )
+        },
+        {
+          path: '/handlePayment',
+          element: (
+            <ProtectedRoute allowedRoles={['Customers', 'Affiliates', 'Guest']}>
+              <HandlePayment />
             </ProtectedRoute>
           )
         }

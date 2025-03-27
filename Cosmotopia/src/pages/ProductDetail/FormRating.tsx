@@ -31,7 +31,7 @@ export const FormRating: FC<FormRatingProps> = ({ ProductID }) => {
   };
   return (
     <>
-      <Modal
+      {/* <Modal
         width={800}
         open={isShow}
         onCancel={() => setIsShow(false)}
@@ -52,14 +52,7 @@ export const FormRating: FC<FormRatingProps> = ({ ProductID }) => {
                       }
                     ]}
                   >
-                    {/* <Select
-                      placeholder="Chọn ngân hàng"
-                      options={banks}
-                      className="w-full"
-                      showSearch
-                      optionFilterProp="label"
-                      // Chỉ chọn chi nhánh khi đã chọn ngân hàng
-                    /> */}
+               
                   </Form.Item>
                 </Col>
                 <Col span={12}>
@@ -94,7 +87,6 @@ export const FormRating: FC<FormRatingProps> = ({ ProductID }) => {
             </Col>
           </Row>
 
-          {/*  */}
         </Form>
       </Modal>
       <button
@@ -104,7 +96,7 @@ export const FormRating: FC<FormRatingProps> = ({ ProductID }) => {
         className="w-30 font-base rounded-full bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] px-6 py-2 text-sm text-white"
       >
         Viết đánh giá
-      </button>
+      </button> */}
     </>
   );
 };

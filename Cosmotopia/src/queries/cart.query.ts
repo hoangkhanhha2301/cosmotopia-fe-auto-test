@@ -97,13 +97,14 @@ export const useUpdateOrder = () => {
 };
 
 
+
 export const useGetAllOrdersBySelf = (page = 1, pageSize = 3) => {
   return useQuery({
     queryKey: ['get_all_orders', page, pageSize],
     queryFn: async () => {
-      const response = await BaseRequest.Get2(`/api/Order/user/orders?page=${page}&pageSize=${pageSize}`);
-      return response || []; 
-    },
+      const response = await BaseRequest.Get2(`/api/Order/user/orders`);
+      return response || [];
+    }
   });
 };
 // export const useGetAllOrders = (page = 1, pageSize = 3) => {
@@ -111,8 +112,8 @@ export const useGetAllOrdersBySelf = (page = 1, pageSize = 3) => {
 //     queryKey: ['get_all_orders', page, pageSize],
 //     queryFn: async () => {
 //       const data = await api.get(`api/Order/user/orders?page=${page}&pageSize=${pageSize}`);;
-//       console.log("API Response:", data); 
-//       return data || []; 
+//       console.log("API Response:", data);
+//       return data || [];
 //     },
 //   });
 // };

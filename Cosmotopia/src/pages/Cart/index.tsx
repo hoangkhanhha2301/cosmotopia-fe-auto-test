@@ -240,6 +240,7 @@ export default function Cart() {
   };
   const handleCheckout = () => {
     if (selectedKeyRows?.length < 1) {
+      message.error('Bạn phải chọn sản phẩm trước khi đặt hàng');
       return;
     }
     const productsToOrder = data
@@ -339,7 +340,7 @@ export default function Cart() {
               className="mt-4 w-full rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 py-3 font-bold text-white shadow-lg"
               onClick={handleCheckout}
             >
-              Thanh toán
+              Đặt hàng
             </button>
           </div>
         </div>
