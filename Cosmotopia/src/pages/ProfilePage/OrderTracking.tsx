@@ -5,6 +5,7 @@ import { useGetAllOrdersBySelf } from '@/queries/cart.query'; // Import hook g�
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import { useNavigate } from 'react-router-dom';
 
 const orderStatuses = [
   { id: 'all', label: 'Tất cả' },
@@ -15,21 +16,18 @@ const orderStatuses = [
   { id: 'cancelled', label: 'Đã hủy' }
 ];
 
-
-
 export default function OrderTracking() {
   const [activeStatus, setActiveStatus] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data, isLoading, error } = useGetAllOrdersBySelf(currentPage, 3);
+  const navigate = useNavigate();
   console.log(data);
   if (isLoading) return <p>Đang tải đơn hàng...</p>;
   if (error) return <p>Lỗi khi tải đơn hàng!</p>;
 
-
   dayjs.extend(utc);
   dayjs.extend(timezone);
-
 
   const allOrders =
     data?.orders.sort(
@@ -55,10 +53,11 @@ export default function OrderTracking() {
               setActiveStatus(status.id);
               setCurrentPage(1);
             }}
-            className={`rounded-xl px-4 py-3 font-montserrat text-sm transition-colors ${activeStatus === status.id
-              ? 'bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] bg-clip-text font-medium text-transparent'
-              : 'text-[#4E4663]'
-              }`}
+            className={`rounded-xl px-4 py-3 font-montserrat text-sm transition-colors ${
+              activeStatus === status.id
+                ? 'bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] bg-clip-text font-medium text-transparent'
+                : 'text-[#4E4663]'
+            }`}
           >
             {status.label}
           </button>
@@ -85,7 +84,10 @@ export default function OrderTracking() {
                 </span>
               </div>
               <span className="bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] bg-clip-text font-montserrat text-sm font-normal text-transparent">
-                {dayjs.utc(order.orderDate).tz('Asia/Ho_Chi_Minh').format('HH:mm DD/MM/YYYY')}
+                {dayjs
+                  .utc(order.orderDate)
+                  .tz('Asia/Ho_Chi_Minh')
+                  .format('HH:mm DD/MM/YYYY')}
               </span>
             </div>
 
@@ -133,12 +135,17 @@ export default function OrderTracking() {
                 </span>
               </div>
               <div className="flex gap-6">
-                <button className="rounded-full bg-gradient-to-r from-[#ED1DBF] via-[#A831F1] to-[#3561FE] bg-clip-text px-12 py-3 font-montserrat text-lg font-bold text-transparent shadow-sm">
+                {/* <button className="rounded-full bg-gradient-to-r from-[#ED1DBF] via-[#A831F1] to-[#3561FE] bg-clip-text px-12 py-3 font-montserrat text-lg font-bold text-transparent shadow-sm">
                   Đánh giá
                 </button>
-                <button className="rounded-full bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] px-12 py-3 font-montserrat text-lg font-bold text-white shadow-lg">
+                <button
+                  className="rounded-full bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] px-12 py-3 font-montserrat text-lg font-bold text-white shadow-lg"
+                  onClick={() => {
+                    navigate('/payment', { state: order.orderDetails });
+                  }}
+                >
                   Mua lại
-                </button>
+                </button> */}
               </div>
             </div>
           </div>

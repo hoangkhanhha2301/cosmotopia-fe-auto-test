@@ -44,7 +44,7 @@ export default function DashboardLayout({
         setSidebarOpen={setSidebarOpen}
       />
       <Sidebar />
-      <BasePages className="relative mx-auto max-h-screen w-[80%] flex-1 p-4">
+      <BasePages className="relative mx-auto w-[80%] flex-1 p-4">
         <div className="mb-8 flex  w-full justify-between gap-10">
           <div className="flex w-1/4 flex-col gap-10">
             <ProfileSidebar />

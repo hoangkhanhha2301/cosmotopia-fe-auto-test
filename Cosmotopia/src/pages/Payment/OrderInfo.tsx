@@ -27,7 +27,7 @@ export default function OrderInfo() {
   // const firstProduct = products[0];
 
   return (
-    <div className="relative flex h-auto  flex-col overflow-hidden rounded-xl bg-white shadow-md ">
+    <div className="min-w[400px] relative flex  h-auto flex-col overflow-hidden rounded-xl bg-white shadow-md ">
       {/* Header */}
       <div className="mb-6 flex w-full items-start justify-center gap-4 pt-2">
         <h1 className="text-center font-montserrat text-2xl font-bold capitalize text-[#3D3D3D]">

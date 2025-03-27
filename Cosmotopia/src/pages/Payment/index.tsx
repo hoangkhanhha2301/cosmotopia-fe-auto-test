@@ -98,12 +98,12 @@ export default function Payment() {
 
   return (
     <>
-      <BasePages className="relative mx-auto max-h-screen w-[80%] flex-1 p-4">
+      <BasePages className="relative mx-auto max-h-screen w-[80%] p-4">
         <h2 className="mb-8 ml-4 bg-gradient-to-r from-[#936EFF] to-[#936EFF] bg-clip-text   font-montserrat text-2xl text-3xl font-bold capitalize text-[#3D3D3D] text-transparent">
           Xem trước thông tin đơn hàng
         </h2>
         <div className="mb-8 flex  w-full items-start justify-between gap-10">
-          <div className="flex w-2/5 flex-col gap-5">
+          <div className="flex w-2/5 min-w-[400px] flex-col gap-5">
             <OrderInfo />
           </div>
           <div className="flex w-4/5 flex-col gap-5 rounded-md">
