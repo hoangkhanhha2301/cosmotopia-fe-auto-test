@@ -151,7 +151,7 @@ export const CreateLink: FC<CreateLinkProps> = ({}) => {
               className="h-10"
               onClick={handleShare}
             >
-              Coppy
+              Copy
             </Button>
           </Space.Compact>
         </Form.Item>

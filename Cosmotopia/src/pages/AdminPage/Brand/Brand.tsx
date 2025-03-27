@@ -32,6 +32,8 @@ import {
 } from 'antd';
 
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import { FC, useEffect, useState } from 'react';
 
 interface BrandProps {}
@@ -47,7 +49,8 @@ export const Brand: FC<BrandProps> = ({}) => {
     total: 0
   });
   const [form] = Form.useForm();
-
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
   const columns = [
     {
       title: 'Name',
@@ -69,7 +72,7 @@ export const Brand: FC<BrandProps> = ({}) => {
       title: 'CreateAt',
       dataIndex: 'createdAt',
       key: 'createdAt',
-      render: (date) => (date ? dayjs(date).format('DD/MM/YYYY') : '')
+      render: (date) => (date ? dayjs.utc(date).tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY') : '')
     },
 
     {

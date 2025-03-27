@@ -1,8 +1,10 @@
 import { Image } from 'antd';
 import { Truck } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useGetAllOrders } from '@/queries/cart.query'; // Import hook gọi API
+import { useGetAllOrdersBySelf } from '@/queries/cart.query'; // Import hook gọi API
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 
 const orderStatuses = [
   { id: 'all', label: 'Tất cả' },
@@ -13,14 +15,21 @@ const orderStatuses = [
   { id: 'cancelled', label: 'Đã hủy' }
 ];
 
+
+
 export default function OrderTracking() {
   const [activeStatus, setActiveStatus] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { data, isLoading, error } = useGetAllOrders(currentPage, 3);
+  const { data, isLoading, error } = useGetAllOrdersBySelf(currentPage, 3);
   console.log(data);
   if (isLoading) return <p>Đang tải đơn hàng...</p>;
   if (error) return <p>Lỗi khi tải đơn hàng!</p>;
+
+
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+
 
   const allOrders =
     data?.orders.sort(
@@ -46,11 +55,10 @@ export default function OrderTracking() {
               setActiveStatus(status.id);
               setCurrentPage(1);
             }}
-            className={`rounded-xl px-4 py-3 font-montserrat text-sm transition-colors ${
-              activeStatus === status.id
-                ? 'bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] bg-clip-text font-medium text-transparent'
-                : 'text-[#4E4663]'
-            }`}
+            className={`rounded-xl px-4 py-3 font-montserrat text-sm transition-colors ${activeStatus === status.id
+              ? 'bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] bg-clip-text font-medium text-transparent'
+              : 'text-[#4E4663]'
+              }`}
           >
             {status.label}
           </button>
@@ -77,7 +85,7 @@ export default function OrderTracking() {
                 </span>
               </div>
               <span className="bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] bg-clip-text font-montserrat text-sm font-normal text-transparent">
-                {dayjs(order.orderDate).format('hh:ss DD/MM/MYYYY')}
+                {dayjs.utc(order.orderDate).tz('Asia/Ho_Chi_Minh').format('HH:mm DD/MM/YYYY')}
               </span>
             </div>
 

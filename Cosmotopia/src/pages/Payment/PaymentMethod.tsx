@@ -1,5 +1,3 @@
-'use client';
-
 import { Image } from 'antd';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -19,72 +17,17 @@ export default function PaymentMethods({ ConfirmPayMent }) {
 
       {/* Payment options */}
       <div className="flex flex-col gap-6 p-8">
-        {/* Credit/Debit Card Option */}
-        {/* <div className="flex w-full items-center justify-between">
-          <div className="flex items-center gap-12">
-            <div className="relative h-[18px] w-[18px]">
-              <div
-                className={`h-[18px] w-[18px] rounded-full border ${
-                  selectedMethod === 'credit'
-                    ? 'border-[#6B72D6] bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF]'
-                    : 'border-[#6C6C6C] bg-white'
-                }`}
-                onClick={() => setSelectedMethod('credit')}
-              >
-                {selectedMethod === 'credit' && (
-                  <div className="absolute left-[5px] top-[5px] h-2 w-2 rounded-full bg-white"></div>
-                )}
-              </div>
-            </div>
 
-            <div className="flex flex-col gap-1">
-              <span className="font-montserrat text-[18px] text-[#837D92]">
-                Thẻ tín dụng / thẻ ghi nợ
-              </span>
-            </div>
-          </div>
-
-          <div className="flex gap-2">
-            <div className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-white shadow-sm">
-              <Image
-                src="/placeholder.svg?height=20&width=20"
-                alt="Visa"
-                width={20}
-                height={20}
-                className="object-contain"
-              />
-            </div>
-            <div className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-white shadow-sm">
-              <Image
-                src="/placeholder.svg?height=20&width=20"
-                alt="Mastercard"
-                width={20}
-                height={20}
-                className="object-contain"
-              />
-            </div>
-            <div className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-white shadow-sm">
-              <Image
-                src="/placeholder.svg?height=20&width=20"
-                alt="Amex"
-                width={20}
-                height={20}
-                className="object-contain"
-              />
-            </div>
-          </div>
-        </div> */}
 
         {/* Direct Payment Option */}
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center gap-12">
             <div className="relative h-[18px] w-[18px]">
               <div
-                className={`h-[18px] w-[18px] rounded-full border ${
-                  selectedMethod === 'direct'
-                    ? 'border-[#6B72D6] bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF]'
-                    : 'border-[#6C6C6C] bg-white'
-                }`}
+                className={`h-[18px] w-[18px] rounded-full border ${selectedMethod === 'direct'
+                  ? 'border-[#6B72D6] bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF]'
+                  : 'border-[#6C6C6C] bg-white'
+                  }`}
                 onClick={() => setSelectedMethod('direct')}
               >
                 {selectedMethod === 'direct' && (
@@ -139,12 +82,11 @@ export default function PaymentMethods({ ConfirmPayMent }) {
           <div className="flex items-center gap-12">
             <div className="relative h-[18px] w-[18px]">
               <div
-                className={`h-[18px] w-[18px] rounded-full border ${
-                  selectedMethod === 'other'
-                    ? 'border-[#6B72D6] bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF]'
-                    : 'border-[#6C6C6C] bg-white'
-                }`}
-                // onClick={() => setSelectedMethod('other')}
+                className={`h-[18px] w-[18px] rounded-full border ${selectedMethod === 'other'
+                  ? 'border-[#6B72D6] bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF]'
+                  : 'border-[#6C6C6C] bg-white'
+                  }`}
+              // onClick={() => setSelectedMethod('other')}
               >
                 {selectedMethod === 'other' && (
                   <div className="absolute left-[5px] top-[5px] h-2 w-2 rounded-full bg-white"></div>
@@ -221,3 +163,60 @@ export default function PaymentMethods({ ConfirmPayMent }) {
     </div>
   );
 }
+
+
+{/* Credit/Debit Card Option */ }
+{/* <div className="flex w-full items-center justify-between">
+          <div className="flex items-center gap-12">
+            <div className="relative h-[18px] w-[18px]">
+              <div
+                className={`h-[18px] w-[18px] rounded-full border ${
+                  selectedMethod === 'credit'
+                    ? 'border-[#6B72D6] bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF]'
+                    : 'border-[#6C6C6C] bg-white'
+                }`}
+                onClick={() => setSelectedMethod('credit')}
+              >
+                {selectedMethod === 'credit' && (
+                  <div className="absolute left-[5px] top-[5px] h-2 w-2 rounded-full bg-white"></div>
+                )}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <span className="font-montserrat text-[18px] text-[#837D92]">
+                Thẻ tín dụng / thẻ ghi nợ
+              </span>
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <div className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-white shadow-sm">
+              <Image
+                src="/placeholder.svg?height=20&width=20"
+                alt="Visa"
+                width={20}
+                height={20}
+                className="object-contain"
+              />
+            </div>
+            <div className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-white shadow-sm">
+              <Image
+                src="/placeholder.svg?height=20&width=20"
+                alt="Mastercard"
+                width={20}
+                height={20}
+                className="object-contain"
+              />
+            </div>
+            <div className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-white shadow-sm">
+              <Image
+                src="/placeholder.svg?height=20&width=20"
+                alt="Amex"
+                width={20}
+                height={20}
+                className="object-contain"
+              />
+            </div>
+          </div>
+        </div> */}

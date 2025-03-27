@@ -33,6 +33,8 @@ import {
 } from 'antd';
 
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import { FC, useEffect, useState } from 'react';
 
 interface OrderProps {}
@@ -48,6 +50,8 @@ export const Order: FC<OrderProps> = ({}) => {
     pageSize: 10,
     total: 100
   });
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
   console.log(dataTable, 'dataTable');
   const columns = [
     {
@@ -79,7 +83,7 @@ export const Order: FC<OrderProps> = ({}) => {
       title: 'Ngày',
       dataIndex: 'orderDate',
       key: 'orderDate',
-      render: (date) => (date ? dayjs(date).format('DD/MM/YYYY') : '')
+      render: (date) => (date ? dayjs.utc(date).tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY') : '')
       // render: (n, o) => {
       //   return <>{getRole(n)}</>;
       // },

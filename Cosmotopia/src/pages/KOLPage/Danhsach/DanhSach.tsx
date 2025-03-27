@@ -12,6 +12,8 @@ import {
   Table
 } from 'antd';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import React, { FC, useEffect, useState } from 'react';
 
 interface DanhSachProps {}
@@ -63,6 +65,8 @@ export const DanhSach: FC<DanhSachProps> = ({}) => {
     total: 0
   });
   const [form] = Form.useForm();
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
 
   const columns = [
     {
@@ -99,13 +103,13 @@ export const DanhSach: FC<DanhSachProps> = ({}) => {
       title: 'Ngày tạo',
       dataIndex: 'created_at',
       key: 'created_at',
-      render: (date) => (date ? dayjs(date).format('DD/MM/YYYY') : '-')
+      render: (date) => (date ? dayjs.utc(date).tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY') : '-')
     },
     {
       title: 'Hết hạn',
       dataIndex: 'expiry_date',
       key: 'expiry_date',
-      render: (date) => (date ? dayjs(date).format('DD/MM/YYYY') : '-')
+      render: (date) => (date ? dayjs.utc(date).tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY') : '-')
     },
     {
       title: 'Chi tiết',

@@ -96,7 +96,9 @@ export const useUpdateOrder = () => {
   });
 };
 
-export const useGetAllOrders = (page = 1, pageSize = 3) => {
+
+
+export const useGetAllOrdersBySelf = (page = 1, pageSize = 3) => {
   return useQuery({
     queryKey: ['get_all_orders', page, pageSize],
     queryFn: async () => {

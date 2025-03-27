@@ -12,6 +12,8 @@ import {
   Table
 } from 'antd';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import React, { FC, useEffect, useState } from 'react';
 import { RequestWithdraw } from './RequestWithdraw';
 import {
@@ -69,6 +71,8 @@ export const Ballance: FC<BallanceProps> = ({}) => {
     total: 0
   });
   const [form] = Form.useForm();
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
 
   const columns = [
     {
@@ -90,7 +94,7 @@ export const Ballance: FC<BallanceProps> = ({}) => {
       dataIndex: 'transactionDate',
       key: 'transactionDate',
       render: (date) => (
-        <>{date ? dayjs(date).format('HH:mm  DD/MM/YYYY') : 0}</>
+        <>{date ? dayjs.utc(date).tz('Asia/Ho_Chi_Minh').format('HH:mm  DD/MM/YYYY') : 0}</>
       )
     },
     {
