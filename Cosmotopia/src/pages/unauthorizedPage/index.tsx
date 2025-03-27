@@ -30,10 +30,7 @@ export default function Unauthorized() {
         401
       </span>
       <h2 className="font-heading my-2 text-2xl font-bold">Unauthorized</h2>
-      <p>
-        Sorry, the page you are looking for doesn&apos;t exist or has been
-        moved.
-      </p>
+      <p>Sorry, you don't have permission to access this page.</p>
       <div className="mt-8 flex justify-center gap-2">
         <Button onClick={() => router.push(urlBack)} variant="ghost" size="lg">
           Back to Home

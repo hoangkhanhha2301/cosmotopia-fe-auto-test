@@ -6,13 +6,14 @@ import {
 import { Button, Col, Form, Input, message, Row } from 'antd';
 import React, { FC, useEffect, useState } from 'react';
 import helper from '@/helpers/index';
+import { getAffiliateProfile } from '@/queries/affilate.api';
 interface ProfileProps {}
 
 export const Profile: FC<ProfileProps> = ({}) => {
   //   const [dataProfile, setDataProfile] = useState();
   const [form] = Form.useForm();
   const getData = () => {
-    getAccountSelf()
+    getAffiliateProfile()
       .then((data) => {
         console.log(data);
         const profile = data?.data;
@@ -21,7 +22,10 @@ export const Profile: FC<ProfileProps> = ({}) => {
           email: profile.email,
           phone: profile.phone,
           lastName: profile.lastName,
-          firstName: profile.firstName
+          firstName: profile.firstName,
+          bankName: profile.bankName,
+          bankBranch: profile.bankBranch,
+          bankAccountNumber: profile.bankAccountNumber
         });
       })
       .catch((error) => {
@@ -45,27 +49,29 @@ export const Profile: FC<ProfileProps> = ({}) => {
     getData();
   }, []);
   const onFinish = async (values) => {
-    console.log(values);
-    const model = {
-      firstName: values.firstName,
-      lastName: values.lastName,
-      phone: values.phone
-    };
-
-    updateAccountSelf(model)
-      .then((data) => {
-        console.log(data);
-        message.success('Update Profile success!!!');
-        getData();
-      })
-      .catch((error) => {
-        console.log(error);
-        message.error(error.response?.data?.msg);
-      });
+    // console.log(values);
+    // const model = {
+    //   firstName: values.firstName,
+    //   lastName: values.lastName,
+    //   phone: values.phone
+    // };
+    // updateAccountSelf(model)
+    //   .then((data) => {
+    //     console.log(data);
+    //     message.success('Update Profile success!!!');
+    //     getData();
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     message.error(error.response?.data?.msg);
+    //   });
   };
   return (
     <div>
       <h1 style={{ fontSize: '32px', color: '#FF9538' }}>Profile Account</h1>
+      <h2 className="mt-4 text-red">
+        Bạn không thể chỉnh sửa thông tin của Affiliate
+      </h2>
       <Form form={form} layout="vertical" onFinish={onFinish}>
         <Row gutter={24}>
           <Col span={24}>
@@ -156,6 +162,52 @@ export const Profile: FC<ProfileProps> = ({}) => {
                         </Form.Item>
                       </Col>
                     </Row> */}
+            <Row gutter={24}>
+              <Col span={12}>
+                <Form.Item
+                  name="bankName"
+                  label="Tên ngân hàng"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please Enter Last Name of User!'
+                    }
+                  ]}
+                >
+                  <Input placeholder="Enter Last Name User" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name="bankBranch"
+                  label="Chi nhánh"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please Enter First Name of User!'
+                    }
+                  ]}
+                >
+                  <Input placeholder="Enter First Name" />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col span={24}>
+                <Form.Item
+                  name="bankAccountNumber"
+                  label="Số tài khoản"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please Enter Last Name of User!'
+                    }
+                  ]}
+                >
+                  <Input placeholder="Enter Last Name User" />
+                </Form.Item>
+              </Col>
+            </Row>
           </Col>
         </Row>
         <Button type="primary" htmlType="submit" disabled>

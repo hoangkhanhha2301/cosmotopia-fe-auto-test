@@ -62,6 +62,7 @@ export default function Sidebar() {
     await logoutAccount({ accessToken });
     helper.cookie_delete('RT');
     helper.cookie_delete('AT');
+    helper.cookie_delete('user');
     router.push('/login');
     dispatch(logout());
   };
@@ -70,6 +71,8 @@ export default function Sidebar() {
     if (e.key === "Enter" && searchQuery.trim() !== "") {
       router.push(`/productGrid?query=${encodeURIComponent(searchQuery.trim())}`);
       sOpen.set(false);
+
+
     }
   };
 
@@ -95,7 +98,7 @@ export default function Sidebar() {
                 className="w-full rounded-full bg-gray-100 py-3 pl-10 pr-4 text-sm focus:ring-2 focus:ring-gray-200"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={handleSearchEnter} 
+                onKeyDown={handleSearchEnter}
               />
             </div>
             {isOpen && (

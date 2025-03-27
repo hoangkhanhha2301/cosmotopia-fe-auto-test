@@ -21,6 +21,7 @@ import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import helper from '@/helpers/index';
 import { logout } from '@/redux/auth.slice';
 import './styles.css';
+import { RootState } from '@/redux/store';
 function getItem(label: any, key: any, icon: any, children: any) {
   return {
     key,
@@ -45,9 +46,11 @@ export default function KOLPage() {
   const location = useLocation();
   const currentURI =
     location.pathname.split('/')[location.pathname.split('/').length - 1];
+  const token = helper.cookie_get('AT');
+  const userObject = token
+    ? JSON.parse(helper.cookie_get('user'))
+    : { role: 'Guest' };
 
-  const userObject = JSON.parse(helper.cookie_get('user'));
-  const role = userObject.role;
   const dataOpen = JSON.parse(localStorage.getItem('keys')) ?? [];
 
   const [openKeys, setOpenKeys] = useState(dataOpen);
@@ -55,10 +58,11 @@ export default function KOLPage() {
   useEffect(() => {
     setItems([
       getItem('Tổng quan', 'tongquan'),
-      getItem('Danh sách', 'danhsach'),
+      getItem('Danh sách ', 'danhsach'),
       //   getItem('Chiến dịch', 'category'),
       //   getItem('Hỗ trợ', 'order'),
       getItem('Tạo liên kết', 'createLink'),
+      getItem('Quản lý số dư', 'ballance'),
       getItem('Thông tin cá nhân', 'profile')
     ]);
   }, []);

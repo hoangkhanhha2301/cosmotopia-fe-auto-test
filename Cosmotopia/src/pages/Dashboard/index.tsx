@@ -7,6 +7,7 @@ import {
   ContactsOutlined,
   LogoutOutlined,
   MenuOutlined,
+  MoneyCollectOutlined,
   ProductOutlined,
   SettingOutlined,
   ShoppingCartOutlined,
@@ -45,7 +46,11 @@ export default function DashBoard() {
   const currentURI =
     location.pathname.split('/')[location.pathname.split('/').length - 1];
 
-  const userObject = JSON.parse(helper.cookie_get('user'));
+  const auth = useSelector((state: RootState) => state.auth.isLogin);
+  const token = helper.cookie_get('AT');
+  const userObject = token
+    ? JSON.parse(helper.cookie_get('user'))
+    : { role: 'Guest' };
   const role = userObject.role;
   const dataOpen = JSON.parse(localStorage.getItem('keys')) ?? [];
 
@@ -71,10 +76,10 @@ export default function DashBoard() {
           getItem('Category', 'category', <MenuOutlined />),
           getItem('Order', 'order', <ShoppingCartOutlined />)
           // getItem('Category', 'category', <MenuOutlined />)
-        ]),
-        getItem('Settings', 'settings', <SettingOutlined />, [
-          getItem('Profile', 'profile', <UserOutlined />)
         ])
+        // getItem('Settings', 'settings', <SettingOutlined />, [
+        //   getItem('Profile', 'profile', <UserOutlined />)
+        // ])
         // getItem(),
       ]);
     }
@@ -91,27 +96,28 @@ export default function DashBoard() {
           getItem('Product', 'product', <ProductOutlined />),
           getItem('Brand', 'brand', <AppleOutlined />),
           getItem('Category', 'category', <MenuOutlined />),
-          getItem('Order', 'order', <ShoppingCartOutlined />)
+          getItem('Order', 'order', <ShoppingCartOutlined />),
+          getItem('WithDraw', 'withdraw', <MoneyCollectOutlined />)
           // getItem('Category', 'category', <MenuOutlined />)
-        ]),
-        getItem('Settings', 'settings', <SettingOutlined />, [
-          getItem('Profile', 'profile', <UserOutlined />)
         ])
+        // getItem('Settings', 'settings', <SettingOutlined />, [
+        //   getItem('Profile', 'profile', <UserOutlined />)
+        // ])
         // getItem(),
       ]);
     }
-    if (role == 'Sales Staff') {
-      setItems([
-        getItem('Management', 'management', <ContactsOutlined />, [
-          getItem('Campaign', 'campaign', <AreaChartOutlined />),
-          getItem('Post', 'post', <AuditOutlined />),
-          getItem('Job Application', 'jobapplication', <BorderOutlined />)
-        ]),
-        getItem('Settings', 'settings', <SettingOutlined />, [
-          getItem('Profile', 'profile', <UserOutlined />)
-        ])
-      ]);
-    }
+    // if (role == 'Sales Staff') {
+    //   setItems([
+    //     getItem('Management', 'management', <ContactsOutlined />, [
+    //       getItem('Campaign', 'campaign', <AreaChartOutlined />),
+    //       getItem('Post', 'post', <AuditOutlined />),
+    //       getItem('Job Application', 'jobapplication', <BorderOutlined />)
+    //     ]),
+    //     getItem('Settings', 'settings', <SettingOutlined />, [
+    //       getItem('Profile', 'profile', <UserOutlined />)
+    //     ])
+    //   ]);
+    // }
     // setItems([
     //   getItem("Account", "account", <ContactsOutlined />),
     //   getItem("Profile", "profile", <SolutionOutlined />),

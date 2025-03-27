@@ -51,26 +51,10 @@ export const Order: FC<OrderProps> = ({}) => {
   console.log(dataTable, 'dataTable');
   const columns = [
     {
-      title: 'Customer Name',
-      dataIndex: 'customerName',
-      key: 'customerName',
-      render: (n, o) => {
-        return <>{n ? n : '-'}</>;
-      }
-    },
-    {
-      title: 'Affiliate ID',
-      dataIndex: 'affiliateProfileId',
-      key: 'affiliateProfileId',
-      render: (n, o) => {
-        return <>{n ? n : '-'}</>;
-      }
-    },
-    {
-      title: 'OrderAt',
-      dataIndex: 'orderDate',
-      key: 'orderDate',
-      render: (date) => (date ? dayjs(date).format('DD/MM/YYYY') : '')
+      title: 'ID',
+      dataIndex: 'orderId',
+      key: 'orderId'
+
       // render: (n, o) => {
       //   return <>{getRole(n)}</>;
       // },
@@ -81,12 +65,18 @@ export const Order: FC<OrderProps> = ({}) => {
       key: 'paymentMethod'
     },
     {
-      title: 'Payment Status',
-      dataIndex: 'paymentStatus',
-      key: 'paymentStatus'
+      title: 'Số tiền',
+      dataIndex: 'totalAmount',
+      key: 'totalAmount'
+    },
+
+    {
+      title: 'Địa chỉ',
+      dataIndex: 'address',
+      key: 'address'
     },
     {
-      title: 'OrderAt',
+      title: 'Ngày',
       dataIndex: 'orderDate',
       key: 'orderDate',
       render: (date) => (date ? dayjs(date).format('DD/MM/YYYY') : '')
@@ -95,65 +85,70 @@ export const Order: FC<OrderProps> = ({}) => {
       // },
     },
     {
-      title: 'Edit',
-      key: 'action',
-      render: (record) => (
-        <Button
-          type="default"
-          // disabled={
-          //   record.admin_approve != "0" && user.role != 0 ? true : false
-          // }
-          onClick={() => {
-            showModal(record?.orderId);
-
-            // SIdCampaign.set(record.id);
-          }}
-        >
-          Edit
-        </Button>
-      )
-    },
-    {
-      title: 'Delete',
-      key: 'action',
-      render: (record) => (
-        // <Button
-        //   type="dashed"
-        //   style={{ backgroundColor: 'red' }}
-        //   // disabled={
-        //   //   record.admin_approve != "0" && user.role != 0 ? true : false
-        //   // }
-        //   onClick={() => {
-        //     console.log(record.brandId);
-        //     // SIdCampaign.set(record.id);
-        //   }}
-        // >
-        //   Delete
-        // </Button>
-        <Popconfirm
-          title="Delete the task"
-          description="Are you sure to delete this task?"
-          icon={
-            <QuestionCircleOutlined
-              style={{
-                color: 'red'
-              }}
-            />
-          }
-          onConfirm={() => deleteData(record.brandId)}
-        >
-          <Button danger>
-            <DeleteOutlined
-              onClick={() => {
-                // deleteData(record.brandId);
-                // SIdCampaign.set(record.id);
-                console.log('okeee');
-              }}
-            />
-          </Button>
-        </Popconfirm>
-      )
+      title: 'Trạng thái đơn hàng',
+      dataIndex: 'status',
+      key: 'status'
     }
+    // {
+    //   title: 'Edit',
+    //   key: 'action',
+    //   render: (record) => (
+    //     <Button
+    //       type="default"
+    //       // disabled={
+    //       //   record.admin_approve != "0" && user.role != 0 ? true : false
+    //       // }
+    //       onClick={() => {
+    //         showModal(record?.orderId);
+
+    //         // SIdCampaign.set(record.id);
+    //       }}
+    //     >
+    //       Edit
+    //     </Button>
+    //   )
+    // },
+    // {
+    //   title: 'Delete',
+    //   key: 'action',
+    //   render: (record) => (
+    //     // <Button
+    //     //   type="dashed"
+    //     //   style={{ backgroundColor: 'red' }}
+    //     //   // disabled={
+    //     //   //   record.admin_approve != "0" && user.role != 0 ? true : false
+    //     //   // }
+    //     //   onClick={() => {
+    //     //     console.log(record.brandId);
+    //     //     // SIdCampaign.set(record.id);
+    //     //   }}
+    //     // >
+    //     //   Delete
+    //     // </Button>
+    //     <Popconfirm
+    //       title="Delete the task"
+    //       description="Are you sure to delete this task?"
+    //       icon={
+    //         <QuestionCircleOutlined
+    //           style={{
+    //             color: 'red'
+    //           }}
+    //         />
+    //       }
+    //       onConfirm={() => deleteData(record.brandId)}
+    //     >
+    //       <Button danger>
+    //         <DeleteOutlined
+    //           onClick={() => {
+    //             // deleteData(record.brandId);
+    //             // SIdCampaign.set(record.id);
+    //             console.log('okeee');
+    //           }}
+    //         />
+    //       </Button>
+    //     </Popconfirm>
+    //   )
+    // }
   ];
   const props = {
     name: 'file',
@@ -388,7 +383,7 @@ export const Order: FC<OrderProps> = ({}) => {
             : dataTable
         }
         columns={columns}
-        pagination={pagination}
+        // pagination={pagination}
         onChange={handleTableChange}
         style={{ marginTop: '24px' }}
         // onChange={onChangePaging}

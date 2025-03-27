@@ -30,7 +30,7 @@ export default function DashboardLayout({
       let model = { ...PagingModel, orderStatus: 1 };
       var data = await getOrderByStatus(model);
       dispatch(updateCart(data));
-      dispatch(updateTotalItems(data.listObjects.length));
+      dispatch(updateTotalItems(data?.listObjects?.length));
     };
     fetch();
   }, []);
