@@ -30,6 +30,8 @@ import {
 import TextArea from 'antd/es/input/TextArea';
 import { da } from 'date-fns/locale';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import React, { FC, useEffect, useState } from 'react';
 
 interface CategoryProps {}
@@ -45,6 +47,8 @@ export const Category: FC<CategoryProps> = ({}) => {
     pageSize: 8,
     total: 0
   });
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
   const handleTableChange = (pagination) => {
     console.log(pagination);
     setPagination(pagination);
@@ -67,7 +71,7 @@ export const Category: FC<CategoryProps> = ({}) => {
       title: 'CreateAt',
       dataIndex: 'createdAt',
       key: 'createdAt',
-      render: (date) => (date ? dayjs(date).format('DD/MM/YYYY') : '')
+      render: (date) => (date ? dayjs.utc(date).tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY') : '')
       // render: (n, o) => {
       //   return <>{getRole(n)}</>;
       // },
