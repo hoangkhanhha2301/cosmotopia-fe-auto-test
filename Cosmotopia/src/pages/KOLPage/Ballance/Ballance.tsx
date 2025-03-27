@@ -14,6 +14,10 @@ import {
 import dayjs from 'dayjs';
 import React, { FC, useEffect, useState } from 'react';
 import { RequestWithdraw } from './RequestWithdraw';
+import {
+  getAffiliateProfile,
+  getAllWithDrawSelf
+} from '@/queries/affilate.api';
 
 interface BallanceProps {}
 
@@ -56,71 +60,45 @@ const fakeData = [
 export const Ballance: FC<BallanceProps> = ({}) => {
   const [dataTable, setDataTable] = useState<null | any[]>(null);
   const [valueSearch, setValueSearch] = useState<string>('');
+  const [profile, setProfile] = useState(null);
   const { Search } = Input;
   const [data, setData] = useState(null);
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 2,
+    pageSize: 8,
     total: 0
   });
   const [form] = Form.useForm();
 
   const columns = [
     {
-      title: 'Tên sản phẩm',
-      dataIndex: 'product_name',
-      key: 'product_name',
-      render: (text) => <>{text ? text : '-'}</>
+      title: 'ID',
+      dataIndex: 'affiliateProfileId',
+      key: 'affiliateProfileId',
+      render: (id) => <>{id ? id : '-'}</>
     },
     {
-      title: 'Giá',
-      dataIndex: 'product_price',
-      key: 'product_price',
-      render: (price) => <>{price ? price : '-'}</>
-    },
-    {
-      title: 'Lượt click',
-      dataIndex: 'clicks',
-      key: 'clicks',
-      render: (clicks) => <>{clicks ? clicks : 0}</>
-    },
-    {
-      title: 'Chuyển đổi',
-      dataIndex: 'conversions',
-      key: 'conversions',
-      render: (conversions) => <>{conversions ? conversions : 0}</>
-    },
-    {
-      title: 'Thu nhập',
-      dataIndex: 'total_earnings',
-      key: 'total_earnings',
-      render: (earnings) => <>{earnings ? earnings : '0đ'}</>
-    },
-    {
-      title: 'Ngày tạo',
-      dataIndex: 'created_at',
-      key: 'created_at',
-      render: (date) => (date ? dayjs(date).format('DD/MM/YYYY') : '-')
-    },
-    {
-      title: 'Hết hạn',
-      dataIndex: 'expiry_date',
-      key: 'expiry_date',
-      render: (date) => (date ? dayjs(date).format('DD/MM/YYYY') : '-')
-    },
-    {
-      title: 'Chi tiết',
-
-      render: (record) => (
-        <Button
-          onClick={() => {
-            showModal(record);
-          }}
-        >
-          View Detail
-        </Button>
+      title: 'Số tiền',
+      dataIndex: 'amount',
+      key: 'amount',
+      render: (amount) => (
+        <>{amount ? `${amount.toLocaleString('vi-VN')} VND` : 0}</>
       )
+    },
+    {
+      title: 'Thời gian rút tiền',
+      dataIndex: 'transactionDate',
+      key: 'transactionDate',
+      render: (date) => (
+        <>{date ? dayjs(date).format('HH:mm  DD/MM/YYYY') : 0}</>
+      )
+    },
+    {
+      title: 'Trạng thái',
+      dataIndex: 'status',
+      key: 'status'
     }
+
     // {
     //   title: 'Edit',
     //   key: 'edit',
@@ -161,10 +139,10 @@ export const Ballance: FC<BallanceProps> = ({}) => {
     setData(null);
     form.resetFields();
   };
-  const handleTableChange = (pagination) => {
-    console.log(pagination);
-    setPagination(pagination);
-  };
+  // const handleTableChange = (pagination) => {
+  //   console.log(pagination);
+  //   setPagination(pagination);
+  // };
   // useEffect(() => {
   //   if (dataId.length > 1) {
   //     getBrandById(dataId).then((data) => {
@@ -176,28 +154,38 @@ export const Ballance: FC<BallanceProps> = ({}) => {
   //     });
   //   }
   // }, [dataId]);
-  useEffect(() => {
-    console.log('dmm');
-    getData(pagination.current, pagination.pageSize);
-  }, [pagination.current, pagination.pageSize]);
+  // useEffect(() => {
+  //   console.log('dmm');
+  //   getData(pagination.current, pagination.pageSize);
+  // }, [pagination.current, pagination.pageSize]);
 
   const getData = (Parampage?, PrampageSize?) => {
-    console.log('oke');
-    const page = Parampage ?? pagination.current;
-    const pageSize = PrampageSize ?? pagination.pageSize;
+    getAffiliateProfile()
+      .then((data) => {
+        // setAmount
+        const profile = data?.data;
+        console.log(profile);
+        setProfile(profile);
+        // helper.cookie_set('user', JSON.stringify(profile));
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {});
     setDataTable(fakeData);
-    // getAllBrand(page, pageSize)
-    //   .then((data) => {
-    //     console.log(data);
-    //     setDataTable(data?.brands);
-    //     setPagination((prev) => ({ ...prev, total: data.totalCount }));
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //     setDataTable([]);
-    //   })
-    //   .finally(() => {});
+    getAllWithDrawSelf()
+      .then((data) => {
+        console.log(data);
+        setDataTable(data?.data);
+        // setPagination((prev) => ({ ...prev, total: data.totalCount }));
+      })
+      .catch((error) => {
+        console.log(error);
+        setDataTable([]);
+      })
+      .finally(() => {});
   };
+  const getBallance = () => {};
   //     getAllCategory()
   //       .then((data) => {
   //         console.log(data);
@@ -324,11 +312,12 @@ export const Ballance: FC<BallanceProps> = ({}) => {
             Add new Brand
           </Button> */}
         </div>
-        <RequestWithdraw getData={getData} />
+        <RequestWithdraw getData={getData} profile={profile} />
       </div>
       <div className="mt-2 px-4">
-        <p className="text-base">Tổng thu nhập: 3000000 VND</p>
-        <p className="text-base">Số dư: 3000000 VND</p>
+        <p className="text-base">
+          Số dư: {profile?.balance.toLocaleString('vi-VN')} VND
+        </p>
       </div>
       {!dataTable ? (
         <Spin
@@ -352,9 +341,9 @@ export const Ballance: FC<BallanceProps> = ({}) => {
               : dataTable
           }
           columns={columns}
-          pagination={pagination}
+          // pagination={pagination}
           style={{ marginTop: '24px' }}
-          onChange={handleTableChange}
+          // onChange={handleTableChange}
         />
       )}
     </div>

@@ -43,7 +43,7 @@ export const Brand: FC<BrandProps> = ({}) => {
   const [dataId, setDataId] = useState<string>('');
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 2,
+    pageSize: 8,
     total: 0
   });
   const [form] = Form.useForm();
@@ -222,6 +222,7 @@ export const Brand: FC<BrandProps> = ({}) => {
       name: values.name,
       isPremium: values.isPremium
     };
+    console.log(dataId);
     dataId == '0' ? addData(model) : updateData(model);
   };
   const getData = (Parampage?, PrampageSize?) => {
@@ -339,7 +340,7 @@ export const Brand: FC<BrandProps> = ({}) => {
                             </Form.Item>
                           </Col>
                         </Row> */}
-                    <Row gutter={24}>
+                    <Row gutter={24} className="px-2">
                       <Form.Item
                         name="isPremium"
                         valuePropName="checked"

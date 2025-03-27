@@ -115,6 +115,14 @@ export const Product: FC<ProductProps> = ({}) => {
           Edit
         </Button>
       )
+    },
+    {
+      title: 'Status',
+      dataIndex: 'isActive',
+      key: 'isActive',
+      render: (n, o) => {
+        return <>{n ? 'Active' : 'Locked'}</>;
+      }
     }
   ];
   const props = {
@@ -190,7 +198,7 @@ export const Product: FC<ProductProps> = ({}) => {
     if (productId.length > 1) {
       getProductDetail(productId).then((data) => {
         const dataCurrent = data?.data;
-        console.log(dataCurrent);
+        // console.log(dataCurrent);
         form.setFieldsValue({
           // image :
 
@@ -201,7 +209,7 @@ export const Product: FC<ProductProps> = ({}) => {
           commissionRate: dataCurrent.commissionRate,
           category: dataCurrent.category?.categoryId,
           name: dataCurrent.name,
-          isActive: dataCurrent.isActive
+          isActive: dataCurrent.isActive || false
         });
         const newFileList = dataCurrent.imageUrls?.map((url, index) => ({
           uid: index,
@@ -216,7 +224,7 @@ export const Product: FC<ProductProps> = ({}) => {
   const addData = (model) => {
     AddProduct(model)
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         message.success('add new Product success!!!');
         handleCancel();
         getData();
@@ -241,8 +249,8 @@ export const Product: FC<ProductProps> = ({}) => {
   };
   const onFinish = async (values) => {
     const listImage = fileList.map((file) => file.url);
-    console.log(listImage);
-    console.log(values);
+    // console.log(listImage);
+    // console.log(values);
     const model = {
       name: values.name,
       description: values.description,
@@ -251,14 +259,15 @@ export const Product: FC<ProductProps> = ({}) => {
       commissionRate: values.commissionRate,
       categoryId: values.category,
       brandId: values.brand,
-      imageUrls: listImage
+      imageUrls: listImage,
+      isActive: values.isActive
     };
     productId.length > 1 ? updateData(model) : addData(model);
   };
   const getData = (Parampage?, PrampageSize?) => {
     const page = Parampage ?? 1;
     const pageSize = PrampageSize ?? 8;
-    console.log('oke');
+
     console.log(page, pageSize);
     getAllProduct(page, pageSize, '')
       .then((data) => {
@@ -275,7 +284,7 @@ export const Product: FC<ProductProps> = ({}) => {
   const getCategory = () => {
     getAllCategory()
       .then((data) => {
-        setCategory(data?.data);
+        setCategory(data?.categories);
       })
       .catch((error) => {
         console.log(error);
@@ -286,7 +295,7 @@ export const Product: FC<ProductProps> = ({}) => {
   const getBrand = () => {
     getAllBrand()
       .then((data) => {
-        setBrand(data?.data);
+        setBrand(data?.brands);
       })
       .catch((error) => {
         console.log(error);
@@ -307,7 +316,7 @@ export const Product: FC<ProductProps> = ({}) => {
   //   setPagination((prev) => ({ ...prev, current: 1 }));
   // }, [valueSearch]);
   useEffect(() => {
-    console.log('oke');
+    // console.log('oke');
     getData(pagination.current, pagination.pageSize);
   }, [pagination.current, pagination.pageSize]);
   return (
@@ -508,7 +517,7 @@ export const Product: FC<ProductProps> = ({}) => {
                       <Col span={12}>
                         <Form.Item
                           name="isActive"
-                          label="Lock Product"
+                          label="Status"
                           rules={[
                             {
                               required: true,
@@ -525,11 +534,11 @@ export const Product: FC<ProductProps> = ({}) => {
                             options={[
                               {
                                 value: false,
-                                label: 'Lock Product'
+                                label: 'Locked'
                               },
                               {
                                 value: true,
-                                label: 'UnLock Product'
+                                label: 'Active'
                               }
                             ]}
                           />

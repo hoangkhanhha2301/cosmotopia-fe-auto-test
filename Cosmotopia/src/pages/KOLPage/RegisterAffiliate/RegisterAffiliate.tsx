@@ -201,7 +201,11 @@ export const RegisterAffiliate: FC<RegisterAffiliateProps> = ({}) => {
             </label>
           )}
         </div>
-
+        {current == 1 && (
+          <h2 className="text-red">
+            *Hãy nhập đúng thông tin và sửa tên account thành tên chính chủ
+          </h2>
+        )}
         <Form
           style={{ display: current == 1 ? '' : 'none' }}
           form={form}
