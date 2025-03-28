@@ -58,12 +58,13 @@ export function ProductCard({
           <h3 className="font-montserrat text-base font-bold text-gray-900">{title}</h3>
           <p className="font-openSans text-xs text-gray-500">{description}</p>
         </div>
-
+        {/* Push price to the bottom */}
+        <div className="flex-grow"></div>
         {/* Price */}
-        <div className="font-montserrat text-base font-normal text-purple-600">{price}</div>
+        <div className="mt-auto font-montserrat text-base font-normal text-purple-600">{price}</div>
 
         {/* Rating */}
-        <div className="flex items-center justify-between">
+        {/* <div className="flex items-center justify-between">
           <div className="flex items-center gap-1">
             {[...Array(5)].map((_, i) => (
               <Star
@@ -80,7 +81,7 @@ export function ProductCard({
             ))}
           </div>
           <span className="text-xs font-medium text-gray-900">{rating}/5</span>
-        </div>
+        </div> */}
       </div>
     </div>
   )

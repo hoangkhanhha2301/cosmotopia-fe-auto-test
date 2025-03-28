@@ -118,7 +118,7 @@ export function ProductListing() {
                       <ProductCard
                         title={product.name}
                         description={product.description}
-                        price={product.price}
+                        price={`${new Intl.NumberFormat('vi-VN').format(product.price)} VND`}
                         rating={product.rating}
                         image={product.imageUrls[0]}
                         isNew={product.isNew}

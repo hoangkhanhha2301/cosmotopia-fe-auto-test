@@ -47,7 +47,7 @@ export default function PaymentMethods({ ConfirmPayMent }) {
           </div>
 
           <div className="flex gap-2">
-            <div className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-white shadow-sm">
+            {/* <div className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-white shadow-sm">
               <Image
                 src="/placeholder.svg?height=20&width=20"
                 alt="Bank 1"
@@ -73,7 +73,7 @@ export default function PaymentMethods({ ConfirmPayMent }) {
                 height={20}
                 className="object-contain"
               />
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -105,7 +105,7 @@ export default function PaymentMethods({ ConfirmPayMent }) {
           </div>
 
           <div className="flex gap-2">
-            <div className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-[#F9F9F9]">
+            {/* <div className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-[#F9F9F9]">
               <Image
                 src="/placeholder.svg?height=20&width=20"
                 alt="PayPal"
@@ -140,7 +140,7 @@ export default function PaymentMethods({ ConfirmPayMent }) {
                 height={20}
                 className="object-contain"
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

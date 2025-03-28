@@ -184,14 +184,15 @@ export default function ProductDetail() {
           </div>
           <div className="mt-2 flex items-center justify-between">
             <span className="text-2xl font-semibold text-purple-500">
-              {data.price} VNĐ
+              {/* {data.price} VNĐ */}
+              {new Intl.NumberFormat('vi-VN').format(data.price)} VND
             </span>
-            <span className="text-gray-400 line-through">
+            {/* <span className="text-gray-400 line-through">
               {data.oldPrice} VNĐ
-            </span>
-            <span className="rounded bg-[rgba(255,0,0,0.1)] px-2 py-0.5 text-xs font-medium text-[rgba(255,0,0,0.8)]">
+            </span> */}
+            {/* <span className="rounded bg-[rgba(255,0,0,0.1)] px-2 py-0.5 text-xs font-medium text-[rgba(255,0,0,0.8)]">
               -{data.discount}%
-            </span>
+            </span> */}
           </div>
           <p className="mt-2 text-gray-600">{data.description}</p>
 

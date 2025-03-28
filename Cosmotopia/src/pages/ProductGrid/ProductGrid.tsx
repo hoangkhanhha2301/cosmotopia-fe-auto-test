@@ -37,34 +37,41 @@ export function ProductGrid({ filters }: ProductGridProps) {
   console.log(data);
 
   const products = data?.products || [];
-  const totalProducts = data?.totalCount || 0;
+  const totalProducts = data?.products?.filter((product: any) => product.isActive).length || 0;
+
 
   if (isPending) return <p>Loading...</p>;
-  if (isError) return <p>Error loading products</p>;
+  if (isError) return <p className="mt-2 flex items-center justify-center font-montserrat text-xl font-bold text-[#4E4663]">Không có sản phẩm nào</p>;
 
   return (
     <div>
       {/* Grid sản phẩm */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {products.map((product: any, i: number) => (
-          <TooltipProvider key={product.productId || i}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div onClick={() => router.push(`/product/${product.productId}`)} className="cursor-pointer">
-                  <ProductCard
-                    title={product.name}
-                    description={product.description}
-                    price={`${product.price} VND`}
-                    rating={product.commissionRate}
-                    image={product.imageUrls?.[0] || ""}
-                    isNew={product.isActive}
-                  />
-                </div>
-              </TooltipTrigger>
-            </Tooltip>
-          </TooltipProvider>
-        ))}
+        {products
+          .filter((product: any) => product.isActive) // Chỉ lấy những sản phẩm có isActive === true
+          .map((product: any, i: number) => (
+            <TooltipProvider key={product.productId || i}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div
+                    onClick={() => router.push(`/product/${product.productId}`)}
+                    className="cursor-pointer"
+                  >
+                    <ProductCard
+                      title={product.name}
+                      description={product.description}
+                      price={`${new Intl.NumberFormat('vi-VN').format(product.price)} VND`}
+                      rating={product.commissionRate}
+                      image={product.imageUrls?.[0] || ""}
+                      isNew={product.isActive}
+                    />
+                  </div>
+                </TooltipTrigger>
+              </Tooltip>
+            </TooltipProvider>
+          ))}
       </div>
+
 
       {/* Pagination */}
       <div className="flex justify-center mt-6">

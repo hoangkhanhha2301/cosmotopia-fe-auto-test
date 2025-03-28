@@ -1,23 +1,12 @@
-import { Icons } from '@/components/ui/icons';
-import { cn } from '@/lib/utils';
 import { NavItem } from '@/types';
 import { Dispatch, SetStateAction } from 'react';
 import { useSidebar } from '@/hooks/use-sidebar';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from '@/components/ui/tooltip';
 import { usePathname } from '@/routes/hooks';
-import { Link } from 'react-router-dom';
-import { Input } from '../ui/input';
 import { useRouter } from '@/routes/hooks';
 import { useEffect, useState } from 'react';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useSearchShoes } from '@/queries/shoes.query';
 import { PagingModel } from '@/constants/data';
-import { Button } from '../ui/button';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { sOpen } from '@/store/spin';
@@ -40,13 +29,11 @@ export default function HeaderNav({
 }: DashboardNavProps) {
   const path = usePathname();
   const router = useRouter();
-  const { isMinimized } = useSidebar();
   const [searchTerm, setSearchTerm] = useState('');
   const [products, setProducts] = useState<ProductType[]>([]);
-  const [isFocused, setIsFocused] = useState(false);
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
   const [pagingModel, setPagingModel] = useState(PagingModel);
-  const { mutateAsync: searchShoes, data, isPending } = useSearchShoes();
+  const { mutateAsync: searchShoes } = useSearchShoes();
 
   const auth = useSelector((state: RootState) => state.auth);
   const cart = useSelector((state: RootState) => state.cart.cartDetail);
@@ -110,14 +97,14 @@ export default function HeaderNav({
               Personal color test
             </a>
           </li>
-          <li>
+          {/* <li>
             <a
               href="#"
               className="text-gray-600 transition-colors duration-200 hover:text-gray-900"
             >
               Lorem
             </a>
-          </li>
+          </li> */}
         </ul>
       </div>
     </nav>
