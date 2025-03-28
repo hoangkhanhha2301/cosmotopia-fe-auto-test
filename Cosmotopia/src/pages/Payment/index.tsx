@@ -8,6 +8,7 @@ import { Button, Form, Input, message, Modal, Select } from 'antd';
 import axios from 'axios';
 import { dataAddressJSOn } from '@/store/dataAddress';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { sSpin } from '@/store/spin';
 
 export default function Payment() {
   const location = useLocation();
@@ -37,6 +38,7 @@ export default function Payment() {
   };
   const textAddress = `${address.house}, ${address.ward}, ${address.district}, TPHCM`;
   const PostOrder = () => {
+    sSpin.set(true);
     const model = {
       orderDetails: products.map((product) => ({
         productId: product.productId,
@@ -66,6 +68,9 @@ export default function Payment() {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        sSpin.set(false);
       });
   };
   useEffect(() => {
