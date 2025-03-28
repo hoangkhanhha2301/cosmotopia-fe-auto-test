@@ -63,7 +63,7 @@ export const DanhSach: FC<DanhSachProps> = ({}) => {
   const [data, setData] = useState(null);
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 2,
+    pageSize: 8,
     total: 0
   });
   const [form] = Form.useForm();
@@ -81,13 +81,21 @@ export const DanhSach: FC<DanhSachProps> = ({}) => {
       title: 'Giá',
       dataIndex: 'price',
       key: 'price',
-      render: (price) => <>{price ? price : '-'}</>
+      render: (price) => (
+        <>{price ? <p>{price.toLocaleString('vi-VN')} VND </p> : '-'}</>
+      )
     },
     {
       title: 'Tên sản phẩm',
       dataIndex: 'productName',
       key: 'productName',
       render: (clicks) => <>{clicks ? clicks : 0}</>
+    },
+    {
+      title: 'code',
+      dataIndex: 'referralCode',
+      key: 'referralCode',
+      render: (code) => <>{code ? code : '-'}</>
     },
     {
       title: 'Ngày tạo',
@@ -97,12 +105,23 @@ export const DanhSach: FC<DanhSachProps> = ({}) => {
         date ? dayjs.utc(date).tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY') : ''
     },
     {
-      title: 'Đường dẫn',
+      title: 'Hoa hồng',
+      dataIndex: 'commissionRate',
+      key: 'commissionRate',
+      render: (rate) =>
+        rate ? <p className="mt- font-bold text-green-600">{rate}%</p> : ''
+    },
+    {
+      title: 'Đường dẫn Affiliate',
 
       key: 'total_earnings',
       render: (record) => (
         <>
-          <Link to={`/product/${record.productId}?ref=${record.referralCode}`}>
+          <Link
+            target="_blank"
+            className="underline"
+            to={`/product/${record.productId}?ref=${record.referralCode}`}
+          >
             Link
           </Link>
         </>

@@ -189,6 +189,7 @@ export const Product: FC<ProductProps> = ({}) => {
   const handleCancel = () => {
     setProductId('');
     form.resetFields();
+    setFileList([]);
   };
   const handlePreview = async (file) => {
     setPreviewImage(file.url);
@@ -627,7 +628,9 @@ export const Product: FC<ProductProps> = ({}) => {
             </div>
           </Modal>
           <Button
-            onClick={() => showModal('0')}
+            onClick={() => {
+              showModal('0');
+            }}
             className="no-tailwind"
             type="primary"
           >

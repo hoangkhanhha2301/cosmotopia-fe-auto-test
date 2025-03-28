@@ -35,7 +35,7 @@ export const CreateLink: FC<CreateLinkProps> = ({}) => {
     const productId = segments[segments.length - 1];
     getProductDetail(productId)
       .then((data) => {
-        // console.log(data);
+        console.log(data);
         setProductSelected(data?.data);
       })
       .catch((err) => {
@@ -109,13 +109,21 @@ export const CreateLink: FC<CreateLinkProps> = ({}) => {
                 />
               }
             >
-              <h3>{productSelected?.name}</h3>
-              <p>Giá: {productSelected?.price}</p>
+              <div>
+                <div>
+                  <h3>{productSelected?.name}</h3>
+                  <p>
+                    Giá: {productSelected?.price.toLocaleString('vi-VN')} VND{' '}
+                  </p>
+                </div>
+                <div className="mt-2 text-base font-bold text-green-600">
+                  Hoa hồng {productSelected.commissionRate} %
+                </div>
+              </div>
             </Card>
           ) : (
             <>
               <Card>
-                {' '}
                 <p className="mt-2">Dán link vào để hiển thị sản phẩm</p>
               </Card>
             </>
