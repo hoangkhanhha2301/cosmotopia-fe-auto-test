@@ -19,6 +19,8 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import helper from '@/helpers/index';
+import __helpers from '@/helpers';
+
 import { logout } from '@/redux/auth.slice';
 import './styles.css';
 import { RootState } from '@/redux/store';
@@ -46,10 +48,12 @@ export default function KOLPage() {
   const location = useLocation();
   const currentURI =
     location.pathname.split('/')[location.pathname.split('/').length - 1];
-  const token = helper.cookie_get('AT');
-  const userObject = token
-    ? JSON.parse(helper.cookie_get('user'))
-    : { role: 'Guest' };
+    const token = __helpers.cookie_get('AT');
+    const userCookie = __helpers.cookie_get('user');
+  
+    const userObject = token && userCookie
+      ? JSON.parse(userCookie)
+      : { role: 'Guest' };
 
   const dataOpen = JSON.parse(localStorage.getItem('keys')) ?? [];
 

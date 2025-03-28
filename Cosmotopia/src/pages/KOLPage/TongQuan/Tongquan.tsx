@@ -1,7 +1,10 @@
+import __helpers from '@/helpers';
 import { Image } from 'antd';
 import React, { FC } from 'react';
+import { useState, useEffect } from "react";
 
-interface TongquanProps {}
+
+interface TongquanProps { }
 const campaigns = Array(5).fill({
   name: 'Phấn mắt Flower Know',
   category: 'Mắt',
@@ -11,13 +14,35 @@ const campaigns = Array(5).fill({
   image: '/logo.png' // Thay bằng URL hình thật
 });
 
-export const Tongquan: FC<TongquanProps> = ({}) => {
+export const Tongquan: FC<TongquanProps> = ({ }) => {
+  const token = __helpers.cookie_get('AT');
+  const userCookie = __helpers.cookie_get('user');
+
+  const userObject = token && userCookie
+    ? JSON.parse(userCookie)
+    : { role: 'Guest' };
+
+  const [currentDate, setCurrentDate] = useState("");
+
+  useEffect(() => {
+    const updateDate = () => {
+      const now = new Date();
+      const formattedDate = now.toLocaleDateString("vi-VN"); // Định dạng theo Việt Nam (dd/mm/yyyy)
+      setCurrentDate(formattedDate);
+    };
+
+    updateDate(); // Cập nhật ngay khi component render
+    const interval = setInterval(updateDate, 1000); // Cập nhật mỗi giây
+
+    return () => clearInterval(interval); // Cleanup khi unmount
+  }, []);
+
   return (
     <div>
       {/* Banner */}
       <div className="rounded-2xl bg-pink-200 px-20 py-10  shadow-md">
         <p className="text-sm text-gray-700">
-          Chào buổi sáng, <span className="font-semibold">ChloeNguyen</span>
+          Chào buổi sáng, <span className="font-semibold">{`${userObject?.firstName} ${userObject?.lastName}`}</span>
         </p>
         <div className=" bg-gradient-to-r from-[#ED1DBF] via-[#A831F1] to-[#3561FE]  bg-clip-text text-transparent ">
           <h2 className=" bg-clip-text text-2xl font-bold text-transparent ">
@@ -28,7 +53,7 @@ export const Tongquan: FC<TongquanProps> = ({}) => {
             tuần này...
           </h2>
         </div>
-        <p className="mt-2 text-sm text-gray-600">15/03/2025</p>
+        <p className="mt-2 text-sm text-gray-600">{currentDate}</p>
       </div>
       {/* Thống kê */}
       <div className="mt-6 grid grid-cols-4 gap-4">
