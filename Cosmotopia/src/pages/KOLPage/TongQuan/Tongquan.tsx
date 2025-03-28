@@ -54,7 +54,7 @@ export const Tongquan: FC<TongquanProps> = ({}) => {
       const formattedDate = now.toLocaleDateString('vi-VN'); // Định dạng theo Việt Nam (dd/mm/yyyy)
       setCurrentDate(formattedDate);
     };
-
+ 
     updateDate(); // Cập nhật ngay khi component render
     const interval = setInterval(updateDate, 1000); // Cập nhật mỗi giây
 
