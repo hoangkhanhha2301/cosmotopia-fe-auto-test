@@ -48,12 +48,11 @@ export default function KOLPage() {
   const location = useLocation();
   const currentURI =
     location.pathname.split('/')[location.pathname.split('/').length - 1];
-    const token = __helpers.cookie_get('AT');
-    const userCookie = __helpers.cookie_get('user');
-  
-    const userObject = token && userCookie
-      ? JSON.parse(userCookie)
-      : { role: 'Guest' };
+  const token = __helpers.cookie_get('AT');
+  const userCookie = __helpers.cookie_get('user');
+
+  const userObject =
+    token && userCookie ? JSON.parse(userCookie) : { role: 'Guest' };
 
   const dataOpen = JSON.parse(localStorage.getItem('keys')) ?? [];
 
@@ -92,6 +91,7 @@ export default function KOLPage() {
   //     behavior: "smooth",
   //   });
   // };
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider

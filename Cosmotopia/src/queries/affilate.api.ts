@@ -15,3 +15,6 @@ export const withDraw = (model) => api.post(`/api/Affiliate/withdraw`, model);
 export const conFirmWithDraw = (id, model?) =>
   api.put(`/api/Affiliate/withdraw/${id}/status`, model);
 export const getAllLinkAffiliate = () => api.get(`/api/Affiliate/links`);
+export const getTop5Link = () => api.get(`/api/Affiliate`);
+export const getEarningSummary = () =>
+  api.get(`/api/Affiliate/earnings/summary`);

@@ -218,7 +218,7 @@ export const DanhSach: FC<DanhSachProps> = ({}) => {
     console.log('oke');
     const page = Parampage ?? pagination.current;
     const pageSize = PrampageSize ?? pagination.pageSize;
-    setDataTable(fakeData);
+    // setDataTable(fakeData);
     getAllLinkAffiliate()
       .then((data) => {
         console.log(data);
