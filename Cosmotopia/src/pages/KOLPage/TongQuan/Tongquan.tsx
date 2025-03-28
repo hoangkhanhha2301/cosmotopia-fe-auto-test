@@ -76,7 +76,7 @@ export const Tongquan: FC<TongquanProps> = ({}) => {
           <h2 className=" bg-clip-text text-2xl font-bold text-transparent">
             Bạn đã kiếm tổng cộng{' '}
             <span className="text-black">
-              {dataSum.totalEarnings.toLocaleString('vi-VN')} VND
+              {dataSum?.totalEarnings.toLocaleString('vi-VN')} VND
             </span>
           </h2>
         </div>
