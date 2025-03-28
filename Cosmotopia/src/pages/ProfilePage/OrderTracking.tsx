@@ -30,11 +30,9 @@ export default function OrderTracking() {
   dayjs.extend(timezone);
 
   const allOrders =
-    data?.length > 0
-      ? data?.orders.sort(
-          (a, b) => new Date(b.orderDate) - new Date(a.orderDate)
-        )
-      : [];
+    data?.orders.sort(
+      (a, b) => new Date(b.orderDate) - new Date(a.orderDate)
+    ) || [];
 
   // Lọc đơn hàng theo trạng thái
   const filteredOrders =
