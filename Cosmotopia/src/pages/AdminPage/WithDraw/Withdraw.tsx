@@ -27,10 +27,11 @@ import {
   Select,
   Spin,
   Table,
+  Tag,
   Upload
 } from 'antd';
 import { da } from 'date-fns/locale';
-import dayjs from 'dayjs';
+import dayjs, { utc } from 'dayjs';
 import React, { FC, useEffect, useState } from 'react';
 
 interface WithdrawProps {}
@@ -85,9 +86,14 @@ export const Withdraw: FC<WithdrawProps> = ({}) => {
   const handlePreview = async (file) => {};
   const columns = [
     {
-      title: 'ID',
-      dataIndex: 'transactionAffiliatesId',
-      key: 'transactionAffiliatesId'
+      title: 'Ngày khởi tạo',
+      dataIndex: 'transactionDate',
+      key: 'transactionDate',
+      render: (date) => (
+        <>
+          {dayjs.utc(date).tz('Asia/Ho_Chi_Minh').format('HH:mm  DD/MM/YYYY')}
+        </>
+      )
     },
     {
       title: 'Tên',
@@ -115,7 +121,18 @@ export const Withdraw: FC<WithdrawProps> = ({}) => {
     {
       title: 'Status',
       dataIndex: 'status',
-      key: 'status'
+      render: (status) => (
+        <>
+          <Tag
+            color={
+              status == 'Paid' ? 'green' : status == 'Failed' ? 'red' : 'blue'
+            }
+            className="text-[16px]"
+          >
+            {status}
+          </Tag>
+        </>
+      )
     },
     {
       title: 'Confirm',
@@ -196,7 +213,11 @@ export const Withdraw: FC<WithdrawProps> = ({}) => {
     getAllWithDrawManager()
       .then((data) => {
         console.log(data);
-        setDataTable(data?.data);
+        setDataTable(
+          data?.data.sort(
+            (a, b) => new Date(b.transactionDate) - new Date(a.transactionDate)
+          )
+        );
       })
       .catch((error) => {
         console.log(error);

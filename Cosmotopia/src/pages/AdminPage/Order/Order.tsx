@@ -29,6 +29,7 @@ import {
   Select,
   Spin,
   Table,
+  Tag,
   Upload
 } from 'antd';
 
@@ -83,7 +84,8 @@ export const Order: FC<OrderProps> = ({}) => {
       title: 'Ngày',
       dataIndex: 'orderDate',
       key: 'orderDate',
-      render: (date) => (date ? dayjs.utc(date).tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY') : '')
+      render: (date) =>
+        date ? dayjs.utc(date).tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY') : ''
       // render: (n, o) => {
       //   return <>{getRole(n)}</>;
       // },
@@ -91,7 +93,30 @@ export const Order: FC<OrderProps> = ({}) => {
     {
       title: 'Trạng thái đơn hàng',
       dataIndex: 'status',
-      key: 'status'
+      key: 'status',
+      render: (status) => (
+        <>
+          {' '}
+          <Tag
+            color={
+              status == '0'
+                ? 'blue'
+                : status == '4'
+                  ? 'red'
+                  : status == '3'
+                    ? 'green'
+                    : 'yellow'
+            }
+            className="text-[16px]"
+          >
+            {status == '0' && 'Chờ thanh toán'}
+            {status == '1' && 'Đã thanh toán'}
+            {status == '2' && 'Đang giao hàng'}
+            {status == '3' && 'Đã giao hàng'}
+            {status == '4' && 'Đã hủy'}
+          </Tag>
+        </>
+      )
     }
     // {
     //   title: 'Edit',
