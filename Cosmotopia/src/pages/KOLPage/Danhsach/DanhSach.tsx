@@ -15,6 +15,8 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import React, { FC, useEffect, useState } from 'react';
+import { getAllLinkAffiliate } from '@/queries/affilate.api';
+import { Link } from 'react-router-dom';
 
 interface DanhSachProps {}
 
@@ -70,60 +72,69 @@ export const DanhSach: FC<DanhSachProps> = ({}) => {
 
   const columns = [
     {
-      title: 'Tên sản phẩm',
-      dataIndex: 'product_name',
+      title: 'Link ID',
+      dataIndex: 'linkId',
       key: 'product_name',
       render: (text) => <>{text ? text : '-'}</>
     },
     {
       title: 'Giá',
-      dataIndex: 'product_price',
-      key: 'product_price',
+      dataIndex: 'price',
+      key: 'price',
       render: (price) => <>{price ? price : '-'}</>
     },
     {
-      title: 'Lượt click',
-      dataIndex: 'clicks',
-      key: 'clicks',
+      title: 'Tên sản phẩm',
+      dataIndex: 'productName',
+      key: 'productName',
       render: (clicks) => <>{clicks ? clicks : 0}</>
     },
     {
-      title: 'Chuyển đổi',
-      dataIndex: 'conversions',
-      key: 'conversions',
-      render: (conversions) => <>{conversions ? conversions : 0}</>
-    },
-    {
-      title: 'Thu nhập',
-      dataIndex: 'total_earnings',
-      key: 'total_earnings',
-      render: (earnings) => <>{earnings ? earnings : '0đ'}</>
-    },
-    {
       title: 'Ngày tạo',
-      dataIndex: 'created_at',
-      key: 'created_at',
-      render: (date) => (date ? dayjs.utc(date).tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY') : '-')
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      render: (date) =>
+        date ? dayjs.utc(date).tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY') : ''
     },
     {
-      title: 'Hết hạn',
-      dataIndex: 'expiry_date',
-      key: 'expiry_date',
-      render: (date) => (date ? dayjs.utc(date).tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY') : '-')
-    },
-    {
-      title: 'Chi tiết',
+      title: 'Đường dẫn',
 
+      key: 'total_earnings',
       render: (record) => (
-        <Button
-          onClick={() => {
-            showModal(record);
-          }}
-        >
-          View Detail
-        </Button>
+        <>
+          <Link to={`/product/${record.productId}?ref=${record.referralCode}`}>
+            Link
+          </Link>
+        </>
       )
     }
+    // {
+    //   title: 'Ngày tạo',
+    //   dataIndex: 'created_at',
+    //   key: 'created_at',
+    //   render: (date) =>
+    //     date ? dayjs.utc(date).tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY') : '-'
+    // },
+    // {
+    //   title: 'Hết hạn',
+    //   dataIndex: 'expiry_date',
+    //   key: 'expiry_date',
+    //   render: (date) =>
+    //     date ? dayjs.utc(date).tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY') : '-'
+    // },
+    // {
+    //   title: 'Chi tiết',
+
+    //   render: (record) => (
+    //     <Button
+    //       onClick={() => {
+    //         showModal(record);
+    //       }}
+    //     >
+    //       View Detail
+    //     </Button>
+    //   )
+    // }
     // {
     //   title: 'Edit',
     //   key: 'edit',
@@ -189,17 +200,17 @@ export const DanhSach: FC<DanhSachProps> = ({}) => {
     const page = Parampage ?? pagination.current;
     const pageSize = PrampageSize ?? pagination.pageSize;
     setDataTable(fakeData);
-    // getAllBrand(page, pageSize)
-    //   .then((data) => {
-    //     console.log(data);
-    //     setDataTable(data?.brands);
-    //     setPagination((prev) => ({ ...prev, total: data.totalCount }));
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //     setDataTable([]);
-    //   })
-    //   .finally(() => {});
+    getAllLinkAffiliate()
+      .then((data) => {
+        console.log(data);
+        setDataTable(data?.data);
+        setPagination((prev) => ({ ...prev, total: data.totalCount }));
+      })
+      .catch((error) => {
+        console.log(error);
+        setDataTable([]);
+      })
+      .finally(() => {});
   };
   //     getAllCategory()
   //       .then((data) => {

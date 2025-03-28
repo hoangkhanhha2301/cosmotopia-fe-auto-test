@@ -106,7 +106,7 @@ export const Tongquan: FC<TongquanProps> = ({}) => {
         </div>
       </div>
       <div className="mt-6 rounded-2xl bg-white p-6 shadow-md">
-        <h2 className="mb-4 text-xl font-semibold">Top 5 Campaigns</h2>
+        <h2 className="mb-4 text-xl font-semibold">Top 5 product earning</h2>
         <div className="space-y-4">
           {campaigns?.map((campaign, index) => (
             <div key={index} className="flex items-center justify-between">

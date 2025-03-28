@@ -62,8 +62,8 @@ export const CreateLink: FC<CreateLinkProps> = ({}) => {
         // form.setFieldValue('link', setdata)
       })
       .catch((err) => {
-        message.error('something went wrong');
-        console.log(err);
+        message.error(err.message);
+        // console.log(err);
       })
       .finally(() => {});
   };

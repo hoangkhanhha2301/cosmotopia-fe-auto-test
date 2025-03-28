@@ -56,8 +56,6 @@ export default function Payment() {
           paymentMethod: 'Vnpay'
         };
         postPayment(modelPayemnt).then((data) => {
-          console.log(data);
-          message.success('oke');
           navigate('/success', {
             state: {
               type: 'Đặt hàng',

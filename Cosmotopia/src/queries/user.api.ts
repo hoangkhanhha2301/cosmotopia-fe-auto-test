@@ -16,3 +16,6 @@ export const postOrder = (model) => api.post(`/api/Order`, model);
 // payment
 export const postPayment = (model) =>
   api.post(`/api/Payment/create-payment`, model);
+export const getTransactions = (id) => api.get(`/api/Payment/payment/${id}`);
+export const HandleTransactions = (id, status) =>
+  api.put(`/api/Payment/update-payment-status/${id}?newStatus=${status}`);

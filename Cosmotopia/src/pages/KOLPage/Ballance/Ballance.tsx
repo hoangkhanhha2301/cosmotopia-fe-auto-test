@@ -94,7 +94,11 @@ export const Ballance: FC<BallanceProps> = ({}) => {
       dataIndex: 'transactionDate',
       key: 'transactionDate',
       render: (date) => (
-        <>{date ? dayjs.utc(date).tz('Asia/Ho_Chi_Minh').format('HH:mm  DD/MM/YYYY') : 0}</>
+        <>
+          {date
+            ? dayjs.utc(date).tz('Asia/Ho_Chi_Minh').format('HH:mm  DD/MM/YYYY')
+            : 0}
+        </>
       )
     },
     {
@@ -320,7 +324,7 @@ export const Ballance: FC<BallanceProps> = ({}) => {
       </div>
       <div className="mt-2 px-4">
         <p className="text-base">
-          Số dư: {profile?.balance.toLocaleString('vi-VN')} VND
+          Số dư: {profile?.balance.toLocaleString('vi-VN') || 0} VND
         </p>
       </div>
       {!dataTable ? (

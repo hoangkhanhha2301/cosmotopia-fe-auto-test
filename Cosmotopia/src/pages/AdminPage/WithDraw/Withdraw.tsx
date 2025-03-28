@@ -41,6 +41,48 @@ export const Withdraw: FC<WithdrawProps> = ({}) => {
   const { Search } = Input;
   const [dataId, setDataId] = useState<number>(0);
   const [form] = Form.useForm();
+  const [fileList, setFileList] = useState<any[]>([]);
+
+  const customUpload = async ({ file, onSuccess, onError }) => {
+    console.log(file);
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'Cometis');
+    formData.append('cloud_name', 'dhylbhwvb');
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/dhylbhwvb/image/upload`,
+      {
+        method: 'POST',
+        body: formData
+      }
+    );
+    const data = await response.json();
+    console.log(data.secure_url);
+    setFileList((prev) => [
+      ...prev,
+      {
+        uid: data.asset_id,
+        status: 'done',
+        url: data.secure_url
+      }
+    ]);
+
+    // try {
+    //   const response = await axios.post(
+    //     'https://your-api.com/upload',
+    //     formData,
+    //     {
+    //       headers: {
+    //         'Content-Type': 'multipart/form-data'
+    //       }
+    //     }
+    //   );
+    //   onSuccess(response.data); // Báo cho AntD biết upload thành công
+    // } catch (error) {
+    //   onError(error); // Báo lỗi nếu có
+    // }
+  };
+  const handlePreview = async (file) => {};
   const columns = [
     {
       title: 'ID',
@@ -79,28 +121,37 @@ export const Withdraw: FC<WithdrawProps> = ({}) => {
       title: 'Confirm',
       key: 'action',
       render: (record) => (
-        <Popconfirm
-          title="Xác nhận đã chuyển tiền"
-          onConfirm={() => {
-            ConfirmWithDraw(record.transactionAffiliatesId);
+        <Button
+          type="default"
+          disabled={record.status != 'Pending'}
+          onClick={() => {
+            setDataId(record.transactionAffiliatesId);
           }}
-          okText="Xác nhận"
-          cancelText="Hủy"
         >
-          <Button
-            type="default"
-            disabled={record.status != 'Pending'}
-            onClick={() => {
-              // SIdCampaign.set(record.id);
-            }}
-          >
-            Confirm
-          </Button>
-        </Popconfirm>
+          Handle
+        </Button>
       )
     }
   ];
-
+  const handleWithDraw = (isWithdraw) => {
+    if (isWithdraw && !fileList[0]?.url) {
+      message.error('Bạn phải tải hình lên để xác nhận thanh toán');
+      return;
+    }
+    const model = {
+      image: isWithdraw ? fileList[0].url : '',
+      status: isWithdraw ? 'Paid' : 'Failed'
+    };
+    console.log(model);
+    console.log(dataId);
+    conFirmWithDraw(dataId, model).then((data) => {
+      console.log(data);
+      setDataId(null);
+      setFileList([]);
+      getData();
+      message.success('Xử lý đơn rút tiền thành công');
+    });
+  };
   const handleCancel = () => {
     setDataId(0);
     form.resetFields();
@@ -124,21 +175,21 @@ export const Withdraw: FC<WithdrawProps> = ({}) => {
     }
   }, [dataId]);
 
-  const ConfirmWithDraw = (id) => {
-    const model = {
-      status: 'Paid'
-    };
-    conFirmWithDraw(id, model)
-      .then((data) => {
-        console.log(data);
-        message.success('Xác nhận chuyển tiền thành công');
-        getData();
-      })
-      .catch((error) => {
-        console.log(error);
-        message.error(error.response?.data?.msg);
-      });
-  };
+  // const ConfirmWithDraw = (id) => {
+  //   const model = {
+  //     status: 'Paid'
+  //   };
+  //   conFirmWithDraw(id, model)
+  //     .then((data) => {
+  //       console.log(data);
+  //       message.success('Xác nhận chuyển tiền thành công');
+  //       getData();
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       message.error(error.response?.data?.msg);
+  //     });
+  // };
 
   const getData = () => {
     console.log('oke');
@@ -168,6 +219,24 @@ export const Withdraw: FC<WithdrawProps> = ({}) => {
   const onSearch = (value, _e, info) => {
     setValueSearch(value.length > 0 ? value : null);
   };
+  const onFinish = async (values) => {
+    // console.log(values);
+    // const model = {
+    //   firstName: values.firstName,
+    //   lastName: values.lastName,
+    //   phone: values.phone
+    // };
+    // updateAccountSelf(model)
+    //   .then((data) => {
+    //     console.log(data);
+    //     message.success('Update Profile success!!!');
+    //     getData();
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     message.error(error.response?.data?.msg);
+    //   });
+  };
   useEffect(() => {
     getData();
   }, []);
@@ -195,6 +264,80 @@ export const Withdraw: FC<WithdrawProps> = ({}) => {
         </div>
         {/* <AddNewAccount GetProfileFunction={getProfile}></AddNewAccount> */}
       </div>
+      <Modal
+        title={'Xử lý thanh toán'}
+        visible={dataId}
+        onCancel={handleCancel}
+        width={500}
+        footer={
+          [
+            // <Button key="back" onClick={handleCancel}>
+            //   Cancel
+            // </Button>
+            // <Button
+            //   type="primary"
+            //   onClick={() => {
+            //     form.submit();
+            //   }}
+            // >
+            //   {'Update User'}
+            // </Button>
+          ]
+        }
+      >
+        <div style={{ margin: 'auto' }}>
+          <Form form={form} layout="vertical" onFinish={onFinish}>
+            <Upload
+              multiple
+              fileList={fileList}
+              onPreview={handlePreview}
+              listType="picture-card"
+              onRemove={(file) => {
+                setFileList((prev) =>
+                  prev.filter((item) => item.uid !== file.uid)
+                );
+              }}
+              accept=".jpg,.png,.pdf"
+              // showUploadList={true}
+              // beforeUpload={(file) => {
+              //   setFileList((prev) => [...prev, file]);
+              //   return false; // Ngăn Ant Design tự động upload
+              // }}
+              // fileList={fileList}
+              // onRemove={(file) => {
+              //   setFileList((prev) =>
+              //     prev.filter((item) => item.uid !== file.uid)
+              //   );
+              // }}
+              customRequest={customUpload}
+            >
+              {fileList.length == 0 && (
+                <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
+              )}
+            </Upload>
+
+            <div className="mt-4 flex justify-between ">
+              <Button
+                type="primary"
+                onClick={() => {
+                  handleWithDraw(true);
+                }}
+              >
+                Xác nhận chuyển tiền
+              </Button>
+              <Button
+                type="primary"
+                danger
+                onClick={() => {
+                  handleWithDraw(false);
+                }}
+              >
+                Xác nhận hủy
+              </Button>
+            </div>
+          </Form>
+        </div>
+      </Modal>
       {!dataTable ? (
         <Spin
           size="large"

@@ -85,8 +85,7 @@ export const RequestWithdraw: FC = ({ getData, profile }) => {
         getData();
       })
       .catch((error) => {
-        console.log(error);
-        // message.error(error.response?.data?.msg);
+        message.error('Có lỗi xảy ra');
       });
   };
   useEffect(() => {}, []);

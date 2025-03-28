@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 const orderStatuses = [
   { id: 'all', label: 'Tất cả' },
   { id: 'pending', label: 'Chờ thanh toán' },
-  { id: 'confirmed', label: 'Đã xác nhận' },
+  { id: 'confirmed', label: 'Đã thanh toán' },
   { id: 'delivering', label: 'Đang giao' },
   { id: 'shipping', label: 'Đã giao' },
   { id: 'cancelled', label: 'Đã hủy' }
@@ -39,7 +39,7 @@ export default function OrderTracking() {
     activeStatus === 'all'
       ? allOrders
       : allOrders.filter((order) => mapStatus(order.status) === activeStatus);
-
+  console.log(filteredOrders);
   const totalPages = data?.totalPages || 1;
 
   return (
@@ -77,9 +77,10 @@ export default function OrderTracking() {
                 <Truck className="h-6 w-6 text-[#9C3CFD]" />
                 <span className="bg-gradient-to-r from-[#9C3CFD] to-[#BF38FF] bg-clip-text font-montserrat text-sm font-normal text-transparent">
                   Đơn hàng{' '}
-                  {(order.status === 3 && 'đã được giao thành công') ||
+                  {(order.status === 4 && 'đã hủy') ||
+                    (order.status === 3 && 'đã được giao thành công') ||
                     (order.status === 2 && 'đang giao') ||
-                    (order.status === 1 && 'đã xác nhận') ||
+                    (order.status === 1 && 'đã thanh toán') ||
                     (order.status === 0 && 'chờ thanh toán')}
                 </span>
               </div>
