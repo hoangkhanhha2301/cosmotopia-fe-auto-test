@@ -44,7 +44,7 @@ export default class GET {
   //     })
 
   // }
-
+ 
   /**
    * get Age from input
    * @param birthDateString String | timestamp
