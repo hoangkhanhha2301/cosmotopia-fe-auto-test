@@ -28,11 +28,12 @@ export default function RegisterPage() {
     };
     await registerAccount(model)
       .then((data: any) => {
+        console.log(data.message);
         if (data?.success) {
           navigate('/OTP', { state: { email: values.email } });
           message.success('Vui lòng kiểm tra mail để xác thực OTP');
         } else {
-          message.error('Something went wrong');
+          message.error(data.message);
         }
       })
       .catch((err) => {
