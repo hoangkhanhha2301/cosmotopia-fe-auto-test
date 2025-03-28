@@ -9,7 +9,8 @@ import {
   Popconfirm,
   Row,
   Spin,
-  Table
+  Table,
+  Tag
 } from 'antd';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -104,7 +105,19 @@ export const Ballance: FC<BallanceProps> = ({}) => {
     {
       title: 'Trạng thái',
       dataIndex: 'status',
-      key: 'status'
+      key: 'status',
+      render: (status) => (
+        <>
+          <Tag
+            color={
+              status == 'Paid' ? 'green' : status == 'Failed' ? 'red' : 'blue'
+            }
+            className="text-[16px]"
+          >
+            {status}
+          </Tag>
+        </>
+      )
     }
 
     // {
@@ -180,11 +193,15 @@ export const Ballance: FC<BallanceProps> = ({}) => {
         console.log(error);
       })
       .finally(() => {});
-    setDataTable(fakeData);
+    // setDataTable(fakeData);
     getAllWithDrawSelf()
       .then((data) => {
         console.log(data);
-        setDataTable(data?.data);
+        setDataTable(
+          data?.data.sort(
+            (a, b) => new Date(b.transactionDate) - new Date(a.transactionDate)
+          )
+        );
         // setPagination((prev) => ({ ...prev, total: data.totalCount }));
       })
       .catch((error) => {
