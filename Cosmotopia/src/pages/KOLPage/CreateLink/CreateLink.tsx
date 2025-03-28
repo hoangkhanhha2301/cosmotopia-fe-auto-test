@@ -58,7 +58,11 @@ export const CreateLink: FC<CreateLinkProps> = ({}) => {
     generalLink(productId)
       .then((data) => {
         console.log(data);
-        setLinkShare(data?.affiliateProductUrl);
+        const url = data?.data.affiliateProductUrl.replace(
+          'yourdomain.com',
+          'cosmotopia.vercel.app'
+        );
+        setLinkShare(url);
         // form.setFieldValue('link', setdata)
       })
       .catch((err) => {
