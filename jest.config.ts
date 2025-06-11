@@ -25,7 +25,10 @@ const config: Config = {
   testMatch: [
     '**/src/test/**/*.(spec|test).[jt]s?(x)',
     '**/?(*.)+(spec|test).[jt]s?(x)'
-  ]
+  ],
+  collectCoverage: true,
+  coverageDirectory: 'coverage',
+  coverageReporters: ['text', 'lcov', 'html']
 };
 
 export default config;
