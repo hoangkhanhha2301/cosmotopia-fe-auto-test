@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProductDetailPage khớp với giao diện hiện tại (snapshot) 1`] = `
+<div>
+  <div>
+    <h1>
+      Áo sơ mi
+    </h1>
+    <p>
+      Giá: 
+      150000
+       VND
+    </p>
+    <p>
+      Chất liệu cotton, thoáng mát.
+    </p>
+    <button>
+      Thêm vào giỏ hàng
+    </button>
+  </div>
+</div>
+`;

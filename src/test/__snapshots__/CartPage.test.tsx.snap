@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CartPage khớp với snapshot giao diện giỏ hàng 1`] = `
+<div>
+  <div>
+    <h1>
+      Giỏ hàng
+    </h1>
+    <ul>
+      <li>
+        Áo
+         x
+        2
+         - 
+        200000
+         VND
+      </li>
+      <li>
+        Quần
+         x
+        1
+         - 
+        200000
+         VND
+      </li>
+    </ul>
+    <p>
+      Tổng cộng: 
+      400000
+       VND
+    </p>
+  </div>
+</div>
+`;
