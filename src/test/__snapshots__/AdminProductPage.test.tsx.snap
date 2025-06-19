@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AdminProductPage khớp với snapshot giao diện admin 1`] = `
+<div>
+  <div>
+    <h1>
+      Quản lý sản phẩm
+    </h1>
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            Áo khoác
+          </td>
+          <td>
+            300000
+          </td>
+          <td>
+            <button>
+              Xoá
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Giày thể thao
+          </td>
+          <td>
+            500000
+          </td>
+          <td>
+            <button>
+              Xoá
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+`;
